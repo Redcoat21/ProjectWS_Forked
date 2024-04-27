@@ -1,1 +1,26 @@
 untuk seeder
+
+// seeders/20240427120100-demo-user.js
+
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.bulkInsert('users', [
+      {
+        username: 'john_doe',
+        email: 'john@example.com',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        username: 'jane_smith',
+        email: 'jane@example.com',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ]);
+  },
+
+  down: async (queryInterface) => {
+    await queryInterface.bulkDelete('users', null, {});
+  },
+};
