@@ -1,0 +1,42 @@
+[{
+  "_id": {
+    "$oid": "662e7282372112ab3152c934"
+  },
+  "playlist_id": "PL001",
+  "name": "My Playlist",
+  "description": "Random music = new Random();",
+  "user_id": "USR003",
+  "type": 1,
+  "playlist": [
+    {
+      "id": "test1"
+    },
+    {
+      "id": "test2"
+    },
+    {
+      "id": "test3"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "662e7282372112ab3152c935"
+  },
+  "playlist_id": "PL002",
+  "name": "My Christian Playlist",
+  "description": "Christian Music Only",
+  "user_id": "USR003",
+  "type": 1,
+  "playlist": [
+    {
+      "id": "test1"
+    },
+    {
+      "id": "test2"
+    },
+    {
+      "id": "test3"
+    }
+  ]
+}]

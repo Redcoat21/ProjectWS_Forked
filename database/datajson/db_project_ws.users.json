@@ -1,0 +1,52 @@
+[{
+  "_id": {
+    "$oid": "662d0b7bf837e3959180ab47"
+  },
+  "user_id": "USR001",
+  "name": "Richard Hadianto",
+  "username": "richardhad",
+  "email": "richardh@gmail.com",
+  "balance": 250000,
+  "api_hit": 50,
+  "api_key": "abcde12345",
+  "premium": false
+},
+{
+  "_id": {
+    "$oid": "662d0b7bf837e3959180ab48"
+  },
+  "user_id": "USR002",
+  "name": "Reynard Kamadjaja",
+  "username": "rey",
+  "email": "reyk@gmail.com",
+  "balance": 100000,
+  "api_hit": 50,
+  "api_key": "fghij67890",
+  "premium": false
+},
+{
+  "_id": {
+    "$oid": "662d0b7bf837e3959180ab49"
+  },
+  "user_id": "USR003",
+  "name": "Yoga Pramana",
+  "username": "yogay",
+  "email": "yogap@gmail.com",
+  "balance": 150000,
+  "api_hit": 50,
+  "api_key": "klmno12345",
+  "premium": false
+},
+{
+  "_id": {
+    "$oid": "662d0b7bf837e3959180ab4a"
+  },
+  "user_id": "USR004",
+  "name": "Yosua Christian",
+  "username": "yosua",
+  "email": "yosua@gmail.com",
+  "balance": 100000,
+  "api_hit": 50,
+  "api_key": "pqrst67890",
+  "premium": false
+}]

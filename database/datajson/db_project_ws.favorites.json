@@ -1,0 +1,32 @@
+[{
+  "_id": {
+    "$oid": "662d14b7f837e3959180ab52"
+  },
+  "user_id": "USR001",
+  "favorite_id": "4WNcduiCmDNfmTEz7JvmLv",
+  "type": 0
+},
+{
+  "_id": {
+    "$oid": "662d14b7f837e3959180ab53"
+  },
+  "user_id": "USR002",
+  "favorite_id": "4WNcduiCmDNfmTEz7JvmLv",
+  "type": 0
+},
+{
+  "_id": {
+    "$oid": "662d14b7f837e3959180ab54"
+  },
+  "user_id": "USR003",
+  "favorite_id": "4WNcduiCmDNfmTEz7JvmLv",
+  "type": 0
+},
+{
+  "_id": {
+    "$oid": "662d14b7f837e3959180ab55"
+  },
+  "user_id": "USR004",
+  "favorite_id": "4WNcduiCmDNfmTEz7JvmLv",
+  "type": 0
+}]
