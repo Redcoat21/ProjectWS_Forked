@@ -1,6 +1,12 @@
+// app/controllers/authController.js
 const authService = require("../services/AuthService");
 
 const register = async function (req, res) {
+  const { error } = authService.validateRegistration(req.body);
+  if (error) {
+    return res.status(400).send(error.details[0].message);
+  }
+
   try {
     const { name, username, email, password } = req.body;
     await authService.register(name, username, email, password);
@@ -12,6 +18,11 @@ const register = async function (req, res) {
 };
 
 const login = async function (req, res) {
+  const { error } = authService.validateLogin(req.body);
+  if (error) {
+    return res.status(400).send(error.details[0].message);
+  }
+
   try {
     const { username, password } = req.body;
     const token = await authService.login(username, password);
