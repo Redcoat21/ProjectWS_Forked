@@ -1,7 +1,6 @@
 // server.js
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
 const authRoutes = require("./routes/AuthRoutes");
 
 const app = express();
@@ -28,9 +27,6 @@ const db = mongoose.connection;
 
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 db.once("open", () => console.log("Connected to MongoDB"));
-
-// Middleware
-app.use(bodyParser.json());
 
 // Routes
 app.use("/auth", authRoutes);
