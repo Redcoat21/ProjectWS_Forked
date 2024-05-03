@@ -1,0 +1,29 @@
+endpoint yang dibutuh=
+
+post:
+- login 
+- register
+- recharge api_hit
+- upgrade tier
+- create playlist
+- add music to playlist
+- allow access to developer (developer requests access to user)(dari sisi dev)
+- generate token 
+
+put:
+- edit user profile (+topup)
+- like music
+- dislike music 
+
+get:
+- get lyrics
+- translate lyric 
+- play music
+- search music
+- get all friends email (have spotify) 
+- play on spotify 
+- show friends now playing( playlist ,song) 
+
+delete: 
+- delete playlist
+- delete music from playlist
