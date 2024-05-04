@@ -39,6 +39,10 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         allowNull: false,
       },
+      profile_pic: {
+        type: Sequelize.STRING(255),
+        allowNull: false,
+      },
     });
 
     await queryInterface.createTable("playlists", {
