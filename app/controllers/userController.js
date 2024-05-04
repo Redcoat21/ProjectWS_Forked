@@ -105,6 +105,8 @@ const editUser = async function (req, res) {
       user.balance += parseInt(topup);
     }
 
+    user.api_hit -= 3;
+
     await user.save();
 
     return res
@@ -116,4 +118,64 @@ const editUser = async function (req, res) {
   }
 };
 
-module.exports = { register, login, editUser };
+const upgradeToPremium = async function (req, res) {
+  const token = req.header("x-auth-token");
+  const decoded = jwt.verify(token, "PROJECTWS");
+
+  try {
+    const user = await User.findOne({ where: { user_id: decoded.user_id } });
+
+    if (user.premium) {
+      return res.status(400).json({ error: "User is already Premium" });
+    }
+
+    const premiumCharge = 55000;
+    if (user.balance < premiumCharge) {
+      return res.status(400).json({ error: "Insufficient balance" });
+    }
+
+    user.balance -= premiumCharge;
+    user.premium = true;
+
+    await user.save();
+
+    return res.status(200).json({ message: "User upgraded to Premium", user });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Could not upgrade user to Premium" });
+  }
+};
+
+const rechargeApiHit = async function (req, res) {
+  const token = req.header("x-auth-token");
+  const decoded = jwt.verify(token, "PROJECTWS");
+  const amount = req.body.amount;
+
+  try {
+    const user = await User.findOne({ where: { user_id: decoded.user_id } });
+
+    const bills = amount * 5000;
+
+    if (user.balance < bills) {
+      return res.status(400).json({ error: "Insufficient balance" });
+    }
+
+    user.api_hit += amount;
+    user.balance -= bills;
+
+    await user.save();
+
+    res.status(200).json({ message: "API-hit recharged successfully", user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Could not recharge API-hit" });
+  }
+};
+
+module.exports = {
+  register,
+  login,
+  editUser,
+  upgradeToPremium,
+  rechargeApiHit,
+};
