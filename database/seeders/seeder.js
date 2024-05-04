@@ -8,6 +8,8 @@ module.exports = {
         name: "Reynard Kamadjaja",
         username: "rey",
         email: "reyk@gmail.com",
+        password:
+          "$2a$10$JA/dBIjjSuikAUtRM.UZa.RL6IS9lap7XRwDHXPyyis0go7gW9Yc6",
         balance: 100000,
         api_key: "abcde12345",
         api_hit: 50,
@@ -20,6 +22,8 @@ module.exports = {
         name: "Richard Hadiyanto",
         username: "hadi",
         email: "richardh@gmail.com",
+        password:
+          "$2a$10$JA/dBIjjSuikAUtRM.UZa.RL6IS9lap7XRwDHXPyyis0go7gW9Yc6",
         balance: 100000,
         api_key: "fghij12345",
         api_hit: 50,
@@ -32,6 +36,8 @@ module.exports = {
         name: "Yoga Pramana",
         username: "yogay",
         email: "nogay@gmail.com",
+        password:
+          "$2a$10$JA/dBIjjSuikAUtRM.UZa.RL6IS9lap7XRwDHXPyyis0go7gW9Yc6",
         balance: 100000,
         api_key: "klmno12345",
         api_hit: 50,
@@ -44,6 +50,8 @@ module.exports = {
         name: "Yosua Christian",
         username: "yosua",
         email: "yosuac@gmail.com",
+        password:
+          "$2a$10$JA/dBIjjSuikAUtRM.UZa.RL6IS9lap7XRwDHXPyyis0go7gW9Yc6",
         balance: 100000,
         api_key: "pqrst12345",
         api_hit: 50,

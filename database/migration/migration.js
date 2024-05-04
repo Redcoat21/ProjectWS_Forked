@@ -19,6 +19,10 @@ module.exports = {
         type: Sequelize.STRING(50),
         allowNull: false,
       },
+      password: {
+        type: Sequelize.STRING(50),
+        allowNull: false,
+      },
       balance: {
         type: Sequelize.INTEGER,
         allowNull: false,
