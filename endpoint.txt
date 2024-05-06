@@ -1,19 +1,19 @@
 endpoint yang dibutuh=
 
 post:
-- login (v)
-- register (v)
+- login (v) yoga
+- register (v) yoga
 - create playlist ()
 - add music to playlist ()
 - allow access to developer (developer requests access to user)(dari sisi dev) ()
 - generate token ()
 
 put:
-- edit user profile (+topup) (v)
+- edit user profile (+topup) (v) yoga
 - like music ()
 - dislike music ()
-- upgrade tier (v)
-- recharge api_hit (v)
+- upgrade tier (v) yoga
+- recharge api_hit (v) yoga
 
 get:
 - get lyrics ()
