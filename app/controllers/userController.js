@@ -1,27 +1,41 @@
-const multer = require("multer");
 const fs = require("fs");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-
-const storage = multer.diskStorage({
-  destination: "./public/assets",
-  filename: function (req, file, cb) {
-    cb(null, "profile_" + Date.now() + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
-}).single("profilePicture");
+const Service = require("../services/userService");
 
 const register = async function (req, res) {
-  upload(req, res, async function (err) {
+  Service.upload(req, res, async function (err) {
     if (err instanceof multer.MulterError) {
       return res.status(400).json({ error: "File size limit exceeded" });
     } else if (err) {
       return res.status(500).json({ error: "Failed to upload file" });
+    }
+
+    const schema = Joi.object({
+      name: Joi.string().required().messages({
+        "any.required": "Semua Field Wajib Diisi!",
+      }),
+      username: Joi.string()
+        .required()
+        .external(Service.checkUsernameNotExist)
+        .messages({
+          "any.required": "Semua Field Wajib Diisi!",
+        }),
+      email: Joi.string().email().required().messages({
+        "any.required": "Semua Field Wajib Diisi!",
+        "string.empty": "Semua Field Wajib Diisi!",
+        "string.email": "Format Email Salah!",
+      }),
+      password: Joi.string().required().messages({
+        "any.required": "Semua Field Wajib Diisi!",
+      }),
+    });
+
+    try {
+      await schema.validateAsync(req.body);
+    } catch (error) {
+      return res.status(400).send(error.toString());
     }
 
     const { name, username, email, password } = req.body;
@@ -55,6 +69,24 @@ const register = async function (req, res) {
 };
 
 const login = async function (req, res) {
+  const schema = Joi.object({
+    username: Joi.string()
+      .required()
+      .external(Service.checkUsernameExist)
+      .messages({
+        "any.required": "Semua Field Wajib Diisi!",
+      }),
+    password: Joi.string().required().messages({
+      "any.required": "Semua Field Wajib Diisi!",
+    }),
+  });
+
+  try {
+    await schema.validateAsync(req.body);
+  } catch (error) {
+    return res.status(400).send(error.toString());
+  }
+
   const { username, password } = req.body;
   const authToken = req.header("x-auth-token");
 
@@ -102,7 +134,11 @@ const editUser = async function (req, res) {
       user.password = hashedPassword;
     }
     if (topup) {
-      user.balance += parseInt(topup);
+      if (!isNaN(parseInt(topup))) {
+        user.balance += parseInt(topup);
+      } else {
+        return res.status(400).json({ error: "Topup amount is not a number" });
+      }
     }
 
     user.api_hit -= 3;
@@ -149,6 +185,19 @@ const upgradeToPremium = async function (req, res) {
 const rechargeApiHit = async function (req, res) {
   const token = req.header("x-auth-token");
   const decoded = jwt.verify(token, "PROJECTWS");
+
+  const schema = Joi.object({
+    amount: Joi.number().required().messages({
+      "any.required": "Semua Field Wajib Diisi!",
+    }),
+  });
+
+  try {
+    await schema.validateAsync(req.body);
+  } catch (error) {
+    return res.status(400).send(error.toString());
+  }
+
   const amount = req.body.amount;
 
   try {

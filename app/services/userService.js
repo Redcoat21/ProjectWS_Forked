@@ -1,40 +1,44 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const multer = require("multer");
 const User = require("../models/User");
 
-const register = async ({ user_id, name, username, email, password }) => {
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({
-      user_id,
-      name,
-      username,
-      email,
-      password: hashedPassword,
-    });
-    return user;
-  } catch (error) {
-    throw error;
+const checkUsernameExist = async function (username) {
+  const getusername = User.findOne({
+    where: {
+      username: username,
+    },
+  });
+  if (getusername) {
+    User.username === username;
+  } else {
+    throw new Error("Username not found!");
   }
 };
 
-const login = async ({ username, password }) => {
-  try {
-    const user = await User.findOne({ where: { username } });
-    if (!user) {
-      throw new Error("User not found");
-    }
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      throw new Error("Incorrect password");
-    }
-    const token = jwt.sign({ user_id: user.user_id }, "your_secret_key", {
-      expiresIn: "1h",
-    });
-    return token;
-  } catch (error) {
-    throw error;
+const checkUsernameNotExist = async function (username) {
+  const getusername = User.findOne({
+    where: {
+      username: username,
+    },
+  });
+  if (getusername) {
+    throw new Error("Username already registered!");
   }
 };
 
-module.exports = { register, login };
+const storage = multer.diskStorage({
+  destination: "./public/assets",
+  filename: function (req, file, cb) {
+    cb(null, "profile_" + Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 10 * 1024 * 1024 },
+}).single("profilePicture");
+
+module.exports = {
+  checkUsernameExist,
+  checkUsernameNotExist,
+  upload,
+};
