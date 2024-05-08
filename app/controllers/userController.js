@@ -2,6 +2,7 @@ const fs = require("fs");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const Joi = require("joi");
 const Service = require("../services/userService");
 
 const register = async function (req, res) {
