@@ -49,7 +49,7 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        user_id: "USR001",
+        user_id: "USR004",
         name: "Yosua Christian",
         username: "yosua",
         email: "yosuac@gmail.com",

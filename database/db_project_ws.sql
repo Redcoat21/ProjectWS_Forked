@@ -7,7 +7,7 @@ CREATE TABLE `users` (
     `name` VARCHAR(255) NOT NULL,
     `username` VARCHAR(25) NOT NULL,
     `email` VARCHAR(50) NOT NULL,
-    `password` VARCHAR(50) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
     `balance` INT(11) NOT NULL,
     `api_key` VARCHAR(25) NOT NULL,
     `api_hit` INT(11) NOT NULL,
@@ -44,7 +44,7 @@ INSERT INTO `users` VALUES (
     100000,
     "abcde12345",
     50,
-    "false",
+    FALSE,
     "./public/assets/222117054"
 );
 
@@ -57,7 +57,7 @@ INSERT INTO `users` VALUES (
     100000,
     "fghij12345",
     50,
-    "false",
+    FALSE,
     "./public/assets/222117055"
 );
 
@@ -70,12 +70,12 @@ INSERT INTO `users` VALUES (
     100000,
     "klmno12345",
     50,
-    "false",
+    FALSE,
     "./public/assets/222117068"
 );
 
 INSERT INTO `users` VALUES (
-    "USR001",
+    "USR004",
     "Yosua Christian",
     "yosua",
     "yosuac@gmail.com",
@@ -83,7 +83,7 @@ INSERT INTO `users` VALUES (
     100000,
     "pqrst12345",
     50,
-    "false",
+    FALSE,
     "./public/assets/222117069"
 );
 
