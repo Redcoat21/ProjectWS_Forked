@@ -3,8 +3,8 @@ endpoint yang dibutuh=
 post:
 - login (v) yoga
 - register (v) yoga
-- create playlist ()
-- add music to playlist ()
+- create playlist () yosua
+- add music to playlist () yosua
 - allow access to developer (developer requests access to user)(dari sisi dev) ()
 - generate token ()
 
@@ -25,5 +25,5 @@ get:
 - show friends now playing( playlist ,song) ()
 
 delete: 
-- delete playlist ()
-- delete music from playlist ()
+- delete playlist ()yosua
+- delete music from playlist ()yosua

@@ -5,5 +5,5 @@ const trackController = require("../app/controllers/trackControler");
 
 router.post("/getApikey", trackController.getApikey);
 router.get("/getTrackById/:trackId", trackController.getTrackById);
-router.put("/edit", trackController.);
+router.put("/createPlaylist", trackController.createPlayList);
 module.exports = router;
