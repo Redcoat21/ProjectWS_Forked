@@ -47,7 +47,7 @@ const getTrackById = async function (req, res) {
             'Authorization': 'Bearer ' + access_token // Make sure access_token is a valid OAuth token
         }
     });
-
+    
     return res.status(200).json(response.data); // Send only the response data using res.json()
     // Handle the response data as needed
   } catch (error) {
@@ -60,9 +60,20 @@ const getTrackById = async function (req, res) {
 const createPlayList = async function (req, res) {
     const playlistname = req.body;
     const createPlaylist = Playlist.create({
-        
+        playlist_id : ,
+        name:,
+        description:
+        user_id:
     });
+    
   };
+
+  // CREATE TABLE `playlists` (
+//   `playlist_id` VARCHAR(5) PRIMARY KEY,
+//   `name` VARCHAR(255) NOT NULL,
+//   `description` VARCHAR(255) NULL,
+//   `user_id` VARCHAR(6) REFERENCES users(user_id)
+// );
 const getTrackByName = async function (req, res) {
   const searchTrack = req.query.searchTrack;
   try {

@@ -27,4 +27,4 @@ const Playlist = sequelize.define("Playlist", {
 //   `description` VARCHAR(255) NULL,
 //   `user_id` VARCHAR(6) REFERENCES users(user_id)
 // );
-module.exports = User;
+module.exports = Playlist;
