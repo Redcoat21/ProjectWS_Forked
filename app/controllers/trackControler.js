@@ -59,22 +59,9 @@ const getTrackById = async function (req, res) {
 
 const createPlayList = async function (req, res) {
     const playlistname = req.body;
-    try {
-        const response = await axios.get('https://api.spotify.com/v1/search', {
-            params: {
-                q: searchTrack,
-                type: 'track'
-            },
-            headers: {
-                'Authorization': 'Bearer ' + access_token // Make sure access_token is a valid OAuth token
-            }
-        });
-        return res.status(200).json(response.data);
-        // Handle the response data as needed
-    } catch (error) {
-        console.error('Error fetching data:', error.response.data);
-        // Handle errors
-    }
+    const createPlaylist = Playlist.create({
+        
+    });
   };
 const getTrackByName = async function (req, res) {
   const searchTrack = req.query.searchTrack;
@@ -101,6 +88,7 @@ module.exports = {
     getApikey,
     getTrackById,
     getTrackByName,
+    createPlayList
   };
   
 
