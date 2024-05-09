@@ -14,7 +14,7 @@ const register = async function (req, res) {
     } else if (err) {
       return res.status(500).json({ error: "Failed to upload file" });
     }
-    
+
     const schema = Joi.object({
       name: Joi.string().required().messages({
         "any.required": "Semua Field Wajib Diisi!",
@@ -73,26 +73,27 @@ const register = async function (req, res) {
 };
 
 const login = async function (req, res) {
+  console.log(req.body)
   const schema = Joi.object({
     username: Joi.string()
       .required()
       .external(Service.checkUsernameExist)
       .messages({
-        "any.required": "Semua Field Wajib Diisi!",
+        "any.required": "username Wajib Diisi!",
       }),
     password: Joi.string().required().messages({
-      "any.required": "Semua Field Wajib Diisi!",
+      "any.required": "password Wajib Diisi!",
     }),
   });
+  const { username, password } = req.body;
+  const authToken = req.header("x-auth-token");
 
+  console.log(req.body)
   try {
     await schema.validateAsync(req.body);
   } catch (error) {
     return res.status(400).send(error.toString());
   }
-
-  const { username, password } = req.body;
-  const authToken = req.header("x-auth-token");
 
   try {
     let user;
