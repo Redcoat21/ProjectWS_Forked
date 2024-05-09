@@ -40,12 +40,4 @@ const sequelize = new Sequelize("db_project_ws", "root", "", {
 });
 
 module.exports = sequelize;
-  // 'migrations-path': path.resolve('database', 'migrations'),
 
-  // "development": {
-  //   "username": "root",
-  //   "password": null,
-  //   "database": "db_project_ws",
-  //   "host": "127.0.0.1",
-  //   "dialect": "mysql"
-  // },
