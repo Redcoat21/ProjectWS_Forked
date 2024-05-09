@@ -4,15 +4,17 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Joi = require("joi");
 const Service = require("../services/userService");
+const multer = require("multer");
 
 const register = async function (req, res) {
   Service.upload(req, res, async function (err) {
+    if(!req.file) return res.status(400).json({ error: "no file img" });
     if (err instanceof multer.MulterError) {
       return res.status(400).json({ error: "File size limit exceeded" });
     } else if (err) {
       return res.status(500).json({ error: "Failed to upload file" });
     }
-
+    
     const schema = Joi.object({
       name: Joi.string().required().messages({
         "any.required": "Semua Field Wajib Diisi!",
@@ -32,15 +34,16 @@ const register = async function (req, res) {
         "any.required": "Semua Field Wajib Diisi!",
       }),
     });
+    console.log(req.body);
+
+    const { name, username, email, password } = req.body;
+    const profilePicturePath = req.file ? req.file.path : null;
 
     try {
       await schema.validateAsync(req.body);
     } catch (error) {
       return res.status(400).send(error.toString());
     }
-
-    const { name, username, email, password } = req.body;
-    const profilePicturePath = req.file ? req.file.path : null;
 
     try {
       const userCount = await User.count();
