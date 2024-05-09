@@ -82,7 +82,7 @@ const createPlayList = async function (req, res) {
         playlist_id : ids,
         name:playlistname,
         description:description,
-        user_id : decoded
+        user_id : decoded.user_id
     });
   };
 
