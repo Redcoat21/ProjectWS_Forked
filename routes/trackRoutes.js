@@ -3,7 +3,8 @@ const router = express.Router();
 const trackController = require("../app/controllers/trackControler");
 const authMiddleware = require("../app/middleware/authMiddleware");
 
-router.post("/getApikey",trackController.getAccessTokenFromSpotify);
-router.get("/getTrackById/:trackId",authMiddleware,trackController.getTrackById);
-router.put("/createPlaylist",authMiddleware,trackController.createPlayList);
+router.post("/getAccessTokenFromSpotify",trackController.getAccessTokenFromSpotify);
+router.get("/getTrackById/:trackId",trackController.getTrackById);
+router.post("/createPlaylist",trackController.createPlayList);
+
 module.exports = router;

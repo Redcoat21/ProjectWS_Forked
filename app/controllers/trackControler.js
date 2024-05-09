@@ -5,9 +5,10 @@ const axios = require("axios");
 const User = require("../models/User");
 const Playlist = require("../models/Playlist");
 const Tracklist = require("../models/Tracklist");
-const api_key_spotify= process.env.API_KEY_SPOTIFY;
-const client_id = process.env.client_id;
-const client_secret = process.env.client_secret;
+require('dotenv').config();
+const ACCESS_KEY_SPOTIFY= process.env.ACCESS_KEY_SPOTIFY;
+const client_id = process.env.CLIENT_ID;
+const client_secret = process.env.CLIENT_SECRET;
 //const client_id = "104508e989054f18865186f0df9a5f70";
 //ini client_id punyaku
 // const client_secret ="87f4064dfa2f43ad85f7b4b99736fdf5";
@@ -20,8 +21,9 @@ const client_secret = process.env.client_secret;
 //habis itu7 kalian run http://localhost:3000/track/getApikey btw jangan lupa client_secret dan client_id nya diganti punya kalian
 
 const getAccessTokenFromSpotify = async function (req, res) {
-    //const {client_id,client_secret} = req.body;
     try {
+        console.log(client_id);
+        console.log(client_secret);
       const response = await axios.post(
           'https://accounts.spotify.com/api/token',
           'grant_type=client_credentials&client_id=' + encodeURIComponent(client_id) + '&client_secret=' + encodeURIComponent(client_secret),
@@ -31,7 +33,6 @@ const getAccessTokenFromSpotify = async function (req, res) {
               }
           }
       );
-
       console.log('Hasil response nya adalah :', response.data);
       return res.status(200).json(response.data);
       // Handle the response data as needed
@@ -47,11 +48,18 @@ const getTrackById = async function (req, res) {
   try {
     const response = await axios.get(`https://api.spotify.com/v1/tracks/${trackId}`, {
         headers: {
-            'Authorization': 'Bearer ' + api_key_spotify // Make sure access_token is a valid OAuth token
+            'Authorization': 'Bearer ' + ACCESS_KEY_SPOTIFY // Make sure access_token is a valid OAuth token
         }
     });
-
-    return res.status(200).json(response.data); // Send only the response data using res.json()
+    let getOneSong = response.data;
+    //return res.status(200).json(response.data); 
+    return res.status(200).send({
+        nama_lagu : getOneSong.name,
+        artis : getOneSong.album.artists[0].name,
+        url:getOneSong.external_urls.spotify,
+        complete :getOneSong
+    });
+    // Send only the response data using res.json()
     // Handle the response data as needed
   } catch (error) {
       console.error('Error fetching data:', error.response.data);
@@ -61,10 +69,14 @@ const getTrackById = async function (req, res) {
 
 
 const createPlayList = async function (req, res) {
-    const {playlistname,description} = req.body;
-    const token = req.header; 
-    //const token = req.header("x-auth-token");
-    const decoded = jwt.verify(token, "PROJECTWS");
+    console.log(req.body);
+    const playlistname = req.body.playlistname;
+    const description = req.body.description;
+    console.log(req.body.playlistname);
+    console.log(req.body.description);
+    // const token = req.header; 
+    // //const token = req.header("x-auth-token");
+    // const decoded = jwt.verify(token, "PROJECTWS");
     const user = await User.findOne({ where: { user_id: decoded.user_id } });
     if (!user) {
         return res.status(404).json({messege:"User dis"});
@@ -78,14 +90,75 @@ const createPlayList = async function (req, res) {
     } else{
         ids = "PL00"+(countPlay+1);
     }
-    const createPlaylist = Playlist.create({
+    // const createPlaylist = Playlist.create({
+    //     playlist_id : ids,
+    //     name:playlistname,
+    //     description:description,
+    //     user_id : decoded.user_id
+    // });
+    return res.status(200).json({
         playlist_id : ids,
         name:playlistname,
-        description:description,
-        user_id : decoded.user_id
+        description:description
     });
   };
 
+
+// const deletePlayList = async function (req, res) {
+//     console.log(req.params.playlist_id);
+//     const playlist_id = req.params.playlist_id;
+//     // const token = req.header; 
+//     // //const token = req.header("x-auth-token");
+//     // const decoded = jwt.verify(token, "PROJECTWS");
+//     const user = await User.findOne({ where: { user_id: decoded.user_id } });
+//     if (!user) {
+//         return res.status(404).json({messege:"User dis"});
+//     } 
+//     const countPlay = await Playlist.count();
+//     let ids = "";
+//     if (countPlay > 9) {
+//         ids = "PL0"+(countPlay+1);
+//     } else if (countPlay > 99) {
+//         ids = "PL"+(countPlay+1);
+//     } else{
+//         ids = "PL00"+(countPlay+1);
+//     }
+//     // const createPlaylist = Playlist.create({
+//     //     playlist_id : ids,
+//     //     name:playlistname,
+//     //     description:description,
+//     //     user_id : decoded.user_id
+//     // });
+//     return res.status(200).json({
+//         playlist_id : ids,
+//         name:playlistname,
+//         description:description
+//     });
+// };
+
+// const deleteTrackList = async function (req, res) {
+//     console.log(req.params.playlist_id);
+//     console.log(req.params.name);
+//     const {playlist_id,name} = req.params;
+//     // const token = req.header; 
+//     // //const token = req.header("x-auth-token");
+//     // const decoded = jwt.verify(token, "PROJECTWS");
+//     const user = await User.findOne({ where: { user_id: decoded.user_id } });
+//     if (!user) {
+//         return res.status(404).json({messege:"User dis"});
+//     } 
+//     const trackDelelete = await Tracklist.findOne({ 
+//         where: { 
+//             playlist_id: playlist_id, 
+//             name: name 
+//         } 
+//     });
+//     trackDelelete.delete().save();
+//     return res.status(200).json({
+//         trackId : trackDelelete.track_id,
+//         name:trackDelelete.name
+//     });
+// };
 // const InsertToPlayList = async function (req, res) {
 //     const {playlistname,description} = req.body;
 //     const countPlay = await Tracklist.count();
@@ -113,31 +186,33 @@ const createPlayList = async function (req, res) {
 // );
 
 
-// const getTrackByName = async function (req, res) {
-//   const searchTrack = req.query.searchTrack;
-//   try {
-//       const response = await axios.get('https://api.spotify.com/v1/search', {
-//           params: {
-//               q: searchTrack,
-//               type: 'track'
-//           },
-//           headers: {
-//               'Authorization': 'Bearer ' + api_key_spotify // Make sure access_token is a valid OAuth token
-//           }
-//       });
-//       return res.status(200).json(response.data);
-//       // Handle the response data as needed
-//   } catch (error) {
-//       console.error('Error fetching data:', error.response.data);
-//       // Handle errors
-//   }
-// };//masih error
+const getTrackByName = async function (req, res) {
+  const searchTrack = req.query.searchTrack;
+  try {
+      const response = await axios.get('https://api.spotify.com/v1/search', {
+          params: {
+              q: searchTrack,
+              type: 'track'
+          },
+          headers: {
+              'Authorization': 'Bearer ' + api_key_spotify // Make sure access_token is a valid OAuth token
+          }
+      });
+      return res.status(200).json(response.data);
+      // Handle the response data as needed
+  } catch (error) {
+      console.error('Error fetching data:', error.response.data);
+      // Handle errors
+  }
+};//masih error
 
 
 module.exports = {
     getAccessTokenFromSpotify,
     getTrackById,
     createPlayList
+    // deletePlayList,
+    // deleteTrackList
   };
 
 

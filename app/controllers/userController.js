@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Joi = require("joi");
 const Service = require("../services/userService");
+const multer = require('multer');
 
 const register = async function (req, res) {
   Service.upload(req, res, async function (err) {

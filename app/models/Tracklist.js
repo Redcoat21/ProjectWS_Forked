@@ -1,9 +1,9 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { Model, Sequelize, DataTypes, Op } = require("sequelize");
 const sequelize = require("../../config/config");
-// class Users extends Model {}
-// Users.init
+
 class Tracklist extends Model{}
-Tracklist({
+Tracklist.init(
+  {
     tracklist_id: {
     type: Sequelize.INTEGER(11),
     primaryKey: true,
