@@ -18,7 +18,8 @@ const client_secret = process.env.client_secret;
 // apikeynya diblokir bisa langsung login spotify dev 
 //habis itu kalian dapat client_id dan client_secret 
 //habis itu7 kalian run http://localhost:3000/track/getApikey btw jangan lupa client_secret dan client_id nya diganti punya kalian
-const getApikey = async function (req, res) {
+
+const getAccessTokenFromSpotify = async function (req, res) {
     //const {client_id,client_secret} = req.body;
     try {
       const response = await axios.post(
@@ -38,15 +39,15 @@ const getApikey = async function (req, res) {
       console.error('Error fetching data:', error);
       // Handle errors
   }
-
 };//buat dapetin apikey spotivynya
+
 
 const getTrackById = async function (req, res) {
   const trackId = req.params.trackId; // Retrieve trackId from request parameters
   try {
     const response = await axios.get(`https://api.spotify.com/v1/tracks/${trackId}`, {
         headers: {
-            'Authorization': 'Bearer ' + access_token // Make sure access_token is a valid OAuth token
+            'Authorization': 'Bearer ' + api_key_spotify // Make sure access_token is a valid OAuth token
         }
     });
 
@@ -61,7 +62,8 @@ const getTrackById = async function (req, res) {
 
 const createPlayList = async function (req, res) {
     const {playlistname,description} = req.body;
-    const token = req.header("x-auth-token");
+    const token = req.header; 
+    //const token = req.header("x-auth-token");
     const decoded = jwt.verify(token, "PROJECTWS");
     const user = await User.findOne({ where: { user_id: decoded.user_id } });
     if (!user) {
@@ -79,8 +81,8 @@ const createPlayList = async function (req, res) {
     const createPlaylist = Playlist.create({
         playlist_id : ids,
         name:playlistname,
-        description:description
-        user_id :
+        description:description,
+        user_id : decoded.user_id
     });
   };
 
@@ -109,33 +111,33 @@ const createPlayList = async function (req, res) {
 //   `description` VARCHAR(255) NULL,
 //   `user_id` VARCHAR(6) REFERENCES users(user_id)
 // );
-const getTrackByName = async function (req, res) {
-  const searchTrack = req.query.searchTrack;
-  try {
-      const response = await axios.get('https://api.spotify.com/v1/search', {
-          params: {
-              q: searchTrack,
-              type: 'track'
-          },
-          headers: {
-              'Authorization': 'Bearer ' + access_token // Make sure access_token is a valid OAuth token
-          }
-      });
-      return res.status(200).json(response.data);
-      // Handle the response data as needed
-  } catch (error) {
-      console.error('Error fetching data:', error.response.data);
-      // Handle errors
-  }
-};//masih error
+
+
+// const getTrackByName = async function (req, res) {
+//   const searchTrack = req.query.searchTrack;
+//   try {
+//       const response = await axios.get('https://api.spotify.com/v1/search', {
+//           params: {
+//               q: searchTrack,
+//               type: 'track'
+//           },
+//           headers: {
+//               'Authorization': 'Bearer ' + api_key_spotify // Make sure access_token is a valid OAuth token
+//           }
+//       });
+//       return res.status(200).json(response.data);
+//       // Handle the response data as needed
+//   } catch (error) {
+//       console.error('Error fetching data:', error.response.data);
+//       // Handle errors
+//   }
+// };//masih error
 
 
 module.exports = {
-    getApikey,
+    getAccessTokenFromSpotify,
     getTrackById,
-    getTrackByName,
-    createPlayList,
-    InsertToPlayList
+    createPlayList
   };
 
 
