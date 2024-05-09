@@ -3,7 +3,7 @@ const User = require("../models/User");
 const path = require("path");
 
 const checkUsernameExist = async function (username) {
-  const getusername = User.findOne({
+  const getusername = await User.findOne({
     where: {
       username: username,
     },
