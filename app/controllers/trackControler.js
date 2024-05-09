@@ -5,12 +5,14 @@ const axios = require("axios");
 const User = require("../models/User");
 const Playlist = require("../models/Playlist");
 const Tracklist = require("../models/Tracklist");
-const api_key= process.env.api_key;
-const client_id = "104508e989054f18865186f0df9a5f70";
+const api_key_spotify= process.env.API_KEY_SPOTIFY;
+const client_id = process.env.client_id;
+const client_secret = process.env.client_secret;
+//const client_id = "104508e989054f18865186f0df9a5f70";
 //ini client_id punyaku
-const client_secret ="87f4064dfa2f43ad85f7b4b99736fdf5";
-//ini client_secret punyaku
-const access_token ="BQBmZWZmlx9T_rL2hVEtfhQ_MgUiB0nqkOTs8BkDt4JI9Q6JyGC4PfbXnVOeRsc6k9AhJDuJ6-N0PUxraVA9lV8TAI5z6NvuyHiPlXkptBZjRRaFNIc";
+// const client_secret ="87f4064dfa2f43ad85f7b4b99736fdf5";
+// //ini client_secret punyaku
+// const access_token ="BQBmZWZmlx9T_rL2hVEtfhQ_MgUiB0nqkOTs8BkDt4JI9Q6JyGC4PfbXnVOeRsc6k9AhJDuJ6-N0PUxraVA9lV8TAI5z6NvuyHiPlXkptBZjRRaFNIc";
 //ini access_token punyaku
 
 // apikeynya diblokir bisa langsung login spotify dev 
