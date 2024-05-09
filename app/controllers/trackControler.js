@@ -1,11 +1,11 @@
 const fs = require("fs");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
 const axios = require("axios");
+const User = require("../models/User");
 const Playlist = require("../models/Playlist");
 const Tracklist = require("../models/Tracklist");
-
+const api_key= process.env.api_key;
 const client_id = "104508e989054f18865186f0df9a5f70";
 //ini client_id punyaku
 const client_secret ="87f4064dfa2f43ad85f7b4b99736fdf5";
@@ -59,6 +59,12 @@ const getTrackById = async function (req, res) {
 
 const createPlayList = async function (req, res) {
     const {playlistname,description} = req.body;
+    const token = req.header("x-auth-token");
+    const decoded = jwt.verify(token, "PROJECTWS");
+    const user = await User.findOne({ where: { user_id: decoded.user_id } });
+    if (!user) {
+        return res.status(404).json({messege:"User dis"});
+    } 
     const countPlay = await Playlist.count();
     let ids = "";
     if (countPlay > 9) {
@@ -72,26 +78,27 @@ const createPlayList = async function (req, res) {
         playlist_id : ids,
         name:playlistname,
         description:description
+        user_id :
     });
   };
 
-const InsertToPlayList = async function (req, res) {
-    const {playlistname,description} = req.body;
-    const countPlay = await Tracklist.count();
-    let ids = "";
-    if (countPlay > 9) {
-        ids = "PL0"+(countPlay+1);
-    } else if (countPlay > 99) {
-        ids = "PL"+(countPlay+1);
-    } else{
-        ids = "PL00"+(countPlay+1);
-    }
-    const createPlaylist = Playlist.create({
-        playlist_id : ids,
-        name:playlistname,
-        description:description
-    });
-  };
+// const InsertToPlayList = async function (req, res) {
+//     const {playlistname,description} = req.body;
+//     const countPlay = await Tracklist.count();
+//     let ids = "";
+//     if (countPlay > 9) {
+//         ids = "PL0"+(countPlay+1);
+//     } else if (countPlay > 99) {
+//         ids = "PL"+(countPlay+1);
+//     } else{
+//         ids = "PL00"+(countPlay+1);
+//     }
+//     const createPlaylist = Playlist.create({
+//         playlist_id : ids,
+//         name:playlistname,
+//         description:description
+//     });
+//   };
 
 
   // CREATE TABLE `playlists` (
