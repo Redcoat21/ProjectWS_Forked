@@ -1,7 +1,8 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../../config/config");
 
-const Playlist = sequelize.define("Playlist", {
+class Playlist extends Model {}
+Playlist.init( {
   playlist_id: {
     type: Sequelize.STRING(5),
     primaryKey: true,
@@ -20,6 +21,11 @@ const Playlist = sequelize.define("Playlist", {
     type: Sequelize.STRING(6),
     allowNull: false,
   },
+},{
+  sequelize,
+  modelName: "Playlist",
+  tableName: "playlist",
+  timestamps: false,
 });
 // CREATE TABLE `playlists` (
 //   `playlist_id` VARCHAR(5) PRIMARY KEY,

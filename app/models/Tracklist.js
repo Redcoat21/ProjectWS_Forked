@@ -1,7 +1,9 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const sequelize = require("../../config/config");
-
-const Tracklist = sequelize.define("Tracklist", {
+// class Users extends Model {}
+// Users.init
+class Tracklist extends Model{}
+Tracklist({
     tracklist_id: {
     type: Sequelize.INTEGER(11),
     primaryKey: true,
@@ -20,7 +22,14 @@ const Tracklist = sequelize.define("Tracklist", {
     type: Sequelize.STRING(255),
     allowNull: false,
   },
-});
+},
+  {
+    sequelize,
+    modelName: "Tracklist",
+    tableName: "tracklist",
+    timestamps: false,
+  }
+);
 //     `tracklist_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
 //     `name` VARCHAR(255) NOT NULL,
 //     `playlist_id` VARCHAR(5) REFERENCES playlists(playlist_id),

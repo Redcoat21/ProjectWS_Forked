@@ -1,7 +1,6 @@
 {
   "name": "projectws",
   "version": "1.0.0",
-  "description": "",
   "main": "server.js",
   "directories": {
     "test": "tests"
@@ -27,5 +26,14 @@
   },
   "devDependencies": {
     "sequelize-cli": "^6.6.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Xrror404/ProjectWS.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Xrror404/ProjectWS/issues"
+  },
+  "homepage": "https://github.com/Xrror404/ProjectWS#readme",
+  "description": ""
 }
