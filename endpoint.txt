@@ -7,13 +7,30 @@ post:
 - add music to playlist () yosua
 - allow access to developer (developer requests access to user)(dari sisi dev) ()
 - generate token ()
+- like music ()
+
+post:
+- localhost:3000/user/login
+- localhost:3000/user/register
+- localhost:3000/playlist
+- localhost:3000/tracklist
+- localhost:3000/user/access 
+- localhost:3000/token
+- localhost:3000/track/favorite
+
+--------------------------------------------------------------------------------------------------------------
 
 put:
 - edit user profile (+topup) (v) yoga
-- like music ()
-- dislike music ()
 - upgrade tier (v) yoga
 - recharge api_hit (v) yoga
+
+put:
+- localhost:3000/user/edit
+- localhost:3000/user/premium
+- localhost:3000/user/apihit
+
+--------------------------------------------------------------------------------------------------------------
 
 get:
 - get lyrics ()
@@ -21,9 +38,26 @@ get:
 - play music ()
 - search music ()
 - get all friends email (have spotify) ()
-- play on spotify ()
 - show friends now playing( playlist ,song) ()
+- play on spotify ()
+
+
+get:
+- localhost:3000/track/lyric/:url
+- localhost:3000/track/lyric/translate/:translate_to
+- localhost:3000/track/play/:url
+- localhost:3000/track/search/:url
+- loclahost:3000/user/email
+- localhost:3000/user/play/:user_id
+- localhost:3000/user/play/:playlist_id/:url
+
+--------------------------------------------------------------------------------------------------------------
+delete: 
+- delete playlist () yosua
+- delete music from playlist () yosua
+- dislike music ()
 
 delete: 
-- delete playlist ()yosua
-- delete music from playlist ()yosua
+- localhost:3000/playlist/:playlist_id
+- localhost:3000/tracklist/:playlist_id/:name
+- localhost:3000/favorite/music
