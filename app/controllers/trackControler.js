@@ -125,7 +125,8 @@ module.exports = {
     getApikey,
     getTrackById,
     getTrackByName,
-    createPlayList
+    createPlayList,
+    InsertToPlayList
   };
 
 
