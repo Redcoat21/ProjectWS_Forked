@@ -50,26 +50,26 @@ const getTrackById = async function (req, res) {
     if (!trackId) {
         return res.status(400).json({ error: "trackId is missing in the request param" });
     }
-  try {
-    const response = await axios.get(`https://api.spotify.com/v1/tracks/${trackId}`, {
-        headers: {
-            'Authorization': 'Bearer ' + ACCESS_KEY_SPOTIFY // Make sure access_token is a valid OAuth token
-        }
-    });
-    let getOneSong = response.data;
-    //return res.status(200).json(response.data); 
-    return res.status(200).send({
-        nama_lagu : getOneSong.name,
-        artis : getOneSong.album.artists[0].name,
-        url:getOneSong.external_urls.spotify,
-        complete :getOneSong
-    });
-    // Send only the response data using res.json()
-    // Handle the response data as needed
-  } catch (error) {
-      console.error('Error fetching data:', error.response.data);
-      return res.status(error.response.status).json({ error: error.response.data }); // Send error response
-  }
+    try {
+      const response = await axios.get(`https://api.spotify.com/v1/tracks/${trackId}`, {
+          headers: {
+              'Authorization': 'Bearer ' + ACCESS_KEY_SPOTIFY // Make sure access_token is a valid OAuth token
+          }
+      });
+      let getOneSong = response.data;
+      //return res.status(200).json(response.data); 
+      return res.status(200).send({
+          nama_lagu : getOneSong.name,
+          artis : getOneSong.album.artists[0].name,
+          url:getOneSong.external_urls.spotify,
+          complete :getOneSong
+      });
+      // Send only the response data using res.json()
+      // Handle the response data as needed
+    } catch (error) {
+        console.error('Error fetching data:', error.response.data);
+        return res.status(error.response.status).json({ error: error.response.data }); // Send error response
+    }
 };// udh dapat
 
 
