@@ -246,7 +246,13 @@ const InsertToPlayList = async function (req, res) {
         } else{
             ids = "TL00"+(countPlay+1);
         }
-      //return res.status(200).json(response.data); 
+    //   //return res.status(200).json(response.data); 
+    //   const Insertplaylist = await Tracklist.create({
+    //       tracklist_id : ids,
+    //       nama : getOneSong.name,
+    //       url:getOneSong.external_urls.spotify,
+    //       playlist_id:playlist_id
+    //   })
       return res.status(200).send({
           Tracklist_id : ids,
           nama_lagu : getOneSong.name,
