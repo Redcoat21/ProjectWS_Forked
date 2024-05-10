@@ -230,37 +230,37 @@ const InsertToPlayList = async function (req, res) {
     const trackId = url.split("/").pop(); // Extract the track ID from the URL
     //console.log(trackId); // Output: 6DCZcSspjsKoFjzjrWoCdn
     // return res.status(200).send({messege:trackId}); 
-  try {
-    const response = await axios.get(`https://api.spotify.com/v1/tracks/${trackId}`, {
-        headers: {
-            'Authorization': 'Bearer ' + ACCESS_KEY_SPOTIFY // Make sure access_token is a valid OAuth token
+    try {
+      const response = await axios.get(`https://api.spotify.com/v1/tracks/${trackId}`, {
+          headers: {
+              'Authorization': 'Bearer ' + ACCESS_KEY_SPOTIFY // Make sure access_token is a valid OAuth token
+          }
+      });
+      let getOneSong = response.data;
+      const countPlay = await Tracklist.count();
+        let ids = "";
+        if (countPlay > 9) {
+            ids = "TL0"+(countPlay+1);
+        } else if (countPlay > 99) {
+            ids = "TL"+(countPlay+1);
+        } else{
+            ids = "TL00"+(countPlay+1);
         }
-    });
-    let getOneSong = response.data;
-    const countPlay = await Tracklist.count();
-      let ids = "";
-      if (countPlay > 9) {
-          ids = "TL0"+(countPlay+1);
-      } else if (countPlay > 99) {
-          ids = "TL"+(countPlay+1);
-      } else{
-          ids = "TL00"+(countPlay+1);
-      }
-    //return res.status(200).json(response.data); 
-    return res.status(200).send({
-        Tracklist_id : ids,
-        nama_lagu : getOneSong.name,
-        artis : getOneSong.album.artists[0].name,
-        url:getOneSong.external_urls.spotify,
-        playlist_id:playlist_id
-        //complete :getOneSong
-    });
-    // Send only the response data using res.json()
-    // Handle the response data as needed
-  } catch (error) {
-      console.error('Error fetching data:', error.response.data);
-      return res.status(error.response.status).json({ error: error.response.data }); // Send error response
-  }
+      //return res.status(200).json(response.data); 
+      return res.status(200).send({
+          Tracklist_id : ids,
+          nama_lagu : getOneSong.name,
+          artis : getOneSong.album.artists[0].name,
+          url:getOneSong.external_urls.spotify,
+          playlist_id:playlist_id
+          //complete :getOneSong
+      });
+      // Send only the response data using res.json()
+      // Handle the response data as needed
+    } catch (error) {
+        console.error('Error fetching data:', error.response.data);
+        return res.status(error.response.status).json({ error: error.response.data }); // Send error response
+    }
 };//udh bisa
 
 
