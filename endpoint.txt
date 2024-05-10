@@ -1,12 +1,12 @@
 endpoint yang dibutuh=
 
 post:
-- login (v) yoga
-- register (v) yoga
+- login (generate token jwt buat login )(v) yoga
+- register (v) yoga  "masalah minor, mek e kalau error di joi masih masuk ke public asset multer e" -richard
 - create playlist () yosua
 - add music to playlist () yosua
 - allow access to developer (developer requests access to user)(dari sisi dev) ()
-- generate token ()
+- generate token ?(token buat opo jadi e?) ()
 - like music ()
 
 post:
@@ -23,7 +23,7 @@ post:
 put:
 - edit user profile (+topup) (v) yoga
 - upgrade tier (v) yoga
-- recharge api_hit (v) yoga
+- recharge api_hit (v) yoga "recharge amount e jek rada aneh nambah mek diconcat tok" - richard
 
 put:
 - localhost:3000/user/edit
