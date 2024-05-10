@@ -186,10 +186,11 @@ const deletePlayList = async function (req, res) {
     //SearchTracklist.delete();
     const SearchPlaylist = await Playlist.findOne({where:{playlist_id:playlist_id,user_id : decoded.user_id}});
     //SearchPlaylist.delete();
-
+    //SearchTracklist.save();
+    //SearchPlaylist.save();
     return res.status(200).json({
         playlist_name : SearchPlaylist.playlist_name,
-        description:description,
+        description:SearchPlaylist.description,
         All_Songs_In_PlayList:SearchTracklist
     });
 };
@@ -198,9 +199,8 @@ const deleteTrackList = async function (req, res) {
     console.log(req.params.playlist_id);
     console.log(req.params.name);
     const {playlist_id,name} = req.params;
-    // const token = req.header; 
-    // //const token = req.header("x-auth-token");
-    // const decoded = jwt.verify(token, "PROJECTWS");
+    const token = req.header; 
+    const decoded = jwt.verify(token, "PROJECTWS");
     const user = await User.findOne({ where: { user_id: decoded.user_id } });
     if (!user) {
         return res.status(404).json({messege:"User dis"});
@@ -307,7 +307,7 @@ module.exports = {
     createPlayList,
     InsertToPlayList,
     deletePlayList,
-    // deleteTrackList
+    deleteTrackList
   };
 
 
