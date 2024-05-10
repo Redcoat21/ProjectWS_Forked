@@ -1,8 +1,8 @@
 const { Model, Sequelize, DataTypes, Op } = require("sequelize");
 const sequelize = require("../../config/config");
 
-class Tracklist extends Model{}
-Tracklist.init(
+class Tracklists extends Model{}
+Tracklists.init(
   {
     tracklist_id: {
     type: Sequelize.INTEGER(11),
@@ -25,8 +25,8 @@ Tracklist.init(
 },
   {
     sequelize,
-    modelName: "Tracklist",
-    tableName: "tracklist",
+    modelName: "Tracklists",
+    tableName: "tracklists",
     timestamps: false,
   }
 );
@@ -35,4 +35,4 @@ Tracklist.init(
 //     `playlist_id` VARCHAR(5) REFERENCES playlists(playlist_id),
 //     `url` VARCHAR(255) NOT NULL
 // );
-module.exports = Tracklist;
+module.exports = Tracklists;

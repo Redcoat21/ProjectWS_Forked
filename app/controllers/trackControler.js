@@ -4,11 +4,13 @@ const jwt = require("jsonwebtoken");
 const axios = require("axios");
 const User = require("../models/User");
 const Playlist = require("../models/Playlist");
-const Tracklist = require("../models/Tracklist");
+const Tracklist = require("../models/Tracklists");
+const { URL } = require("url");
 require('dotenv').config();
 const ACCESS_KEY_SPOTIFY= process.env.ACCESS_KEY_SPOTIFY;
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
+
 //const client_id = "104508e989054f18865186f0df9a5f70";
 //ini client_id punyaku
 // const client_secret ="87f4064dfa2f43ad85f7b4b99736fdf5";
@@ -44,7 +46,10 @@ const getAccessTokenFromSpotify = async function (req, res) {
 
 
 const getTrackById = async function (req, res) {
-  const trackId = req.params.trackId; // Retrieve trackId from request parameters
+    const trackId = req.params.trackId;
+    if (!trackId) {
+        return res.status(400).json({ error: "trackId is missing in the request param" });
+    }
   try {
     const response = await axios.get(`https://api.spotify.com/v1/tracks/${trackId}`, {
         headers: {
@@ -68,6 +73,68 @@ const getTrackById = async function (req, res) {
 };// udh dapat
 
 
+const getTrackByUrl = async function (req, res) {
+    const url = req.body.url;
+    if (!url) {
+        return res.status(400).json({ error: "URL is missing in the request body" });
+    }
+    const trackId = url.split("/").pop(); // Extract the track ID from the URL
+    console.log(trackId); // Output: 6DCZcSspjsKoFjzjrWoCdn
+    // return res.status(200).send({messege:trackId}); 
+  try {
+    const response = await axios.get(`https://api.spotify.com/v1/tracks/${trackId}`, {
+        headers: {
+            'Authorization': 'Bearer ' + ACCESS_KEY_SPOTIFY // Make sure access_token is a valid OAuth token
+        }
+    });
+    let getOneSong = response.data;
+    //return res.status(200).json(response.data); 
+    return res.status(200).send({
+        nama_lagu : getOneSong.name,
+        artis : getOneSong.album.artists[0].name,
+        url:getOneSong.external_urls.spotify,
+        complete :getOneSong
+    });
+    // Send only the response data using res.json()
+    // Handle the response data as needed
+  } catch (error) {
+      console.error('Error fetching data:', error.response.data);
+      return res.status(error.response.status).json({ error: error.response.data }); // Send error response
+  }
+};//sudah bisa
+
+
+const getAlbumByUrl = async function (req, res) {
+    const url = req.body.url
+    if (!url) {
+        return res.status(400).json({ error: "URL is missing in the request body" });
+    };
+    const albumId = url.split("/").pop();
+    // Extract the track ID from the URL
+    console.log(albumId); // Output: 6DCZcSspjsKoFjzjrWoCdn
+    // return res.status(200).send({messege:trackId}); 
+  try {
+    const response = await axios.get(`https://api.spotify.com/v1/albums/${albumId}`, {
+        headers: {
+            'Authorization': 'Bearer ' + ACCESS_KEY_SPOTIFY // Make sure access_token is a valid OAuth token
+        }
+    });
+    //let getOneSong = response.data;
+    return res.status(200).json(response.data); 
+    // return res.status(200).send({
+    //     nama_lagu : getOneSong.name,
+    //     artis : getOneSong.album.artists[0].name,
+    //     url:getOneSong.external_urls.spotify,
+    //     complete :getOneSong
+    // });
+    // Send only the response data using res.json()
+    // Handle the response data as needed
+  } catch (error) {
+      console.error('Error fetching data:', error.response.data);
+      return res.status(error.response.status).json({ error: error.response.data }); // Send error response
+  }
+};
+
 const createPlayList = async function (req, res) {
     console.log(req.body);
     const playlistname = req.body.playlistname;
@@ -77,10 +144,10 @@ const createPlayList = async function (req, res) {
     // const token = req.header; 
     // //const token = req.header("x-auth-token");
     // const decoded = jwt.verify(token, "PROJECTWS");
-    const user = await User.findOne({ where: { user_id: decoded.user_id } });
-    if (!user) {
-        return res.status(404).json({messege:"User dis"});
-    } 
+    // const user = await User.findOne({ where: { user_id: decoded.user_id } });
+    // if (!user) {
+    //     return res.status(404).json({messege:"User dis"});
+    // } 
     const countPlay = await Playlist.count();
     let ids = "";
     if (countPlay > 9) {
@@ -97,6 +164,7 @@ const createPlayList = async function (req, res) {
     //     user_id : decoded.user_id
     // });
     return res.status(200).json({
+        messege : "Playlist successfuly created",
         playlist_id : ids,
         name:playlistname,
         description:description
@@ -104,37 +172,27 @@ const createPlayList = async function (req, res) {
   };
 
 
-// const deletePlayList = async function (req, res) {
-//     console.log(req.params.playlist_id);
-//     const playlist_id = req.params.playlist_id;
-//     // const token = req.header; 
-//     // //const token = req.header("x-auth-token");
-//     // const decoded = jwt.verify(token, "PROJECTWS");
-//     const user = await User.findOne({ where: { user_id: decoded.user_id } });
-//     if (!user) {
-//         return res.status(404).json({messege:"User dis"});
-//     } 
-//     const countPlay = await Playlist.count();
-//     let ids = "";
-//     if (countPlay > 9) {
-//         ids = "PL0"+(countPlay+1);
-//     } else if (countPlay > 99) {
-//         ids = "PL"+(countPlay+1);
-//     } else{
-//         ids = "PL00"+(countPlay+1);
-//     }
-//     // const createPlaylist = Playlist.create({
-//     //     playlist_id : ids,
-//     //     name:playlistname,
-//     //     description:description,
-//     //     user_id : decoded.user_id
-//     // });
-//     return res.status(200).json({
-//         playlist_id : ids,
-//         name:playlistname,
-//         description:description
-//     });
-// };
+const deletePlayList = async function (req, res) {
+    //console.log(req.params.playlist_id);
+    const playlist_id = req.params.playlist_id;
+    const token = req.header; 
+    // //const token = req.header("x-auth-token");
+    const decoded = jwt.verify(token, "PROJECTWS");
+    const user = await User.findOne({ where: { user_id: decoded.user_id } });
+    if (!user) {
+        return res.status(404).json({messege:"User dis"});
+    } 
+    const SearchTracklist = await Tracklist.findAll({where:{playlist_id:playlist_id,user_id : decoded.user_id}});
+    SearchTracklist.delete();
+    const SearchPlaylist = await Playlist.findOne({where:{playlist_id:playlist_id,user_id : decoded.user_id}});
+    SearchPlaylist.delete();
+
+    return res.status(200).json({
+        playlist_name : SearchPlaylist.playlist_name,
+        description:description,
+        All_Songs_In_PlayList:SearchTracklist
+    });
+};
 
 // const deleteTrackList = async function (req, res) {
 //     console.log(req.params.playlist_id);
@@ -159,23 +217,51 @@ const createPlayList = async function (req, res) {
 //         name:trackDelelete.name
 //     });
 // };
-// const InsertToPlayList = async function (req, res) {
-//     const {playlistname,description} = req.body;
-//     const countPlay = await Tracklist.count();
-//     let ids = "";
-//     if (countPlay > 9) {
-//         ids = "PL0"+(countPlay+1);
-//     } else if (countPlay > 99) {
-//         ids = "PL"+(countPlay+1);
-//     } else{
-//         ids = "PL00"+(countPlay+1);
-//     }
-//     const createPlaylist = Playlist.create({
-//         playlist_id : ids,
-//         name:playlistname,
-//         description:description
-//     });
-//   };
+const InsertToPlayList = async function (req, res) {
+    const playlist_id = req.body.playlist_id;
+    const url = req.body.url;
+    //const trackId = req.body.trackId;
+    if (!url) {
+        return res.status(400).json({ error: "URL is missing in the request body" });
+    }
+    if (!playlist_id) {
+        return res.status(400).json({ error: "please insert playlist_id" });
+    }
+    const trackId = url.split("/").pop(); // Extract the track ID from the URL
+    //console.log(trackId); // Output: 6DCZcSspjsKoFjzjrWoCdn
+    // return res.status(200).send({messege:trackId}); 
+  try {
+    const response = await axios.get(`https://api.spotify.com/v1/tracks/${trackId}`, {
+        headers: {
+            'Authorization': 'Bearer ' + ACCESS_KEY_SPOTIFY // Make sure access_token is a valid OAuth token
+        }
+    });
+    let getOneSong = response.data;
+    const countPlay = await Tracklist.count();
+      let ids = "";
+      if (countPlay > 9) {
+          ids = "TL0"+(countPlay+1);
+      } else if (countPlay > 99) {
+          ids = "TL"+(countPlay+1);
+      } else{
+          ids = "TL00"+(countPlay+1);
+      }
+    //return res.status(200).json(response.data); 
+    return res.status(200).send({
+        Tracklist_id : ids,
+        nama_lagu : getOneSong.name,
+        artis : getOneSong.album.artists[0].name,
+        url:getOneSong.external_urls.spotify,
+        playlist_id:playlist_id
+        //complete :getOneSong
+    });
+    // Send only the response data using res.json()
+    // Handle the response data as needed
+  } catch (error) {
+      console.error('Error fetching data:', error.response.data);
+      return res.status(error.response.status).json({ error: error.response.data }); // Send error response
+  }
+};//udh bisa
 
 
   // CREATE TABLE `playlists` (
@@ -210,28 +296,14 @@ const getTrackByName = async function (req, res) {
 module.exports = {
     getAccessTokenFromSpotify,
     getTrackById,
-    createPlayList
-    // deletePlayList,
+    getTrackByUrl,
+    getAlbumByUrl,
+    createPlayList,
+    InsertToPlayList,
+    deletePlayList,
     // deleteTrackList
   };
 
-
-// const getTrack = async function (req, res) {
-//     const {trackId} = req.body;
-//     try {
-//         const response = await axios.get(`https://api.spotify.com/v1/tracks/${trackId}`, {
-//           headers: {
-//             'Authorization': 'Bearer YOUR_ACCESS_TOKEN', 
-//           }
-//         });
-//         return res.status(200).json(response);
-//         // Handle the response data as needed
-//       } catch (error) {
-//         console.error('Error fetching data:', error);
-//         // Handle errors
-//       }
-
-// };
 
 
 
