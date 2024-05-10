@@ -1,52 +1,52 @@
-const { Model, Sequelize, DataTypes, Op } = require("sequelize");
+const { Model, DataTypes, Op } = require("sequelize");
 const sequelize = require("../../config/config");
 
 class Users extends Model {}
 Users.init(
   {
     user_id: {
-      type: Sequelize.STRING(6),
+      type: DataTypes.STRING(6),
       primaryKey: true,
       allowNull: false,
       unique: true,
     },
     name: {
-      type: Sequelize.STRING(255),
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
     username: {
-      type: Sequelize.STRING(25),
+      type: DataTypes.STRING(25),
       allowNull: false,
       unique: true,
     },
     email: {
-      type: Sequelize.STRING(50),
+      type: DataTypes.STRING(50),
       allowNull: false,
       unique: true,
     },
     password: {
-      type: Sequelize.STRING(255),
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
     balance: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     api_key: {
-      type: Sequelize.STRING(25),
+      type: DataTypes.STRING(25),
       allowNull: false,
       unique: true,
     },
     api_hit: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     premium: {
-      type: Sequelize.BOOLEAN,
+      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
     profile_pic: {
-      type: Sequelize.STRING(255),
+      type: DataTypes.STRING(255),
       allowNull: false,
     },
   },

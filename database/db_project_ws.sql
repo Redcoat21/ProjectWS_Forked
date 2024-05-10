@@ -45,7 +45,7 @@ INSERT INTO `users` VALUES (
     "abcde12345",
     50,
     FALSE,
-    "./public/assets/222117054"
+    "public\\assets\\222117054.jpg"
 );
 
 INSERT INTO `users` VALUES (
@@ -58,7 +58,7 @@ INSERT INTO `users` VALUES (
     "fghij12345",
     50,
     FALSE,
-    "./public/assets/222117055"
+    "public\\assets\\222117055.jpg"
 );
 
 INSERT INTO `users` VALUES (
@@ -71,7 +71,7 @@ INSERT INTO `users` VALUES (
     "klmno12345",
     50,
     FALSE,
-    "./public/assets/222117068"
+    "public\\assets\\222117068.jpg"
 );
 
 INSERT INTO `users` VALUES (
@@ -84,7 +84,7 @@ INSERT INTO `users` VALUES (
     "pqrst12345",
     50,
     FALSE,
-    "./public/assets/222117069"
+    "public\\assets\\222117069.jpg"
 );
 
 INSERT INTO `playlists` VALUES (

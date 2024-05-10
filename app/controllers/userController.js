@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Joi = require("joi");
 const Service = require("../services/userService");
-const multer = require('multer');
+const multer = require("multer");
 
 const register = async function (req, res) {
   Service.upload(req, res, async function (err) {
@@ -41,7 +41,7 @@ const register = async function (req, res) {
     }
 
     const { name, username, email, password } = req.body;
-    const profilePicturePath = req.file ? req.file.path : null;
+    const profilePicture = req.file ? req.file.path : null;
 
     try {
       const userCount = await User.count();
@@ -58,7 +58,7 @@ const register = async function (req, res) {
         api_key: api_key,
         api_hit: 50,
         premium: false,
-        profile_pic: profilePicturePath,
+        profile_pic: profilePicture,
       });
       return res
         .status(201)

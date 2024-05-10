@@ -17,7 +17,7 @@ const checkUsernameExist = async function (username) {
 
 const checkUsernameNotExist = async function (username) {
   const getusername = await User.findOne({
-    where: {username},
+    where: { username },
   });
   if (getusername) {
     throw new Error("Username already registered!");
@@ -25,11 +25,11 @@ const checkUsernameNotExist = async function (username) {
 };
 
 const storage = multer.diskStorage({
-  destination: "./public/assets",
+  destination: "./public/assets/",
   filename: function (req, file, cb) {
     // console.log(file);
     cb(null, "profile_" + Date.now() + path.extname(file.originalname));
-    console.log(file.originalname)
+    console.log(file.originalname);
   },
 });
 
