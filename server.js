@@ -8,9 +8,10 @@ const dotenv = require("dotenv").config();
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-const PORT = process.env.PORT || 3000;
-
+const PORT = 3000;
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use("/user", userRoutes);
 app.use("/track", trackRoutes);
