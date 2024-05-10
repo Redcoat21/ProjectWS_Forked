@@ -8,6 +8,7 @@ router.post("/getAccessTokenFromSpotify",trackController.getAccessTokenFromSpoti
 router.get("/getTrackById/:trackId",trackController.getTrackById);
 router.get("/getTrackByUrl",trackController.getTrackByUrl);
 router.get("/getAlbumByUrl",trackController.getAlbumByUrl);
+router.get("/getTrackByNama",trackController.getTrackByName);
 router.post("/playlist",trackController.createPlayList);
 router.post("/tracklist",trackController.InsertToPlayList);
 router.delete("/playlist/:playlist_id",trackController.deletePlayList);

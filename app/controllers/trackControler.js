@@ -6,6 +6,7 @@ const User = require("../models/User");
 const Playlist = require("../models/Playlists");
 const Tracklist = require("../models/Tracklists");
 const { URL } = require("url");
+const { isArray } = require("util");
 require('dotenv').config();
 const ACCESS_KEY_SPOTIFY= process.env.ACCESS_KEY_SPOTIFY;
 const client_id = process.env.CLIENT_ID;
@@ -279,24 +280,49 @@ const InsertToPlayList = async function (req, res) {
 
 
 const getTrackByName = async function (req, res) {
-  const searchTrack = req.query.searchTrack;
+  const searchTrack = req.body.searchTrack;
   try {
       const response = await axios.get('https://api.spotify.com/v1/search', {
           params: {
-              q: searchTrack,
-              type: 'track'
+              q: `name: ${searchTrack}`,
+              type: "track",
           },
           headers: {
-              'Authorization': 'Bearer ' + api_key_spotify // Make sure access_token is a valid OAuth token
+              'Authorization': 'Bearer ' + ACCESS_KEY_SPOTIFY // Make sure access_token is a valid OAuth token
           }
       });
-      return res.status(200).json(response.data);
+      let getAllSong = response.data.tracks.items;
+      let getAllSongs = response.data;
+      const isarray = Array.isArray(getAllSongs);
+      return res.status(200).send({
+        isarray:isarray,
+        allsongs:getAllSong
+    });
+    //   if (Array.isArray(getAllSong)) {
+    //     for (let i = 0; i < getAllSong.length; i++) {
+    //         return res.status(200).json({
+    //             name_songs:getAllSong[i].name,
+    //             name_Artis:getAllSong[i].artists[0].name
+    //         });
+    //       }
+    //     // return res.status(200).json({
+    //     //     name_songs:getAllSong.tracks.items[i].name,
+    //     //     name_Artis:getAllSong.tracks.items[i].artists[0].name
+    //     // });
+    //   }
+    //   else{
+    //     return res.status(400).json({ error: "getAllSong is not array" });
+    //   }
+    //   return res.status(200).json({
+    //     name_songs:getAllSong.tracks.items[1].name,
+    //      name_Artis:getAllSong.tracks.items[1].artists[0].name
+    //   });
       // Handle the response data as needed
   } catch (error) {
       console.error('Error fetching data:', error.response.data);
       // Handle errors
   }
-};//masih error
+};//masih bingung cara returnnya
 
 
 module.exports = {
@@ -307,7 +333,8 @@ module.exports = {
     createPlayList,
     InsertToPlayList,
     deletePlayList,
-    deleteTrackList
+    deleteTrackList,
+    getTrackByName
   };
 
 
