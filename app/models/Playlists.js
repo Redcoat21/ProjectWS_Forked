@@ -2,8 +2,8 @@ const { Model, Sequelize, DataTypes, Op } = require("sequelize");
 const sequelize = require("../../config/config");
 
 
-class Playlist extends Model {}
-Playlist.init( 
+class Playlists extends Model {}
+Playlists.init( 
 {
   playlist_id: {
     type: Sequelize.STRING(5),
@@ -25,7 +25,7 @@ Playlist.init(
   },
 },{
   sequelize,
-  modelName: "Playlist",
+  modelName: "Playlists",
   tableName: "playlists",
   timestamps: false,
 });
@@ -35,4 +35,4 @@ Playlist.init(
 //   `description` VARCHAR(255) NULL,
 //   `user_id` VARCHAR(6) REFERENCES users(user_id)
 // );
-module.exports = Playlist;
+module.exports = Playlists;

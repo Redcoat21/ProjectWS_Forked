@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
 const User = require("../models/User");
-const Playlist = require("../models/Playlist");
+const Playlist = require("../models/Playlists");
 const Tracklist = require("../models/Tracklists");
 const { URL } = require("url");
 require('dotenv').config();
@@ -183,9 +183,9 @@ const deletePlayList = async function (req, res) {
         return res.status(404).json({messege:"User dis"});
     } 
     const SearchTracklist = await Tracklist.findAll({where:{playlist_id:playlist_id,user_id : decoded.user_id}});
-    SearchTracklist.delete();
+    //SearchTracklist.delete();
     const SearchPlaylist = await Playlist.findOne({where:{playlist_id:playlist_id,user_id : decoded.user_id}});
-    SearchPlaylist.delete();
+    //SearchPlaylist.delete();
 
     return res.status(200).json({
         playlist_name : SearchPlaylist.playlist_name,
@@ -194,29 +194,29 @@ const deletePlayList = async function (req, res) {
     });
 };
 
-// const deleteTrackList = async function (req, res) {
-//     console.log(req.params.playlist_id);
-//     console.log(req.params.name);
-//     const {playlist_id,name} = req.params;
-//     // const token = req.header; 
-//     // //const token = req.header("x-auth-token");
-//     // const decoded = jwt.verify(token, "PROJECTWS");
-//     const user = await User.findOne({ where: { user_id: decoded.user_id } });
-//     if (!user) {
-//         return res.status(404).json({messege:"User dis"});
-//     } 
-//     const trackDelelete = await Tracklist.findOne({ 
-//         where: { 
-//             playlist_id: playlist_id, 
-//             name: name 
-//         } 
-//     });
-//     trackDelelete.delete().save();
-//     return res.status(200).json({
-//         trackId : trackDelelete.track_id,
-//         name:trackDelelete.name
-//     });
-// };
+const deleteTrackList = async function (req, res) {
+    console.log(req.params.playlist_id);
+    console.log(req.params.name);
+    const {playlist_id,name} = req.params;
+    // const token = req.header; 
+    // //const token = req.header("x-auth-token");
+    // const decoded = jwt.verify(token, "PROJECTWS");
+    const user = await User.findOne({ where: { user_id: decoded.user_id } });
+    if (!user) {
+        return res.status(404).json({messege:"User dis"});
+    } 
+    const trackDelelete = await Tracklist.findOne({ 
+        where: { 
+            playlist_id: playlist_id, 
+            name: name 
+        } 
+    });
+    trackDelelete.delete().save();
+    return res.status(200).json({
+        trackId : trackDelelete.track_id,
+        name:trackDelelete.name
+    });
+};
 const InsertToPlayList = async function (req, res) {
     const playlist_id = req.body.playlist_id;
     const url = req.body.url;
