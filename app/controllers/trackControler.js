@@ -47,12 +47,12 @@ const getAccessTokenFromSpotify = async function (req, res) {
 
 
 const getTrackById = async function (req, res) {
-    const trackId = req.params.trackId;
-    if (!trackId) {
+    const Id = req.params.Id;
+    if (!Id) {
         return res.status(400).json({ error: "trackId is missing in the request param" });
     }
     try {
-      const response = await axios.get(`https://api.spotify.com/v1/tracks/${trackId}`, {
+      const response = await axios.get(`https://api.spotify.com/v1/tracks/${Id}`, {
           headers: {
               'Authorization': 'Bearer ' + ACCESS_KEY_SPOTIFY // Make sure access_token is a valid OAuth token
           }

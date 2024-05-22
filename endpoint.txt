@@ -61,3 +61,14 @@ delete:
 - localhost:3000/playlist/:playlist_id
 - localhost:3000/tracklist/:playlist_id/:name
 - localhost:3000/favorite/music
+
+
+
+post:
+- localhost:3000/playlist
+- localhost:3000/tracklist
+get:
+- localhost:3000/track/search/:id 
+delete: 
+- localhost:3000/playlist/:playlist_id
+- localhost:3000/tracklist/:playlist_id/:name
