@@ -75,7 +75,8 @@ const getTrackById = async function (req, res) {
 
 
 const getTrackByUrl = async function (req, res) {
-    const url = req.body.url;
+    //const url = req.body.url;
+    const url = req.params;
     if (!url) {
         return res.status(400).json({ error: "URL is missing in the request body" });
     }
@@ -104,6 +105,36 @@ const getTrackByUrl = async function (req, res) {
     }
 };//sudah bisa
 
+const getTrackByUrlbody = async function (req, res) {
+    //const url = req.body.url;
+    const url = req.body.url;
+    if (!url) {
+        return res.status(400).json({ error: "URL is missing in the request body" });
+    }
+    const trackId = url.split("/").pop(); // Extract the track ID from the URL
+    console.log(trackId); // Output: 6DCZcSspjsKoFjzjrWoCdn
+    // return res.status(200).send({messege:trackId}); 
+    try {
+      const response = await axios.get(`https://api.spotify.com/v1/tracks/${trackId}`, {
+          headers: {
+              'Authorization': 'Bearer ' + ACCESS_KEY_SPOTIFY // Make sure access_token is a valid OAuth token
+          }
+      });
+      let getOneSong = response.data;
+      //return res.status(200).json(response.data); 
+      return res.status(200).send({
+          nama_lagu : getOneSong.name,
+          artis : getOneSong.album.artists[0].name,
+          url:getOneSong.external_urls.spotify,
+          complete :getOneSong
+      });
+      // Send only the response data using res.json()
+      // Handle the response data as needed
+    } catch (error) {
+        console.error('Error fetching data:', error.response.data);
+        return res.status(error.response.status).json({ error: error.response.data }); // Send error response
+    }
+};//sudah bisa
 
 const getAlbumByUrl = async function (req, res) {
     const url = req.body.url
@@ -219,9 +250,15 @@ const deleteTrackList = async function (req, res) {
     });
 };
 const InsertToPlayList = async function (req, res) {
+    
     const playlist_id = req.body.playlist_id;
     const url = req.body.url;
-    //const trackId = req.body.trackId;
+    const token = req.header; 
+    const decoded = jwt.verify(token, "PROJECTWS");
+    const user = await User.findOne({ where: { user_id: decoded.user_id } });
+    if (!user) {
+        return res.status(404).json({messege:"User not found"});
+    } 
     if (!url) {
         return res.status(400).json({ error: "URL is missing in the request body" });
     }
@@ -329,6 +366,7 @@ module.exports = {
     getAccessTokenFromSpotify,
     getTrackById,
     getTrackByUrl,
+    getTrackByUrlbody,
     getAlbumByUrl,
     createPlayList,
     InsertToPlayList,

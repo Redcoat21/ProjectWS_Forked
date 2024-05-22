@@ -36,20 +36,20 @@ get:
 - get lyrics ()
 - translate lyric ()
 - play music ()
-- search music ()
+- search music () yosua
 - get all friends email (have spotify) ()
 - show friends now playing( playlist ,song) ()
 - play on spotify ()
 
 
 get:
-- localhost:3000/track/lyric/:url
+- localhost:3000/track/lyric/:id
 - localhost:3000/track/lyric/translate/:translate_to
-- localhost:3000/track/play/:url
-- localhost:3000/track/search/:url
+- localhost:3000/track/play/:id
+- localhost:3000/track/search/:id 
 - loclahost:3000/user/email
 - localhost:3000/user/play/:user_id
-- localhost:3000/user/play/:playlist_id/:url
+- localhost:3000/user/play/:playlist_id/:id
 
 --------------------------------------------------------------------------------------------------------------
 delete: 
