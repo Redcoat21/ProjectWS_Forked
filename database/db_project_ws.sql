@@ -32,6 +32,7 @@ CREATE TABLE `tracklists` (
 CREATE TABLE `favorites` (
     `favorite_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
     `user_id` VARCHAR(6) REFERENCES users(user_id),
+    `tracklist_id` INT(11) NULL,
     `url` VARCHAR(255) NOT NULL
 );
 

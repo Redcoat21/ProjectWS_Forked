@@ -9,4 +9,5 @@ router.put("/edit", authMiddleware, userController.editUser);
 router.put("/premium", authMiddleware, userController.upgradeToPremium);
 router.put("/apihit", authMiddleware, userController.rechargeApiHit);
 
+
 module.exports = router;

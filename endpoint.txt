@@ -7,7 +7,7 @@ post:
 - add music to playlist () yosua
 - allow access to developer (developer requests access to user)(dari sisi dev) ()
 - generate token ?(token buat opo jadi e?) ()
-- like music ()
+- like music (v) Rey
 
 post:
 - localhost:3000/user/login
@@ -55,7 +55,7 @@ get:
 delete: 
 - delete playlist () yosua
 - delete music from playlist () yosua
-- dislike music ()
+- dislike music (v) Rey
 
 delete: 
 - localhost:3000/playlist/:playlist_id
