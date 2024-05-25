@@ -12,7 +12,8 @@ CREATE TABLE `users` (
     `api_key` VARCHAR(25) NOT NULL,
     `api_hit` INT(11) NOT NULL,
     `premium` BOOLEAN NOT NULL,
-    `profile_pic` VARCHAR(255) NOT NULL
+    `profile_pic` VARCHAR(255) NOT NULL,
+    `now_playing` VARCHAR(255) NULL
 );
 
 CREATE TABLE `playlists` (
@@ -32,7 +33,7 @@ CREATE TABLE `tracklists` (
 CREATE TABLE `favorites` (
     `favorite_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
     `user_id` VARCHAR(6) REFERENCES users(user_id),
-    `tracklist_id` INT(11) NULL,
+    `tracklist_id` VARCHAR(11) NULL,
     `url` VARCHAR(255) NOT NULL
 );
 
@@ -46,7 +47,8 @@ INSERT INTO `users` VALUES (
     "abcde12345",
     50,
     FALSE,
-    "public\\assets\\222117054.jpg"
+    "public\\assets\\222117054.jpg",
+    ""
 );
 
 INSERT INTO `users` VALUES (
@@ -59,7 +61,8 @@ INSERT INTO `users` VALUES (
     "fghij12345",
     50,
     FALSE,
-    "public\\assets\\222117055.jpg"
+    "public\\assets\\222117055.jpg",
+    ""
 );
 
 INSERT INTO `users` VALUES (
@@ -72,7 +75,8 @@ INSERT INTO `users` VALUES (
     "klmno12345",
     50,
     FALSE,
-    "public\\assets\\222117068.jpg"
+    "public\\assets\\222117068.jpg",
+    ""
 );
 
 INSERT INTO `users` VALUES (
@@ -85,7 +89,8 @@ INSERT INTO `users` VALUES (
     "pqrst12345",
     50,
     FALSE,
-    "public\\assets\\222117069.jpg"
+    "public\\assets\\222117069.jpg",
+    ""
 );
 
 INSERT INTO `playlists` VALUES (
@@ -147,11 +152,13 @@ INSERT INTO `tracklists` VALUES (
 INSERT INTO `favorites` VALUES (
     1,
     "USR003",
+    "",
     "https://open.spotify.com/track/7Ee6XgP8EHKDhTMYLIndu9?si=b35eaffb14de4927"
 );
 
 INSERT INTO `favorites` VALUES (
     2,
     "USR003",
+    "",
     "https://open.spotify.com/track/0gWrMbx6pbdH3n3nsLjE55?si=39ea590f62f7470f"
 );

@@ -43,6 +43,10 @@ module.exports = {
         type: Sequelize.STRING(255),
         allowNull: false,
       },
+      now_playing: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+      },
     });
 
     await queryInterface.createTable("playlists", {
@@ -102,6 +106,10 @@ module.exports = {
           model: "users",
           key: "user_id",
         },
+      },
+      tracklist_id: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
       },
       url: {
         type: Sequelize.STRING(255),
