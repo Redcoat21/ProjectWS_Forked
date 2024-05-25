@@ -37,8 +37,8 @@ get:
 - translate lyric ()
 - play music ()
 - search music () yosua
-- get all friends email (have spotify) ()
-- show friends now playing( playlist ,song) ()
+- get all friends email (have spotify) (V) Rey
+- show friends now playing( playlist ,song) (v) Rey
 - play on spotify ()
 
 
