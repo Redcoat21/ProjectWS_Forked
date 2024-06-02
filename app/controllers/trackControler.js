@@ -11,7 +11,7 @@ require('dotenv').config();
 const ACCESS_KEY_SPOTIFY= process.env.ACCESS_KEY_SPOTIFY;
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
-
+const Sequelize = require("sequelize");
 //const client_id = "104508e989054f18865186f0df9a5f70";
 //ini client_id punyaku
 // const client_secret ="87f4064dfa2f43ad85f7b4b99736fdf5";
@@ -362,7 +362,44 @@ const getTrackByName = async function (req, res) {
 };//masih bingung cara returnnya
 
 
-
+const play = async function (req, res) {
+    try {
+      const id_music = req.params.id;
+  
+      if (id_music != null) {
+        const track = await Tracklist.findOne({
+          attributes: ['name'], // column yang nanti ditampilkan
+          where: { tracklist_id: id_music },
+        });
+  
+        if (track != null) {
+          const token = req.header("x-auth-token");
+          if (!token) {
+            return res.status(401).json({ error: "Access token missing" });
+          }
+  
+          const decoded = jwt.verify(token, "PROJECTWS");
+          const user = await User.findOne({ where: { user_id: decoded.user_id } });
+  
+          if (!user) {
+            return res.status(404).json({ error: "User not found" });
+          }
+  
+          await user.update({ now_playing: track.name });
+  
+          return res.status(200).json({ track: track.name, user: user.name });
+        } else {
+          return res.status(404).json({ error: "Music not found" });
+        }
+      } else {
+        return res.status(400).json({ error: "Music ID is missing" });
+      }
+    } catch (error) {
+      console.error("Error updating now_playing:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+  
 
 
 
@@ -376,7 +413,8 @@ module.exports = {
     InsertToPlayList,
     deletePlayList,
     deleteTrackList,
-    getTrackByName
+    getTrackByName,
+    play
   };
 
 

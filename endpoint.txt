@@ -35,7 +35,7 @@ put:
 get:
 - get lyrics ()
 - translate lyric ()
-- play music ()
+- play music (v) rey -> memasukantrack yang dicari ke now_playing
 - search music () yosua
 - get all friends email (have spotify) (V) Rey
 - show friends now playing( playlist ,song) (v) Rey
@@ -60,7 +60,8 @@ delete:
 delete: 
 - localhost:3000/playlist/:playlist_id
 - localhost:3000/tracklist/:playlist_id/:name
-- localhost:3000/favorite/music
+- localhost:3000/track/favorite
+
 
 
 

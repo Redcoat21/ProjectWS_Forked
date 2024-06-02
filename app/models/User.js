@@ -49,6 +49,10 @@ Users.init(
       type: DataTypes.STRING(255),
       allowNull: false,
     },
+    now_playing: {
+      type: DataTypes.STRING(255),
+      allowNull: true,
+    },
   },
   {
     sequelize,

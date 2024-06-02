@@ -5,6 +5,7 @@ const User = require("../models/User");
 const Joi = require("joi");
 const Service = require("../services/userService");
 const multer = require("multer");
+const Sequelize = require("sequelize");
 
 const register = async function (req, res) {
   Service.upload(req, res, async function (err) {
@@ -237,7 +238,7 @@ const getUsers = async function (req, res) {
 
 // tambahkan kolom now playing ya, di db sama model ntar di update
 const getPlayingMusic = async function (req, res) {
-  var user_id = req.param.user_id;
+  var user_id = req.params.user_id;
   if(user_id != null){
     const user = await User.findOne({
       attributes: ['now_playing'], // column yang nanti ditampilkan 
@@ -254,7 +255,7 @@ const getPlayingMusic = async function (req, res) {
         return res.status(400).json({ error: "User not found" });
       }
   } else {
-    return res.status(400).json({ error: "User not found" });
+    return res.status(400).json({ error: "User not found 20" });
   }
 }
 
