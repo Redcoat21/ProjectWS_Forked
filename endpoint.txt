@@ -18,24 +18,6 @@ post:
 - localhost:3000/token 
 - localhost:3000/track/favorite reynard
 
---------------------------------------------------------------------------------------------------------------
-
-;;
-put:
-- edit user profile (+topup) (v) yoga
-- upgrade tier (v) yoga
-- recharge api_hit (v) yoga "recharge amount e jek rada aneh nambah mek diconcat tok" - richard (udh benerin) 👍
-
-put:
-- localhost:3000/user/edit yoga
-- localhost:3000/user/premium yoga
-- localhost:3000/user/apihit yoga 
-;;
-
-yang put udah tuntas semua 👍
-
---------------------------------------------------------------------------------------------------------------
-
 get:
 - get lyrics ()
 - translate lyric ()
@@ -48,32 +30,43 @@ get:
 
 get:
 - localhost:3000/track/lyric/:id
-- localhost:3000/track/lyric/translate/:translate_to
-- localhost:3000/track/play/:id
-- localhost:3000/track/search/:id 
-- loclahost:3000/user/email
-- localhost:3000/user/play/:user_id
+- localhost:3000/track/lyric/translate/:translate_to 
+- localhost:3000/track/play/:id rey
+- localhost:3000/track/:id  yos
+- loclahost:3000/user/email rey
+- localhost:3000/user/play/:user_id rey
 - localhost:3000/user/play/:playlist_id/:id
 
---------------------------------------------------------------------------------------------------------------
-delete: 
-- delete playlist () yosua
-- delete music from playlist () yosua
-- dislike music (v) Rey (wes ok mek e minta dibenerin dikit soale gk ketemu lagu yang difavorite juga ngomong e success)- richard 
-
-delete: 
-- localhost:3000/playlist/:playlist_id
-- localhost:3000/tracklist/:playlist_id/:name
-- localhost:3000/track/favorite
 
 
 
+yoga :
 
-post:
+- localhost:3000/user/login yoga
+- localhost:3000/user/register yoga
+- localhost:3000/user/edit yoga
+- localhost:3000/user/premium yoga
+- localhost:3000/user/apihit yoga 
+
+yosua: 
+
+- localhost:3000/track/accesstoken 
+- localhost:3000/track/:id 
 - localhost:3000/playlist
-- localhost:3000/tracklist
-get:
-- localhost:3000/track/search/:id 
-delete: 
-- localhost:3000/playlist/:playlist_id
-- localhost:3000/tracklist/:playlist_id/:name
+- localhost:3000/playlist/track
+- localhost:3000/playlist/:id 
+
+reynard:
+
+- localhost:3000/track/favorite post
+- localhost:3000/track/favorite del
+- localhost:3000/user/email 
+- localhost:3000/user/play/:user_id 
+- localhost:3000/track/play/:id 
+
+richard:
+- localhost:3000/track/lyric/:id
+- localhost:3000/track/lyric/translate/:translate_to 
+- localhost:3000/user/play/:playlist_id/:id
+- localhost:3000/user/access 
+- localhost:3000/token 
