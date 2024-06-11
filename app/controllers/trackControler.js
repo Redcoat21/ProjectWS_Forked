@@ -12,16 +12,16 @@ const ACCESS_KEY_SPOTIFY= process.env.ACCESS_KEY_SPOTIFY;
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
 const Sequelize = require("sequelize");
-//const client_id = "104508e989054f18865186f0df9a5f70";
-//ini client_id punyaku
-// const client_secret ="87f4064dfa2f43ad85f7b4b99736fdf5";
-// //ini client_secret punyaku
-// const access_token ="BQBmZWZmlx9T_rL2hVEtfhQ_MgUiB0nqkOTs8BkDt4JI9Q6JyGC4PfbXnVOeRsc6k9AhJDuJ6-N0PUxraVA9lV8TAI5z6NvuyHiPlXkptBZjRRaFNIc";
-//ini access_token punyaku
 
-// apikeynya diblokir bisa langsung login spotify dev 
-//habis itu kalian dapat client_id dan client_secret 
-//habis itu7 kalian run http://localhost:3000/track/getApikey btw jangan lupa client_secret dan client_id nya diganti punya kalian
+//  yang harus diperhatiin makek axios spotify dev
+//const client_id = "104508e989054f18865186f0df9a5f70";
+// const client_secret ="87f4064dfa2f43ad85f7b4b99736fdf5";
+//  client id sama secret itu dipakai ambil dari pas login baru create new app(kalo redirect url pakek localhost biar gk ribet)
+// const access_token ="BQBmZWZmlx9T_rL2hVEtfhQ_MgUiB0nqkOTs8BkDt4JI9Q6JyGC4PfbXnVOeRsc6k9AhJDuJ6-N0PUxraVA9lV8TAI5z6NvuyHiPlXkptBZjRRaFNIc";
+// accesstoken itu cuman bisa dipakai 1h doang buat makeknya 
+
+// kalo pas coba error token expired (pertama kali) login spotify dev baru bikin new app buat ganti info client
+
 
 const getAccessTokenFromSpotify = async function (req, res) {
     try {
@@ -181,14 +181,7 @@ const createPlayList = async function (req, res) {
     //     return res.status(404).json({messege:"User dis"});
     // } 
     const countPlay = await Playlist.count();
-    let ids = "";
-    if (countPlay > 9) {
-        ids = "PL0"+(countPlay+1);
-    } else if (countPlay > 99) {
-        ids = "PL"+(countPlay+1);
-    } else{
-        ids = "PL00"+(countPlay+1);
-    }
+    let ids = "PL" + (countPlay + 1).toString().padStart(3, '0');
     // const createPlaylist = Playlist.create({
     //     playlist_id : ids,
     //     name:playlistname,
