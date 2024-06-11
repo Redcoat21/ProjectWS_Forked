@@ -211,7 +211,7 @@ const rechargeApiHit = async function (req, res) {
     if (user.balance < bills) {
       return res.status(400).json({ error: "Insufficient balance" });
     }
- const parsed= parseInt(amount)+1;
+    const parsed = parseInt(amount) + 1;
     user.api_hit += parsed;
     user.balance -= bills;
 
@@ -223,11 +223,11 @@ const rechargeApiHit = async function (req, res) {
     res.status(500).json({ error: "Could not recharge API-hit" });
   }
 };
-//rey 
+//rey
 const getUsers = async function (req, res) {
   try {
     const users = await User.findAll({
-      attributes: ['email']
+      attributes: ["email"],
     }); // Mengambil semua data user dari database
     res.status(200).json(users);
   } catch (error) {
@@ -239,26 +239,25 @@ const getUsers = async function (req, res) {
 // tambahkan kolom now playing ya, di db sama model ntar di update
 const getPlayingMusic = async function (req, res) {
   var user_id = req.params.user_id;
-  if(user_id != null){
+  if (user_id != null) {
     const user = await User.findOne({
-      attributes: ['now_playing'], // column yang nanti ditampilkan 
+      attributes: ["now_playing"], // column yang nanti ditampilkan
       where: Sequelize.where(
-
-        Sequelize.fn('LOWER', Sequelize.col('user_id')),
-        'LIKE',
+        Sequelize.fn("LOWER", Sequelize.col("user_id")),
+        "LIKE",
         `%${user_id.toLowerCase()}%`
-      ) });
+      ),
+    });
 
-      if(user != null){ 
-        return res.status(200).json(user);
-      } else {
-        return res.status(400).json({ error: "User not found" });
-      }
+    if (user != null) {
+      return res.status(200).json(user);
+    } else {
+      return res.status(400).json({ error: "User not found" });
+    }
   } else {
     return res.status(400).json({ error: "User not found 20" });
   }
-}
-
+};
 
 module.exports = {
   register,
@@ -266,7 +265,6 @@ module.exports = {
   editUser,
   upgradeToPremium,
   rechargeApiHit,
-  getUsers, // bagian ini hanya untuk mengecek isi user dari database, dari Reynard 
-  getPlayingMusic
+  getUsers, // bagian ini hanya untuk mengecek isi user dari database, dari Reynard
+  getPlayingMusic,
 };
-
