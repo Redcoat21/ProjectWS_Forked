@@ -1,10 +1,15 @@
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Playlist = require("../models/Playlists");
 const Tracklist = require("../models/Tracklists");
 const Sequelize = require("sequelize");
+const Joi = require("joi");
 
 const createPlayList = async function (req, res) {
   const token = req.header("x-auth-token");
+  if (!token) {
+    return res.status(400).send("require user token")
+  }
   const decoded = jwt.verify(token, "PROJECTWS");
 
   const user = await User.findOne({
@@ -26,11 +31,28 @@ const createPlayList = async function (req, res) {
   const newPlay = parseInt(countPlay) + 1;
   const idcount = newPlay.toString().padStart(3, "0");
   const id_playlist = `PL${idcount}`;
+  const { name, description } = req.body;
+  const schema = Joi.object({
+    name: Joi.string()
+      .required()
+      .messages({
+        "any.required": "Semua Field Wajib Diisi!",
+      }),
+    description: Joi.string().required().messages({
+      "any.required": "Semua Field Wajib Diisi!",
+    }),
+  });
+
+  try {
+    await schema.validateAsync(req.body);
+  } catch (error) {
+    return res.status(400).send(error.toString());
+  }
 
   await Playlist.create({
     playlist_id: id_playlist,
-    name: req.body.name,
-    description: req.body.description,
+    name: name,
+    description: description,
     user_id: decoded.user_id,
   });
 
@@ -86,7 +108,9 @@ const InsertToPlayList = async function (req, res) {
   const url = req.body.url;
   const token = req.header("x-auth-token");
   const decoded = jwt.verify(token, "PROJECTWS");
-
+  if (!url || url == "") {
+    return res.status(404).json({ message: "url required" });
+  }
   const user = await User.findOne({
     where: { user_id: decoded.user_id },
   });
@@ -104,19 +128,20 @@ const InsertToPlayList = async function (req, res) {
   }
 
   const trackId = url.split("/").pop();
-
+  console.log(trackId)
   try {
     const response = await axios.get(
       `https://api.spotify.com/v1/tracks/${trackId}`,
       {
         headers: {
-          Authorization: "Bearer " + ACCESS_KEY_SPOTIFY,
+          'Authorization': "Bearer " + ACCESS_KEY_SPOTIFY,
         },
       }
     );
 
     let getOneSong = response.data;
-
+    console.log(getOneSong)
+    console.log(response)
     await Tracklist.create({
       name: getOneSong.name,
       playlist_id: req.body.playlist_id,
