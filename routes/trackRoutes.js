@@ -4,6 +4,7 @@ const trackController = require("../app/controllers/trackControler");
 const favoriteController = require("../app/controllers/favoriteController");
 const authMiddleware = require("../app/middleware/authMiddleware");
 
+router.post("/refreshtoken", trackController.getRefreshToken);
 router.post("/accesstoken", trackController.getAccessTokenFromSpotify);
 
 // router.get("/getTrackById/:trackId",trackController.getTrackById);
@@ -14,7 +15,7 @@ router.get("/lyric/:id", trackController.getLyrics);
 // router.get("/search/:url",trackController.getTrackByUrl);
 // router.get("/search",trackController.getTrackByUrlbody);
 // router.get("/getAlbumByUrl",trackController.getAlbumByUrl);
-// router.get("/getTrackByNama",trackController.getTrackByName);
+router.get("/name",trackController.getTrackByName);
 
 //rey
 router.post("/favorite", authMiddleware, favoriteController.likeMusic);

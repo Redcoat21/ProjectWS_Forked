@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const axios = require("axios");
 const User = require("../models/User");
 const Playlist = require("../models/Playlists");
+const querystring = require('querystring');
 const Tracklist = require("../models/Tracklists");
 const { URL } = require("url");
 const { isArray } = require("util");
@@ -23,7 +24,48 @@ const API_KEY_MUSIXMATCH = process.env.API_KEY_MUSIXMATCH;
 // accesstoken itu cuman bisa dipakai 1h doang buat makeknya 
 
 // kalo pas coba error token expired (pertama kali) login spotify dev baru bikin new app buat ganti info client
+function generateRandomString(length) {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
+const getRefreshToken = async function (req, res) {
 
+  // refresh token that has been previously stored
+
+  var state = generateRandomString(16);
+  var scope = 'user-read-private user-read-email';
+  var redirect_uri = 'http://localhost:3000/callback';
+  res.redirect('https://accounts.spotify.com/authorize?' +
+    querystring.stringify({
+      response_type: 'code',
+      client_id: client_id,
+      scope: scope,
+      redirect_uri: redirect_uri,
+      state: state
+    }));
+    const refreshToken = req.body.refresh_token;
+
+    try {
+      const response = await axios.post(
+        "https://accounts.spotify.com/api/token",
+        `grant_type=refresh_token&client_id=${encodeURIComponent(client_id)}&client_secret=${encodeURIComponent(client_secret)}&refresh_token=${encodeURIComponent(refreshToken)}`,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+        }
+      );
+  
+      return res.status(200).send(response.data);
+    } catch (error) {
+      console.error("Error refreshing token:", error);
+      return res.status(500).send("Internal Server Error");
+    }
+}
 
 const getAccessTokenFromSpotify = async function (req, res) {
   try {
@@ -42,6 +84,7 @@ const getAccessTokenFromSpotify = async function (req, res) {
       }
     );
     console.log("Hasil response nya adalah :", response.data);
+   
     return res.status(200).json(response.data);
     // Handle the response data as needed
   } catch (error) {
@@ -259,7 +302,7 @@ const play = async function (req, res) {
 };
 const getLyrics = async function (req, res) {
   try {
-    const {id}=req.params;
+    const { id } = req.params;
     console.log(API_KEY_MUSIXMATCH);
     const response = await axios.get("https://api.musixmatch.com/ws/1.1/track.lyrics.get", {
       params: {
@@ -310,6 +353,7 @@ const getLyrics = async function (req, res) {
 
 module.exports = {
   getAccessTokenFromSpotify,
+  getRefreshToken,
   getLyrics,
   getTrackById,
   getTrackByUrl,
