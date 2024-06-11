@@ -4,7 +4,7 @@ const trackController = require("../app/controllers/trackControler");
 const favoriteController = require("../app/controllers/favoriteController");
 const authMiddleware = require("../app/middleware/authMiddleware");
 
-router.post("/getAccessTokenFromSpotify",trackController.getAccessTokenFromSpotify);
+router.post("/accesstoken",trackController.getAccessTokenFromSpotify);
 // router.get("/getTrackById/:trackId",trackController.getTrackById);
 // router.get("/getTrackById/:trackId",trackController.getTrackById);
 router.get("/search/:Id",trackController.getTrackById);
