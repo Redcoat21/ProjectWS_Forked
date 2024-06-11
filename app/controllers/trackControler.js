@@ -180,12 +180,6 @@ const getAlbumByUrl = async function (req, res) {
     );
     //let getOneSong = response.data;
     return res.status(200).json(response.data);
-    // return res.status(200).send({
-    //     nama_lagu : getOneSong.name,
-    //     artis : getOneSong.album.artists[0].name,
-    //     url:getOneSong.external_urls.spotify,
-    //     complete :getOneSong
-    // });
     // Send only the response data using res.json()
     // Handle the response data as needed
   } catch (error) {
@@ -215,25 +209,6 @@ const getTrackByName = async function (req, res) {
       isarray: isarray,
       allsongs: getAllSong,
     });
-    //   if (Array.isArray(getAllSong)) {
-    //     for (let i = 0; i < getAllSong.length; i++) {
-    //         return res.status(200).json({
-    //             name_songs:getAllSong[i].name,
-    //             name_Artis:getAllSong[i].artists[0].name
-    //         });
-    //       }
-    //     // return res.status(200).json({
-    //     //     name_songs:getAllSong.tracks.items[i].name,
-    //     //     name_Artis:getAllSong.tracks.items[i].artists[0].name
-    //     // });
-    //   }
-    //   else{
-    //     return res.status(400).json({ error: "getAllSong is not array" });
-    //   }
-    //   return res.status(200).json({
-    //     name_songs:getAllSong.tracks.items[1].name,
-    //      name_Artis:getAllSong.tracks.items[1].artists[0].name
-    //   });
     // Handle the response data as needed
   } catch (error) {
     console.error("Error fetching data:", error.response.data);
@@ -291,32 +266,3 @@ module.exports = {
   play,
 };
 
-// const authToken = req.header("x-auth-token");
-
-// try {
-//   let user;
-//   if (authToken) {
-//     user = await User.findOne({ where: { username } });
-
-//     if (!user) {
-//       return res.status(404).json({ error: "User not found" });
-//     }
-//     if (user.api_key !== authToken) {
-//       return res.status(401).json({ error: "Invalid authentication token" });
-//     }
-//     const passwordMatch = await bcrypt.compare(password, user.password);
-//     if (!passwordMatch) {
-//       return res.status(401).json({ error: "Incorrect password" });
-//     }
-//   } else {
-//     return res.status(403).json({ message: "Forbidden" });
-//   }
-
-//   const token = jwt.sign({ user_id: user.user_id }, "PROJECTWS", {
-//     expiresIn: "1h",
-//   });
-//   return res.status(200).json({ message: "Login successful", token });
-// } catch (error) {
-//   console.error(error);
-//   return res.status(500).json({ error: "Could not log in" });
-// }
