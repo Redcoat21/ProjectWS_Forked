@@ -211,8 +211,8 @@ const rechargeApiHit = async function (req, res) {
     if (user.balance < bills) {
       return res.status(400).json({ error: "Insufficient balance" });
     }
-
-    user.api_hit += amount;
+ const parsed= parseInt(amount)+1;
+    user.api_hit += parsed;
     user.balance -= bills;
 
     await user.save();
