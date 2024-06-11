@@ -2,7 +2,7 @@ endpoint yang dibutuh=
 
 post:
 - login (generate token jwt buat login )(v) yoga
-- register (v) yoga  "masalah minor, mek e kalau error di joi masih masuk ke public asset multer e" -richard
+- register (v) yoga  "masalah minor, mek e kalau error di joi masih masuk ke public asset multer e" -richard udhok 👍
 - create playlist () yosua
 - add music to playlist () yosua
 - allow access to developer (developer requests access to user)(dari sisi dev) ()
@@ -10,25 +10,29 @@ post:
 - like music (v) Rey
 
 post:
-- localhost:3000/user/login
-- localhost:3000/user/register
+- localhost:3000/user/login yoga
+- localhost:3000/user/register yoga
 - localhost:3000/playlist
-- localhost:3000/tracklist
+- localhost:3000/tracklist 
 - localhost:3000/user/access 
-- localhost:3000/token
-- localhost:3000/track/favorite
+- localhost:3000/token 
+- localhost:3000/track/favorite reynard
 
 --------------------------------------------------------------------------------------------------------------
 
+;;
 put:
 - edit user profile (+topup) (v) yoga
 - upgrade tier (v) yoga
-- recharge api_hit (v) yoga "recharge amount e jek rada aneh nambah mek diconcat tok" - richard
+- recharge api_hit (v) yoga "recharge amount e jek rada aneh nambah mek diconcat tok" - richard (udh benerin) 👍
 
 put:
-- localhost:3000/user/edit
-- localhost:3000/user/premium
-- localhost:3000/user/apihit
+- localhost:3000/user/edit yoga
+- localhost:3000/user/premium yoga
+- localhost:3000/user/apihit yoga 
+;;
+
+yang put udah tuntas semua 👍
 
 --------------------------------------------------------------------------------------------------------------
 
@@ -55,7 +59,7 @@ get:
 delete: 
 - delete playlist () yosua
 - delete music from playlist () yosua
-- dislike music (v) Rey
+- dislike music (v) Rey (wes ok mek e minta dibenerin dikit soale gk ketemu lagu yang difavorite juga ngomong e success)- richard 
 
 delete: 
 - localhost:3000/playlist/:playlist_id
