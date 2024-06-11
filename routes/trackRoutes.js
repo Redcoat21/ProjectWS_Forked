@@ -8,7 +8,7 @@ router.post("/accesstoken", trackController.getAccessTokenFromSpotify);
 
 // router.get("/getTrackById/:trackId",trackController.getTrackById);
 // router.get("/getTrackById/:trackId",trackController.getTrackById);
-router.get("/:id", trackController.getTrackById);
+router.get("/:Id", trackController.getTrackById);
 //router.get("/getTrackByUrl",trackController.getTrackByUrl);
 // router.get("/search/:url",trackController.getTrackByUrl);
 // router.get("/search",trackController.getTrackByUrlbody);

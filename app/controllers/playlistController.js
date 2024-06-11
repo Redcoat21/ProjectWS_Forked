@@ -3,7 +3,9 @@ const User = require("../models/User");
 const Playlist = require("../models/Playlists");
 const Tracklist = require("../models/Tracklists");
 const Sequelize = require("sequelize");
+const axios = require("axios");
 const Joi = require("joi");
+const ACCESS_KEY_SPOTIFY = process.env.ACCESS_KEY_SPOTIFY;
 
 const createPlayList = async function (req, res) {
   const token = req.header("x-auth-token");
@@ -140,9 +142,13 @@ const InsertToPlayList = async function (req, res) {
     );
 
     let getOneSong = response.data;
-    console.log(getOneSong)
-    console.log(response)
+    const count =await Tracklist.findOne({
+      order: [['tracklist_id', 'DESC']]
+    });
+    const hasil= count+1;
+     
     await Tracklist.create({
+      tracklist_id: hasil,
       name: getOneSong.name,
       playlist_id: req.body.playlist_id,
       url: getOneSong.external_urls.spotify,
@@ -152,10 +158,10 @@ const InsertToPlayList = async function (req, res) {
       message: `${getOneSong.name} has been added to ${playlist.name}`,
     });
   } catch (error) {
-    console.error("Error fetching data:", error.response.data);
+    console.error("Error fetching data:", error);
     return res
-      .status(error.response.status)
-      .json({ error: error.response.data });
+      .status(400)
+      .json({ error: error.response }); // Send error response
   }
 };
 
