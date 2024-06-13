@@ -9,8 +9,10 @@ router.put("/edit", authMiddleware, userController.editUser);
 router.put("/premium", authMiddleware, userController.upgradeToPremium);
 router.put("/apihit", authMiddleware, userController.rechargeApiHit);
 
-router.get("/email",authMiddleware, userController.getUsers);
-router.get("/play/:user_id", authMiddleware, userController.getPlayingMusic);
+router.post("/accesstoken", userController.getAccessTokenFromSpotify);
+router.get("/refresh_token", userController.refreshToken);
 
+router.get("/email", authMiddleware, userController.getUsers);
+router.get("/play/:user_id", authMiddleware, userController.getPlayingMusic);
 
 module.exports = router;

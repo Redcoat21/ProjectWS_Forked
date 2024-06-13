@@ -5,7 +5,11 @@ const User = require("../models/User");
 const Joi = require("joi");
 const Service = require("../services/userService");
 const multer = require("multer");
-const Sequelize = require("sequelize");
+const { Sequelize, Op } = require("sequelize");
+const ACCESS_KEY_SPOTIFY = process.env.ACCESS_KEY_SPOTIFY;
+const client_id = process.env.CLIENT_ID;
+const client_secret = process.env.CLIENT_SECRET;
+const API_KEY_MUSIXMATCH = process.env.API_KEY_MUSIXMATCH;
 
 const register = async function (req, res) {
   Service.upload(req, res, async function (err) {
@@ -61,9 +65,17 @@ const register = async function (req, res) {
         premium: false,
         profile_pic: profilePicture,
       });
-      return res
-        .status(201)
-        .json({ message: "User registered successfully", user });
+      return res.status(201).json({
+        message: "User registered successfully",
+        user: {
+          user_id: user.user_id,
+          name: user.name,
+          username: user.username,
+          email: user.email,
+          balance: user.balance,
+          api_key: user.api_key,
+        },
+      });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error: "Could not register user" });
@@ -148,9 +160,17 @@ const editUser = async function (req, res) {
 
     await user.save();
 
-    return res
-      .status(200)
-      .json({ message: "User profile updated successfully", user });
+    return res.status(200).json({
+      message: "User profile updated successfully",
+      user: {
+        name: user.name,
+        username: user.username,
+        password: user.password,
+        email: user.email,
+        balance: user.balance,
+        api_hit: user.api_hit,
+      },
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Could not update user profile" });
@@ -178,7 +198,7 @@ const upgradeToPremium = async function (req, res) {
 
     await user.save();
 
-    return res.status(200).json({ message: "User upgraded to Premium", user });
+    return res.status(200).json({ message: "User upgraded to Premium" });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Could not upgrade user to Premium" });
@@ -209,7 +229,9 @@ const rechargeApiHit = async function (req, res) {
     const bills = amount * 5000;
 
     if (user.balance < bills) {
-      return res.status(400).json({ error: "Insufficient balance" });
+      return res.status(400).json({
+        error: `Insufficient balance (Current balance : Rp. ${user.balance}, API HIT Total Price: Rp. ${bills})`,
+      });
     }
     const parsed = parseInt(amount) + 1;
     user.api_hit += parsed;
@@ -217,19 +239,56 @@ const rechargeApiHit = async function (req, res) {
 
     await user.save();
 
-    res.status(200).json({ message: "API-hit recharged successfully", user });
+    res.status(200).json({
+      message: `API-hit recharged successfully (Current balance: Rp. ${user.balance})`,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Could not recharge API-hit" });
   }
 };
+
+const getAccessTokenFromSpotify = async function (req, res) {
+  try {
+    console.log(client_id);
+    console.log(client_secret);
+    const response = await axios.post(
+      "https://accounts.spotify.com/api/token",
+      "grant_type=client_credentials&client_id=" +
+        encodeURIComponent(client_id) +
+        "&client_secret=" +
+        encodeURIComponent(client_secret),
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    );
+
+    return res.status(200).json(response.data);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
+const refreshToken = function (req, res) {
+  const refresh_token = req.query.refresh_token;
+  Service.refreshSpotifyToken(refresh_token, (error, tokens) => {
+    if (error) {
+      res.status(500).send({ error: error.message });
+    } else {
+      res.send(tokens);
+    }
+  });
+};
+
 //rey
 const getUsers = async function (req, res) {
   try {
     const users = await User.findAll({
-      attributes: ["email"],
+      attributes: ["name", "username", "email"],
     }); // Mengambil semua data user dari database
-    res.status(200).json(users);
+    res.status(200).json({ Users: users });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Could not retrieve users" });
@@ -240,13 +299,13 @@ const getUsers = async function (req, res) {
 const getPlayingMusic = async function (req, res) {
   var user_id = req.params.user_id;
   if (user_id != null) {
-    const user = await User.findOne({
-      attributes: ["now_playing"], // column yang nanti ditampilkan
-      where: Sequelize.where(
-        Sequelize.fn("LOWER", Sequelize.col("user_id")),
-        "LIKE",
-        `%${user_id.toLowerCase()}%`
-      ),
+    const user = await User.findAll({
+      attributes: ["username", "now_playing"], // column yang nanti ditampilkan
+      where: {
+        now_playing: {
+          [Sequelize.Op.ne]: null,
+        },
+      },
     });
 
     if (user != null) {
@@ -265,6 +324,8 @@ module.exports = {
   editUser,
   upgradeToPremium,
   rechargeApiHit,
+  getAccessTokenFromSpotify,
+  refreshToken,
   getUsers, // bagian ini hanya untuk mengecek isi user dari database, dari Reynard
   getPlayingMusic,
 };

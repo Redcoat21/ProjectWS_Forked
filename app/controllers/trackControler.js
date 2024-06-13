@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const axios = require("axios");
 const User = require("../models/User");
 const Playlist = require("../models/Playlists");
-const querystring = require('querystring');
+const querystring = require("querystring");
 const Tracklist = require("../models/Tracklists");
 const { URL } = require("url");
 const { isArray } = require("util");
@@ -15,86 +15,64 @@ const client_secret = process.env.CLIENT_SECRET;
 const Sequelize = require("sequelize");
 const API_KEY_MUSIXMATCH = process.env.API_KEY_MUSIXMATCH;
 
-
 //  yang harus diperhatiin makek axios spotify dev
 //const client_id = "104508e989054f18865186f0df9a5f70";
 // const client_secret ="87f4064dfa2f43ad85f7b4b99736fdf5";
 //  client id sama secret itu dipakai ambil dari pas login baru create new app(kalo redirect url pakek localhost biar gk ribet)
 // const access_token ="BQBmZWZmlx9T_rL2hVEtfhQ_MgUiB0nqkOTs8BkDt4JI9Q6JyGC4PfbXnVOeRsc6k9AhJDuJ6-N0PUxraVA9lV8TAI5z6NvuyHiPlXkptBZjRRaFNIc";
-// accesstoken itu cuman bisa dipakai 1h doang buat makeknya 
+// accesstoken itu cuman bisa dipakai 1h doang buat makeknya
 
 // kalo pas coba error token expired (pertama kali) login spotify dev baru bikin new app buat ganti info client
 function generateRandomString(length) {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
   for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length));
   }
   return result;
 }
 const getRefreshToken = async function (req, res) {
-
   // refresh token that has been previously stored
 
   var state = generateRandomString(16);
-  var scope = 'user-read-private user-read-email';
-  var redirect_uri = 'http://localhost:3000/callback';
-  res.redirect('https://accounts.spotify.com/authorize?' +
-    querystring.stringify({
-      response_type: 'code',
-      client_id: client_id,
-      scope: scope,
-      redirect_uri: redirect_uri,
-      state: state
-    }));
-    const refreshToken = req.body.refresh_token;
+  var scope = "user-read-private user-read-email";
+  var redirect_uri = "http://localhost:3000/callback";
+  res.redirect(
+    "https://accounts.spotify.com/authorize?" +
+      querystring.stringify({
+        response_type: "code",
+        client_id: client_id,
+        scope: scope,
+        redirect_uri: redirect_uri,
+        state: state,
+      })
+  );
+  const refreshToken = req.body.refresh_token;
 
-    try {
-      const response = await axios.post(
-        "https://accounts.spotify.com/api/token",
-        `grant_type=refresh_token&client_id=${encodeURIComponent(client_id)}&client_secret=${encodeURIComponent(client_secret)}&refresh_token=${encodeURIComponent(refreshToken)}`,
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-        }
-      );
-  
-      return res.status(200).send(response.data);
-    } catch (error) {
-      console.error("Error refreshing token:", error);
-      return res.status(500).send("Internal Server Error");
-    }
-}
-
-const getAccessTokenFromSpotify = async function (req, res) {
   try {
-    console.log(client_id);
-    console.log(client_secret);
     const response = await axios.post(
       "https://accounts.spotify.com/api/token",
-      "grant_type=client_credentials&client_id=" +
-      encodeURIComponent(client_id) +
-      "&client_secret=" +
-      encodeURIComponent(client_secret),
+      `grant_type=refresh_token&client_id=${encodeURIComponent(
+        client_id
+      )}&client_secret=${encodeURIComponent(
+        client_secret
+      )}&refresh_token=${encodeURIComponent(refreshToken)}`,
       {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
       }
     );
-    console.log("Hasil response nya adalah :", response.data);
-   
-    return res.status(200).json(response.data);
-    // Handle the response data as needed
+
+    return res.status(200).send(response.data);
   } catch (error) {
-    console.error("Error fetching data:", error);
-    // Handle errors
+    console.error("Error refreshing token:", error);
+    return res.status(500).send("Internal Server Error");
   }
-}; //buat dapetin apikey spotivynya
+};
 
 const getTrackById = async function (req, res) {
-  const Id = req.params.Id;
   const token = req.header("x-auth-token");
   const decoded = jwt.verify(token, "PROJECTWS");
 
@@ -105,14 +83,49 @@ const getTrackById = async function (req, res) {
   if (!user) {
     return res.status(404).json({ message: "User not found!" });
   }
-  if (!Id) {
+
+  const id = req.params.id;
+  if (!id) {
     return res
       .status(400)
       .json({ error: "trackId is missing in the request param" });
   }
   try {
     const response = await axios.get(
-      `https://api.spotify.com/v1/tracks/${Id}`,
+      `https://api.spotify.com/v1/tracks/${id}`,
+      {
+        headers: {
+          Authorization: "Bearer " + ACCESS_KEY_SPOTIFY,
+        },
+      }
+    );
+    let getOneSong = response.data;
+    return res.status(200).send({
+      name: getOneSong.name,
+      artist: getOneSong.album.artists[0].name,
+      url: getOneSong.external_urls.spotify,
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error.response.data);
+    return res
+      .status(error.response.status)
+      .json({ error: error.response.data });
+  }
+}; // udh dapat
+
+const getTrackByUrl = async function (req, res) {
+  const url = req.params.url;
+  if (!url) {
+    return res
+      .status(400)
+      .json({ error: "URL is missing in the request body" });
+  }
+  const trackId = url.split("/").pop(); // Extract the track ID from the URL
+  console.log(trackId); // Output: 6DCZcSspjsKoFjzjrWoCdn
+  // return res.status(200).send({messege:trackId});
+  try {
+    const response = await axios.get(
+      `https://api.spotify.com/v1/tracks/${trackId}`,
       {
         headers: {
           Authorization: "Bearer " + ACCESS_KEY_SPOTIFY, // Make sure access_token is a valid OAuth token
@@ -125,6 +138,7 @@ const getTrackById = async function (req, res) {
       nama_lagu: getOneSong.name,
       artis: getOneSong.album.artists[0].name,
       url: getOneSong.external_urls.spotify,
+      complete: getOneSong,
     });
     // Send only the response data using res.json()
     // Handle the response data as needed
@@ -134,45 +148,7 @@ const getTrackById = async function (req, res) {
       .status(error.response.status)
       .json({ error: error.response.data }); // Send error response
   }
-}; // udh dapat
-
-// const getTrackByUrl = async function (req, res) {
-//   //const url = req.body.url;
-//   const url = req.params;
-//   if (!url) {
-//     return res
-//       .status(400)
-//       .json({ error: "URL is missing in the request body" });
-//   }
-//   const trackId = url.split("/").pop(); // Extract the track ID from the URL
-//   console.log(trackId); // Output: 6DCZcSspjsKoFjzjrWoCdn
-//   // return res.status(200).send({messege:trackId});
-//   try {
-//     const response = await axios.get(
-//       `https://api.spotify.com/v1/tracks/${trackId}`,
-//       {
-//         headers: {
-//           Authorization: "Bearer " + ACCESS_KEY_SPOTIFY, // Make sure access_token is a valid OAuth token
-//         },
-//       }
-//     );
-//     let getOneSong = response.data;
-//     //return res.status(200).json(response.data);
-//     return res.status(200).send({
-//       nama_lagu: getOneSong.name,
-//       artis: getOneSong.album.artists[0].name,
-//       url: getOneSong.external_urls.spotify,
-//       complete: getOneSong,
-//     });
-//     // Send only the response data using res.json()
-//     // Handle the response data as needed
-//   } catch (error) {
-//     console.error("Error fetching data:", error.response.data);
-//     return res
-//       .status(error.response.status)
-//       .json({ error: error.response.data }); // Send error response
-//   }
-// }; //sudah bisa
+}; //sudah bisa
 
 // const getTrackByUrlbody = async function (req, res) {
 //   //const url = req.body.url;
@@ -211,7 +187,6 @@ const getTrackById = async function (req, res) {
 //       .json({ error: error.response.data }); // Send error response
 //   }
 // }; //sudah bisa
-
 
 // const getTrackByName = async function (req, res) {
 //   const searchTrack = req.body.searchTrack;
@@ -282,13 +257,16 @@ const getLyrics = async function (req, res) {
   try {
     const { id } = req.params;
     console.log(API_KEY_MUSIXMATCH);
-    const response = await axios.get("https://api.musixmatch.com/ws/1.1/track.lyrics.get", {
-      params: {
-        // track_id: 283840831,
-        track_id: id,
-        apikey: API_KEY_MUSIXMATCH,
-      },
-    });
+    const response = await axios.get(
+      "https://api.musixmatch.com/ws/1.1/track.lyrics.get",
+      {
+        params: {
+          // track_id: 283840831,
+          track_id: id,
+          apikey: API_KEY_MUSIXMATCH,
+        },
+      }
+    );
 
     // Check if the response status is successful (200)
     if (response.status === 200) {
@@ -318,22 +296,23 @@ const getLyrics = async function (req, res) {
       // Set the response content type to HTML and send the modified HTML response
       // console.log(lyricres)
       console.log(lyricsBody);
-      res.setHeader('Content-Type', 'text/html');
+      res.setHeader("Content-Type", "text/html");
       return res.status(200).send(lyricsBody);
     } else {
-      throw new Error("Musixmatch API request failed with status code " + response.status);
+      throw new Error(
+        "Musixmatch API request failed with status code " + response.status
+      );
     }
   } catch (error) {
     console.error("Error fetching data from Musixmatch:", error);
     return res.status(500).send("Internal Server Error"); // Change to 500 status code for internal server error
   }
-}
+};
 
 module.exports = {
-  getAccessTokenFromSpotify,
   getRefreshToken,
   getLyrics,
   getTrackById,
+  getTrackByUrl,
   play,
 };
-
