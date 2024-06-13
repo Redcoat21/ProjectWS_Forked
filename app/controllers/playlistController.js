@@ -166,7 +166,7 @@ const InsertToPlayList = async function (req, res) {
 };
 
 const deleteTrackList = async function (req, res) {
-  const token = req.header;
+  const token = req.header("x-auth-token");
   const decoded = jwt.verify(token, "PROJECTWS");
 
   const user = await User.findOne({

@@ -95,6 +95,16 @@ const getAccessTokenFromSpotify = async function (req, res) {
 
 const getTrackById = async function (req, res) {
   const Id = req.params.Id;
+  const token = req.header("x-auth-token");
+  const decoded = jwt.verify(token, "PROJECTWS");
+
+  const user = await User.findOne({
+    where: { user_id: decoded.user_id },
+  });
+
+  if (!user) {
+    return res.status(404).json({ message: "User not found!" });
+  }
   if (!Id) {
     return res
       .status(400)
@@ -115,7 +125,6 @@ const getTrackById = async function (req, res) {
       nama_lagu: getOneSong.name,
       artis: getOneSong.album.artists[0].name,
       url: getOneSong.external_urls.spotify,
-      complete: getOneSong,
     });
     // Send only the response data using res.json()
     // Handle the response data as needed
@@ -127,139 +136,108 @@ const getTrackById = async function (req, res) {
   }
 }; // udh dapat
 
-const getTrackByUrl = async function (req, res) {
-  //const url = req.body.url;
-  const url = req.params;
-  if (!url) {
-    return res
-      .status(400)
-      .json({ error: "URL is missing in the request body" });
-  }
-  const trackId = url.split("/").pop(); // Extract the track ID from the URL
-  console.log(trackId); // Output: 6DCZcSspjsKoFjzjrWoCdn
-  // return res.status(200).send({messege:trackId});
-  try {
-    const response = await axios.get(
-      `https://api.spotify.com/v1/tracks/${trackId}`,
-      {
-        headers: {
-          Authorization: "Bearer " + ACCESS_KEY_SPOTIFY, // Make sure access_token is a valid OAuth token
-        },
-      }
-    );
-    let getOneSong = response.data;
-    //return res.status(200).json(response.data);
-    return res.status(200).send({
-      nama_lagu: getOneSong.name,
-      artis: getOneSong.album.artists[0].name,
-      url: getOneSong.external_urls.spotify,
-      complete: getOneSong,
-    });
-    // Send only the response data using res.json()
-    // Handle the response data as needed
-  } catch (error) {
-    console.error("Error fetching data:", error.response.data);
-    return res
-      .status(error.response.status)
-      .json({ error: error.response.data }); // Send error response
-  }
-}; //sudah bisa
+// const getTrackByUrl = async function (req, res) {
+//   //const url = req.body.url;
+//   const url = req.params;
+//   if (!url) {
+//     return res
+//       .status(400)
+//       .json({ error: "URL is missing in the request body" });
+//   }
+//   const trackId = url.split("/").pop(); // Extract the track ID from the URL
+//   console.log(trackId); // Output: 6DCZcSspjsKoFjzjrWoCdn
+//   // return res.status(200).send({messege:trackId});
+//   try {
+//     const response = await axios.get(
+//       `https://api.spotify.com/v1/tracks/${trackId}`,
+//       {
+//         headers: {
+//           Authorization: "Bearer " + ACCESS_KEY_SPOTIFY, // Make sure access_token is a valid OAuth token
+//         },
+//       }
+//     );
+//     let getOneSong = response.data;
+//     //return res.status(200).json(response.data);
+//     return res.status(200).send({
+//       nama_lagu: getOneSong.name,
+//       artis: getOneSong.album.artists[0].name,
+//       url: getOneSong.external_urls.spotify,
+//       complete: getOneSong,
+//     });
+//     // Send only the response data using res.json()
+//     // Handle the response data as needed
+//   } catch (error) {
+//     console.error("Error fetching data:", error.response.data);
+//     return res
+//       .status(error.response.status)
+//       .json({ error: error.response.data }); // Send error response
+//   }
+// }; //sudah bisa
 
-const getTrackByUrlbody = async function (req, res) {
-  //const url = req.body.url;
-  const url = req.body.url;
-  if (!url) {
-    return res
-      .status(400)
-      .json({ error: "URL is missing in the request body" });
-  }
-  const trackId = url.split("/").pop(); // Extract the track ID from the URL
-  console.log(trackId); // Output: 6DCZcSspjsKoFjzjrWoCdn
-  // return res.status(200).send({messege:trackId});
-  try {
-    const response = await axios.get(
-      `https://api.spotify.com/v1/tracks/${trackId}`,
-      {
-        headers: {
-          Authorization: "Bearer " + ACCESS_KEY_SPOTIFY, // Make sure access_token is a valid OAuth token
-        },
-      }
-    );
-    let getOneSong = response.data;
-    //return res.status(200).json(response.data);
-    return res.status(200).send({
-      nama_lagu: getOneSong.name,
-      artis: getOneSong.album.artists[0].name,
-      url: getOneSong.external_urls.spotify,
-      complete: getOneSong,
-    });
-    // Send only the response data using res.json()
-    // Handle the response data as needed
-  } catch (error) {
-    console.error("Error fetching data:", error.response.data);
-    return res
-      .status(error.response.status)
-      .json({ error: error.response.data }); // Send error response
-  }
-}; //sudah bisa
+// const getTrackByUrlbody = async function (req, res) {
+//   //const url = req.body.url;
+//   const url = req.body.url;
+//   if (!url) {
+//     return res
+//       .status(400)
+//       .json({ error: "URL is missing in the request body" });
+//   }
+//   const trackId = url.split("/").pop(); // Extract the track ID from the URL
+//   console.log(trackId); // Output: 6DCZcSspjsKoFjzjrWoCdn
+//   // return res.status(200).send({messege:trackId});
+//   try {
+//     const response = await axios.get(
+//       `https://api.spotify.com/v1/tracks/${trackId}`,
+//       {
+//         headers: {
+//           Authorization: "Bearer " + ACCESS_KEY_SPOTIFY, // Make sure access_token is a valid OAuth token
+//         },
+//       }
+//     );
+//     let getOneSong = response.data;
+//     //return res.status(200).json(response.data);
+//     return res.status(200).send({
+//       nama_lagu: getOneSong.name,
+//       artis: getOneSong.album.artists[0].name,
+//       url: getOneSong.external_urls.spotify,
+//       complete: getOneSong,
+//     });
+//     // Send only the response data using res.json()
+//     // Handle the response data as needed
+//   } catch (error) {
+//     console.error("Error fetching data:", error.response.data);
+//     return res
+//       .status(error.response.status)
+//       .json({ error: error.response.data }); // Send error response
+//   }
+// }; //sudah bisa
 
-const getAlbumByUrl = async function (req, res) {
-  const url = req.body.url;
-  if (!url) {
-    return res
-      .status(400)
-      .json({ error: "URL is missing in the request body" });
-  }
-  const albumId = url.split("/").pop();
-  // Extract the track ID from the URL
-  console.log(albumId); // Output: 6DCZcSspjsKoFjzjrWoCdn
-  // return res.status(200).send({messege:trackId});
-  try {
-    const response = await axios.get(
-      `https://api.spotify.com/v1/albums/${albumId}`,
-      {
-        headers: {
-          Authorization: "Bearer " + ACCESS_KEY_SPOTIFY, // Make sure access_token is a valid OAuth token
-        },
-      }
-    );
-    //let getOneSong = response.data;
-    return res.status(200).json(response.data);
-    // Send only the response data using res.json()
-    // Handle the response data as needed
-  } catch (error) {
-    console.error("Error fetching data:", error.response.data);
-    return res
-      .status(error.response.status)
-      .json({ error: error.response.data }); // Send error response
-  }
-};
 
-const getTrackByName = async function (req, res) {
-  const searchTrack = req.body.searchTrack;
-  try {
-    const response = await axios.get("https://api.spotify.com/v1/search", {
-      params: {
-        q: `name: ${searchTrack}`,
-        type: "track",
-      },
-      headers: {
-        Authorization: "Bearer " + ACCESS_KEY_SPOTIFY, // Make sure access_token is a valid OAuth token
-      },
-    });
-    let getAllSong = response.data.tracks.items;
-    let getAllSongs = response.data;
-    const isarray = Array.isArray(getAllSongs);
-    return res.status(200).send({
-      isarray: isarray,
-      allsongs: getAllSong,
-    });
-    // Handle the response data as needed
-  } catch (error) {
-    console.error("Error fetching data:", error.response.data);
-    // Handle errors
-  }
-}; //masih bingung cara returnnya
+// const getTrackByName = async function (req, res) {
+//   const searchTrack = req.body.searchTrack;
+//   try {
+//     const response = await axios.get("https://api.spotify.com/v1/search", {
+//       params: {
+//         q: `name: ${searchTrack}`,
+//         type: "track",
+//       },
+//       headers: {
+//         Authorization: "Bearer " + ACCESS_KEY_SPOTIFY, // Make sure access_token is a valid OAuth token
+//       },
+//     });
+//     let getAllSong = response.data.tracks.items;
+//     let getAllSongs = response.data;
+//     const isarray = Array.isArray(getAllSongs);
+//     return res.status(200).send({
+//       isarray: isarray,
+//       allsongs: getAllSong,
+//     });
+//     // Handle the response data as needed
+//   } catch (error) {
+//     console.error("Error fetching data:", error.response.data);
+//     // Handle errors
+//   }
+// }; //masih bingung cara returnnya
 
 const play = async function (req, res) {
   try {
@@ -356,10 +334,6 @@ module.exports = {
   getRefreshToken,
   getLyrics,
   getTrackById,
-  getTrackByUrl,
-  getTrackByUrlbody,
-  getAlbumByUrl,
-  getTrackByName,
   play,
 };
 
