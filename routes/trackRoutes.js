@@ -4,16 +4,10 @@ const trackController = require("../app/controllers/trackControler");
 const favoriteController = require("../app/controllers/favoriteController");
 const authMiddleware = require("../app/middleware/authMiddleware");
 
-// router.get("/getTrackById/:trackId",trackController.getTrackById);
-// router.get("/getTrackById/:trackId",trackController.getTrackById);
+
 router.get("/:id", authMiddleware, trackController.getTrackById);
 router.get("/lyric/:id",authMiddleware, trackController.getLyrics);
-router.get("/best", trackController.chartTrack);
-//router.get("/getTrackByUrl",trackController.getTrackByUrl);
-// router.get("/search/:url",trackController.getTrackByUrl);
-// router.get("/search",trackController.getTrackByUrlbody);
-// router.get("/getAlbumByUrl",trackController.getAlbumByUrl);
-//router.get("/name",trackController.getTrackByName);
+router.get("/chart/:country/:row",authMiddleware, trackController.chartTrack);
 
 //rey
 router.post("/favorite", authMiddleware, favoriteController.likeMusic);

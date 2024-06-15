@@ -66,8 +66,10 @@ reynard:
 
 richard:
 - localhost:3000/track/lyric/:id ok
-- localhost:3000/track/lyric/translate/:translate_to 
+- localhost:3000/track//chart/:country/:row ok
 - localhost:3000/user/play/:playlist_id/:id
 - localhost:3000/user/access 
 - localhost:3000/user/auth ok
 - localhost:3000/user/refresh_token ok
+
+- localhost:3000/track/lyric/translate/:translate_to x (gk dibolehin sama musixmatch ) 
