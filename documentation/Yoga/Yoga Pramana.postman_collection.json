@@ -1,0 +1,218 @@
+{
+	"info": {
+		"_postman_id": "12b20ed2-81c1-4de3-97ba-91aecaa58239",
+		"name": "Yoga Pramana",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32799193",
+		"_collection_link": "https://kelompok-2-api-spotify.postman.co/workspace/Project~6dfa34b0-2d89-4422-8ecb-05d4f43c4e51/collection/32799193-12b20ed2-81c1-4de3-97ba-91aecaa58239?action=share&source=collection_link&creator=32799193"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Dunstan Claudio",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "ds",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "ds@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "dslovejessica",
+							"type": "text"
+						},
+						{
+							"key": "profilePicture",
+							"type": "file",
+							"src": "postman-cloud:///1ef0eaa8-ff9b-42b0-b06b-c6ea7cee927d"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/user/register",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "gcd9sip1"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "ds",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "dslovejessica",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/user/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit User",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA1IiwiaWF0IjoxNzE4MTgxMDY0LCJleHAiOjE3MTgxODQ2NjR9.X8buSkDxMU_vrpfLnbKzSRPVKbIUBRHnB0cFEWWAesI"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "duns",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "topup",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/user/edit",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"edit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upgrade Premium",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA1IiwiaWF0IjoxNzE4MTgxMDY0LCJleHAiOjE3MTgxODQ2NjR9.X8buSkDxMU_vrpfLnbKzSRPVKbIUBRHnB0cFEWWAesI"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "localhost:3000/user/premium",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"premium"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recharge API-Hit",
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA1IiwiaWF0IjoxNzE4MTgxMDY0LCJleHAiOjE3MTgxODQ2NjR9.X8buSkDxMU_vrpfLnbKzSRPVKbIUBRHnB0cFEWWAesI"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "amount",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/user/apihit",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"apihit"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
