@@ -2,10 +2,40 @@ const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 const API_KEY_MUSIXMATCH = process.env.API_KEY_MUSIXMATCH;
-
+const client_id = process.env.CLIENT_ID;
+const client_secret = process.env.CLIENT_SECRET;
+const redirect_uri = "http://localhost:3000/callback";
+const querystring = require("querystring");
 router.get("/", (req, res) => {
     return res.status(200).send("testing");
 });
+function generateRandomString(length) {
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let result = "";
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+  }
+const refreshToken = function (req, res) {
+  
+    var state = generateRandomString(16);
+    var scope = 'user-read-private user-read-email';
+  
+    res.redirect('https://accounts.spotify.com/authorize?' +
+      querystring.stringify({
+        response_type: 'code',
+        client_id: client_id,
+        scope: scope,
+        redirect_uri: redirect_uri,
+        state: state
+      }));
+    console.log(res);
+  };
+  
+router.get("/refresh",refreshToken);
+
 
 router.get("/music", async function (req, res) {
     try {
