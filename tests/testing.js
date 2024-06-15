@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const axios = require("axios");
+const axios = require("axios").default;
 const API_KEY_MUSIXMATCH = process.env.API_KEY_MUSIXMATCH;
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
@@ -64,13 +64,14 @@ router.get("/music", async function (req, res) {
 router.get("/lyrics/:id", async function (req, res) {
    
   const id = req.params.id;
+  console.log(id)
   if (!id) {
     return res
       .status(400)
       .json({ error: "trackId is missing in the request param" });
   }
   try {
-    const response = await axios.get(
+    const responsesong = await axios.get(
       `https://api.spotify.com/v1/tracks/${id}`,
       {
         headers: {
@@ -78,11 +79,36 @@ router.get("/lyrics/:id", async function (req, res) {
         },
       }
     );
-    let getOneSong = response.data;
+    let getOneSong = responsesong.data;
+       const songname= getOneSong.name;
+       console.log(songname)
+    //    return res.status(500).send(songname);
+    //     try {
+    //         console.log(API_KEY_MUSIXMATCH);
+    //         const response = await axios.get("https://api.musixmatch.com/ws/1.1/track.search", {
+    //             params: {
+    //                 q_track: songname, page_size: 3, page: 1, s_track_rating: "desc",
+    //                 apikey: API_KEY_MUSIXMATCH,
+    //             },
+    //         });
+    
+    //         // Check if the response status is successful (200)
+    //         if (response.status === 200) {
+    //             const lyricres = response.data;
+    //             // Set the response content type to HTML and send the modified HTML response
+    //             console.log(lyricres)
+    //             return res.status(200).send(lyricres);
+    //         } else {
+    //             throw new Error("Musixmatch API request failed with status code " + response.status);
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching data from Musixmatch:", error);
+    //         return res.status(500).send("Internal Server Error"); // Change to 500 status code for internal server error
+    //     }
     return res.status(200).send({
-      name: getOneSong.name,
-      artist: getOneSong.album.artists[0].name,
-      url: getOneSong.external_urls.spotify,
+        name: getOneSong.name,
+        artist: getOneSong.album.artists[0].name,
+        url: getOneSong.external_urls.spotify,
     });
   } catch (error) {
     console.error("Error fetching data:", error.response.data);

@@ -10,8 +10,8 @@ router.put("/premium", authMiddleware, userController.upgradeToPremium);
 router.put("/apihit", authMiddleware, userController.rechargeApiHit);
 
 router.post("/accesstoken", userController.getAccessTokenFromSpotify);
-router.get("/refresh_token", userController.refreshToken);
-router.get("/accessRef", userController.renewAccessToken);
+router.get("/auth", userController.refreshToken);
+router.get("/refresh_token", userController.renewAccessToken);
 
 router.get("/email", authMiddleware, userController.getUsers);
 router.get("/play/:user_id", authMiddleware, userController.getPlayingMusic);
