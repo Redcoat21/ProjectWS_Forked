@@ -4,6 +4,19 @@ const path = require("path");
 const request = require("request");
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
+const redirect_uri = "http://localhost:3000/callback";
+const axios = require("axios");
+const querystring = require("querystring");
+
+function generateRandomString(length) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
 
 const checkUsernameExist = async function (username) {
   const getusername = await User.findOne({
@@ -41,31 +54,20 @@ const upload = multer({
   limits: { fileSize: 10 * 1024 * 1024 },
 }).single("profilePicture");
 
-const refreshSpotifyToken = function (refresh_token, callback) {
-  const authOptions = {
-    url: "https://accounts.spotify.com/api/token",
-    headers: {
-      "content-type": "application/x-www-form-urlencoded",
-      Authorization:
-        "Basic " +
-        Buffer.from(client_id + ":" + client_secret).toString("base64"),
-    },
-    form: {
-      grant_type: "refresh_token",
-      refresh_token: refresh_token,
-    },
-    json: true,
-  };
+const refreshSpotifyToken = function (res) {
+  var state = generateRandomString(16);
+  var scope = 'user-read-private user-read-email';
 
-  request.post(authOptions, function (error, response, body) {
-    if (!error && response.statusCode === 200) {
-      const access_token = body.access_token;
-      const refresh_token = body.refresh_token;
-      callback(null, { access_token, refresh_token });
-    } else {
-      callback(error || new Error("Failed to refresh token"));
-    }
-  });
+  res.redirect('https://accounts.spotify.com/authorize?' +
+    querystring.stringify({
+      response_type: 'code',
+      client_id: client_id,
+      scope: scope,
+      redirect_uri: redirect_uri,
+      state: state
+    }));
+  console.log(res);
+  console.log(client_id);
 };
 
 module.exports = {

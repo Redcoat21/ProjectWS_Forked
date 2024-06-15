@@ -272,8 +272,7 @@ const getAccessTokenFromSpotify = async function (req, res) {
 };
 
 const refreshToken = function (req, res) {
-  const refresh_token = req.query.refresh_token;
-  Service.refreshSpotifyToken(refresh_token, (error, tokens) => {
+  Service.refreshSpotifyToken(res, (error, tokens) => {
     if (error) {
       res.status(500).send({ error: error.message });
     } else {
