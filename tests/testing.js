@@ -66,6 +66,7 @@ router.get("/music", async function (req, res) {
     return res.status(500).send("Internal Server Error"); // Change to 500 status code for internal server error
   }
 });
+
 router.get("/lyrics/:id", async function (req, res) {
   const token = req.header("x-auth-token");
   const decoded = jwt.verify(token, "PROJECTWS");
@@ -134,46 +135,33 @@ router.get("/lyrics/:id", async function (req, res) {
   }
 });
 
-router.get("/translate", async function (req, res) {
+router.get("/best", async function (req, res) {
+  const { country, row } = req.query;
   try {
     console.log(API_KEY_MUSIXMATCH);
-    const response = await axios.get("https://api.musixmatch.com/ws/1.1/track.lyrics.get", {
+    const response = await axios.get("https://api.musixmatch.com/ws/1.1/chart.tracks.get", {
       params: {
-        track_id: 283840831,
+        chart_name: "top",
+        page: 1,
+        page_size: row,
+        country: country,
+        f_has_lyrics: 1,
         apikey: API_KEY_MUSIXMATCH,
       },
     });
-
-    // Check if the response status is successful (200)
     if (response.status === 200) {
-      // Add Musixmatch tracking script dynamically to the HTML response
-      // const trackingScript = `<script type="text/javascript" src="http://tracking.musixmatch.com/t1.0/AMa6hJCIEzn1v8RuOP"></script>`;
-      // const trackingimgScript = `<img src="http://tracking.musixmatch.com/t1.0/AMa6hJCIEzn1v8RuXW">`;
-
-      const lyricsBody = response.data.message.body.lyrics.lyrics_body;
-      // Modify the HTML content of the response to include the tracking script
-      // const htmlResponse = `
-      //     <!DOCTYPE html>
-      //     <html lang="en">
-      //     <head>
-      //         <meta charset="UTF-8">
-      //         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      //         <title>Translate Page</title>
-      //         ${trackingScript}
-      //         ${trackingimgScript}
-      //     </head>
-      //     <body>
-      //         <h1>Translate Page</h1>
-      //         <p>Lyrics: ${lyricsBody}</p>
-      //     </body>
-      //     </html>
-      // `;
-      // const lyricres = response.data;
-      // Set the response content type to HTML and send the modified HTML response
-      // console.log(lyricres)
-      console.log(lyricsBody);
+      console.log(response.data.message.body.track_list);
+      const trackList = response.data.message.body.track_list;
+      const tracks = trackList.map(trackItem => {
+        const track = trackItem.track;
+        return {
+          track_name: track.track_name,
+          artist_name: track.artist_name,
+          album_name: track.album_name,
+        };
+      });
       res.setHeader('Content-Type', 'text/html');
-      return res.status(200).send(lyricsBody);
+      return res.status(200).json({ tracks });
     } else {
       throw new Error("Musixmatch API request failed with status code " + response.status);
     }

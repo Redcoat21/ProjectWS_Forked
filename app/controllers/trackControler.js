@@ -273,9 +273,46 @@ const getLyrics = async function (req, res) {
   }
 };
 
+const chartTrack = async function (req, res) {
+  const { country, row } = req.query;
+  try {
+    console.log(API_KEY_MUSIXMATCH);
+    const response = await axios.get("https://api.musixmatch.com/ws/1.1/chart.tracks.get", {
+      params: {
+        chart_name: "top",
+        page: 1,
+        page_size: row,
+        country: country,
+        f_has_lyrics: 1,
+        apikey: API_KEY_MUSIXMATCH,
+      },
+    });
+    if (response.status === 200) {
+      console.log(response.data.message.body.track_list);
+      const trackList = response.data.message.body.track_list;
+      const tracks = trackList.map(trackItem => {
+        const track = trackItem.track;
+        return {
+          track_name: track.track_name,
+          artist_name: track.artist_name,
+          album_name: track.album_name,
+        };
+      });
+      res.setHeader('Content-Type', 'text/html');
+      return res.status(200).json({ tracks });
+    } else {
+      throw new Error("Musixmatch API request failed with status code " + response.status);
+    }
+  } catch (error) {
+    console.error("Error fetching data from Musixmatch:", error);
+    return res.status(500).send("Internal Server Error"); // Change to 500 status code for internal server error
+  }
+};
+
 module.exports = {
   getLyrics,
   getTrackById,
   getTrackByUrl,
   play,
+  chartTrack,
 };
