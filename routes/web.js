@@ -3,6 +3,10 @@ const router = express.Router();
 const userRoutes = require("./userRoutes");
 const trackRoutes = require("./trackRoutes");
 const playlistRoutes = require("./playlistRoutes");
+const client_id = process.env.CLIENT_ID;
+const client_secret = process.env.CLIENT_SECRET;
+const redirect_uri = "http://localhost:3000/callback";
+const axios = require("axios");
 const test = require("../tests/testing");
 
 router.use("/test", test);
