@@ -281,6 +281,16 @@ const refreshToken = function (req, res) {
   });
 };
 
+const renewAccessToken = function (req, res) {
+  Service.getRefreshToken(req,res, (error, tokens) => {
+    if (error) {
+      res.status(500).send({ error: error.message });
+    } else {
+      res.send(tokens);
+    }
+  });
+};
+
 //rey
 const getUsers = async function (req, res) {
   try {
@@ -327,4 +337,5 @@ module.exports = {
   refreshToken,
   getUsers, // bagian ini hanya untuk mengecek isi user dari database, dari Reynard
   getPlayingMusic,
+  renewAccessToken
 };

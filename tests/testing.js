@@ -61,6 +61,36 @@ router.get("/music", async function (req, res) {
         return res.status(500).send("Internal Server Error"); // Change to 500 status code for internal server error
     }
 });
+router.get("/lyrics/:id", async function (req, res) {
+   
+  const id = req.params.id;
+  if (!id) {
+    return res
+      .status(400)
+      .json({ error: "trackId is missing in the request param" });
+  }
+  try {
+    const response = await axios.get(
+      `https://api.spotify.com/v1/tracks/${id}`,
+      {
+        headers: {
+          Authorization: "Bearer " + ACCESS_KEY_SPOTIFY,
+        },
+      }
+    );
+    let getOneSong = response.data;
+    return res.status(200).send({
+      name: getOneSong.name,
+      artist: getOneSong.album.artists[0].name,
+      url: getOneSong.external_urls.spotify,
+    });
+  } catch (error) {
+    console.error("Error fetching data:", error.response.data);
+    return res
+      .status(error.response.status)
+      .json({ error: error.response.data });
+  }
+});
 router.get("/translate", async function (req, res) {
     try {
         console.log(API_KEY_MUSIXMATCH);
