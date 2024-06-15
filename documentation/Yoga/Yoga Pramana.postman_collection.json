@@ -17,28 +17,28 @@
 					"formdata": [
 						{
 							"key": "name",
-							"value": "Dunstan Claudio",
+							"value": "",
 							"type": "text"
 						},
 						{
 							"key": "username",
-							"value": "ds",
+							"value": "",
 							"type": "text"
 						},
 						{
 							"key": "email",
-							"value": "ds@gmail.com",
+							"value": "",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "dslovejessica",
+							"value": "",
 							"type": "text"
 						},
 						{
 							"key": "profilePicture",
-							"type": "file",
-							"src": "postman-cloud:///1ef0eaa8-ff9b-42b0-b06b-c6ea7cee927d"
+							"value": "",
+							"type": "file"
 						}
 					]
 				},
@@ -63,7 +63,7 @@
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "gcd9sip1"
+						"value": ""
 					}
 				],
 				"body": {
@@ -71,12 +71,12 @@
 					"urlencoded": [
 						{
 							"key": "username",
-							"value": "ds",
+							"value": "",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "dslovejessica",
+							"value": "",
 							"type": "text"
 						}
 					]
@@ -102,7 +102,7 @@
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA1IiwiaWF0IjoxNzE4MTgxMDY0LCJleHAiOjE3MTgxODQ2NjR9.X8buSkDxMU_vrpfLnbKzSRPVKbIUBRHnB0cFEWWAesI"
+						"value": ""
 					}
 				],
 				"body": {
@@ -120,7 +120,7 @@
 						},
 						{
 							"key": "username",
-							"value": "duns",
+							"value": "",
 							"type": "text"
 						},
 						{
@@ -156,7 +156,7 @@
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA1IiwiaWF0IjoxNzE4MTgxMDY0LCJleHAiOjE3MTgxODQ2NjR9.X8buSkDxMU_vrpfLnbKzSRPVKbIUBRHnB0cFEWWAesI"
+						"value": ""
 					}
 				],
 				"body": {
@@ -187,7 +187,7 @@
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA1IiwiaWF0IjoxNzE4MTgxMDY0LCJleHAiOjE3MTgxODQ2NjR9.X8buSkDxMU_vrpfLnbKzSRPVKbIUBRHnB0cFEWWAesI"
+						"value": ""
 					}
 				],
 				"body": {
@@ -195,7 +195,7 @@
 					"urlencoded": [
 						{
 							"key": "amount",
-							"value": "1",
+							"value": "",
 							"type": "text"
 						}
 					]

@@ -1,0 +1,184 @@
+{
+	"info": {
+		"_postman_id": "5e49e802-586c-40e8-b630-da737c6ba9a2",
+		"name": "Reynard Kamadjaja",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32799193",
+		"_collection_link": "https://kelompok-2-api-spotify.postman.co/workspace/Project~6dfa34b0-2d89-4422-8ecb-05d4f43c4e51/collection/32799193-5e49e802-586c-40e8-b630-da737c6ba9a2?action=share&source=collection_link&creator=32799193"
+	},
+	"item": [
+		{
+			"name": "Insert Track Into Favorite",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "track_name",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/track/favorite",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"track",
+						"favorite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Track From Favorite",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "track_name",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/track/favorite",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"track",
+						"favorite"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Friends Email",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/user/email",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"email"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get What Friends Currently Playing",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "localhost:3000/user/play",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"play"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Play What Friends Currently Playing",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/user/play/:user_id",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"play",
+						":user_id"
+					],
+					"variable": [
+						{
+							"key": "user_id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
