@@ -9,95 +9,80 @@ const Tracklist = require("../models/Tracklists");
 const Sequelize = require("sequelize");
 
 const likeMusic = async function (req, res) {
-  const { track_name } = req.body;
-  // get User id 
   const token = req.header("x-auth-token");
   const decoded = jwt.verify(token, "PROJECTWS");
-  //const user = await User.findOne({ where: { user_id: decoded.user_id } });
   try {
-    if (track_name) {
-      const tracks = await Tracklist.findAll({
-        where: Sequelize.where(
-          Sequelize.fn('LOWER', Sequelize.col('name')),
-          'LIKE',
-          `%${track_name.toLowerCase()}%`
-        )
-      });
-  
-      if (tracks.length > 0) {
-        const favoritePromises = tracks.map(track => {
-          return Favorite.create({
-            tracklist_id: track.tracklist_id,
-            user_id: decoded.user_id,
-            url: track.url
-          });
-        });
-  
-        // Wait for all promises to resolve
-        await Promise.all(favoritePromises);
-  
-        return res.status(200).json({ message: "success" });
-      } else {
-        return res.status(400).json({ message: "track not found" });
+    if (req.body.track_id) {
+      const response = await axios.get(
+        `https://api.spotify.com/v1/tracks/${req.body.track_id}`,
+        {
+          headers: {
+            Authorization: "Bearer " + ACCESS_KEY_SPOTIFY,
+          },
+        }
+      );
+
+      let getTrack = response.data;
+
+      if (!getTrack) {
+        return res.status(404).json({ message: "Track not found!" });
       }
+
+      await Favorite.create({
+        where: {
+          user_id: decoded.user_id,
+          track_id: getTrack.id,
+        },
+      });
+
+      return res
+        .status(200)
+        .json({ message: `Track is succesfully added into Favorites` });
     } else {
-      return res.status(400).json({ message: "track_name is required" });
+      return res.status(400).json({ message: "track_id is required" });
     }
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "An error occurred", error });
   }
-  
-}
-
+};
 
 const deleteLikeMusic = async function (req, res) {
-  const { track_name } = req.body;
-  // get User id 
   const token = req.header("x-auth-token");
   const decoded = jwt.verify(token, "PROJECTWS");
-  //const user = await User.findOne({ where: { user_id: decoded.user_id } });
   try {
-    if (track_name) {
-      const tracks = await Tracklist.findAll({
-        where: Sequelize.where(
-          Sequelize.fn('LOWER', Sequelize.col('name')),
-          'LIKE',
-          `%${track_name.toLowerCase()}%`
-        )
+    if (req.body.track_id) {
+      const getTrack = await Favorite.findOne({
+        where: {
+          user_id: decoded.user_id,
+          track_id: req.body.track_id,
+        },
       });
-  
-      if (tracks.length > 0) {
-        const favoritePromises = tracks.map(track => {
-          return Favorite.destroy({
-            where: {
-              tracklist_id: track.tracklist_id,
-              user_id: decoded.user_id  
-            }
-          });
-        });
-  
-        // Wait for all promises to resolve
-        await Promise.all(favoritePromises);
-  
-        return res.status(200).json({ message: "success" });
-      } else {
-        return res.status(400).json({ message: "track not found" });
+
+      if (!getTrack) {
+        return res.status(404).json({ message: "Track is not on Favorites!" });
       }
+
+      await Favorite.destroy({
+        where: {
+          user_id: decoded.user_id,
+          track_id: req.body.track_id,
+        },
+      });
+
+      return res
+        .status(200)
+        .json({ message: `Track is succesfully remove from Favorites` });
     } else {
-      return res.status(400).json({ message: "track_name is required" });
+      return res.status(400).json({ message: "track_id is required" });
     }
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "An error occurred", error });
   }
-  
-}
-
-
-
+};
 
 module.exports = {
-    likeMusic,
-    deleteLikeMusic
+  likeMusic,
+  deleteLikeMusic,
 };

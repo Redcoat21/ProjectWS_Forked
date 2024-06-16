@@ -88,7 +88,7 @@ module.exports = {
           key: "playlist_id",
         },
       },
-      url: {
+      track_id: {
         type: Sequelize.STRING(255),
         allowNull: false,
       },
@@ -107,11 +107,7 @@ module.exports = {
           key: "user_id",
         },
       },
-      tracklist_id: {
-        type: Sequelize.STRING(255),
-        allowNull: true,
-      },
-      url: {
+      track_id: {
         type: Sequelize.STRING(255),
         allowNull: false,
       },

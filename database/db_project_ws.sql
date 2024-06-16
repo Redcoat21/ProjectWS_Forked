@@ -27,14 +27,13 @@ CREATE TABLE `tracklists` (
     `tracklist_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
     `playlist_id` VARCHAR(5) REFERENCES playlists(playlist_id),
-    `url` VARCHAR(255) NOT NULL
+    `track_id` VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE `favorites` (
     `favorite_id` INT(11) PRIMARY KEY AUTO_INCREMENT,
     `user_id` VARCHAR(6) REFERENCES users(user_id),
-    `tracklist_id` VARCHAR(11) NULL,
-    `url` VARCHAR(255) NOT NULL
+    `track_id` VARCHAR(255) NOT NULL
 );
 
 INSERT INTO `users` VALUES (
@@ -111,54 +110,52 @@ INSERT INTO `tracklists` VALUES (
     1,
     "Space Cadet (feat. Gunna)",
     "PL001",
-    "https://open.spotify.com/track/1fewSx2d5KIZ04wsooEBOz?si=59d61ca37d184eb6"
+    "1fewSx2d5KIZ04wsooEBOz"
 );
 
 INSERT INTO `tracklists` VALUES (
     2,
     "Sky",
     "PL001",
-    "https://open.spotify.com/track/29TPjc8wxfz4XMn21O7VsZ?si=c124e727d89a4999"
+    "29TPjc8wxfz4XMn21O7VsZ"
 );
 
 INSERT INTO `tracklists` VALUES (
     3,
     "Lemonade (feat. NAV)",
     "PL001",
-    "https://open.spotify.com/track/1p0rEzrK7YtdRZVtiyV7RN?si=4cba1b55fa674211"
+    "1p0rEzrK7YtdRZVtiyV7RN"
 );
 
 INSERT INTO `tracklists` VALUES (
     4,
     "Glock In My Lap",
     "PL001",
-    "https://open.spotify.com/track/6pcywuOeGGWeOQzdUyti6k?si=8df7fedc65a54209"
+    "6pcywuOeGGWeOQzdUyti6k"
 );
 
 INSERT INTO `tracklists` VALUES (
     5,
     "Let Go",
     "PL002",
-    "https://open.spotify.com/track/6apFmBCR7iOTwZ1yK8xcDT?si=dc66b0d5cfc447bf"
+    "6apFmBCR7iOTwZ1yK8xcDT"
 );
 
 INSERT INTO `tracklists` VALUES (
     6,
     "Echo (feat. Tauren Wells)",
     "PL002",
-    "https://open.spotify.com/track/6ZhORhQoBD0qndKYvpBTv2?si=fd51f798d0d54f3f"
+    "6ZhORhQoBD0qndKYvpBTv2"
 );
 
 INSERT INTO `favorites` VALUES (
     1,
     "USR003",
-    "",
-    "https://open.spotify.com/track/7Ee6XgP8EHKDhTMYLIndu9?si=b35eaffb14de4927"
+    "7Ee6XgP8EHKDhTMYLIndu9"
 );
 
 INSERT INTO `favorites` VALUES (
     2,
     "USR003",
-    "",
-    "https://open.spotify.com/track/0gWrMbx6pbdH3n3nsLjE55?si=39ea590f62f7470f"
+    "0gWrMbx6pbdH3n3nsLjE55"
 );
