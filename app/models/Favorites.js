@@ -12,17 +12,12 @@ Favorite.init(
       allowNull: false,
       autoIncrement: true
     },
-    tracklist_id: {
-        type: DataTypes.INTEGER(11),
-        allowNull: true,
-        unique: true,
+    track_id: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
       },
     user_id: {
       type: DataTypes.STRING(6),
-      allowNull: false,
-    },
-    url: {
-      type: DataTypes.STRING(255),
       allowNull: false,
     },
     

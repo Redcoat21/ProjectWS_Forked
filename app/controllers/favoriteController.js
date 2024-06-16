@@ -32,13 +32,10 @@ const likeMusic = async function (req, res) {
         return res.status(404).json({ message: "Track not found!" });
       }
 
-      await Favorite.create({
-        where: {
-          user_id: decoded.user_id,
-          track_id: getTrack.id,
-        },
+      await Favorite.upsert({
+        user_id: decoded.user_id,
+        track_id: getTrack.id
       });
-
       return res
         .status(200)
         .json({ message: `Track is succesfully added into Favorites` });
@@ -54,6 +51,7 @@ const likeMusic = async function (req, res) {
 const deleteLikeMusic = async function (req, res) {
   const token = req.header("x-auth-token");
   const decoded = jwt.verify(token, "PROJECTWS");
+  const ACCESS_KEY_SPOTIFY = process.env.ACCESS_KEY_SPOTIFY;
   try {
     if (req.body.track_id) {
       const getTrack = await Favorite.findOne({
