@@ -303,7 +303,7 @@ const authorizePlayback = function (req, res) {
   });
 };
 const playonotherdevice = async function (req, res) {
-  const accessToken = req.params.accessToken;
+  const accessToken = ACCESS_KEY_SPOTIFY;
   const trackUri = req.params.trackUri; // Replace with actual track URI
   try {
     // Get user's devices
@@ -323,6 +323,29 @@ const playonotherdevice = async function (req, res) {
 
     const deviceId = devices[0].id; // Use the first device found
 
+    const response = await axios.get(
+      `https://api.spotify.com/v1/tracks/${trackUri}`,
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+    console.log(accessToken)
+    let getOneSong = response.data;
+    const songname = getOneSong.name;
+    if(response.status==200){
+      console.log({ devices });
+      return res
+        .status(200)
+        .send("Track "+songname+" is playing on " + deviceId + " name: " + devices[0].name);
+        
+      }else{
+        return res
+          .status(200)
+          .send("song not found");
+        
+    }
     // Play track on the selected device
     // const result= await axios.put(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
     //   uris: [trackUri]
@@ -331,10 +354,6 @@ const playonotherdevice = async function (req, res) {
     //     'Authorization': 'Bearer ' + accessToken
     //   }
     // });
-    console.log({ devices });
-    return res
-      .status(200)
-      .send("Track playing on " + deviceId + " name: " + devices[0].name);
   } catch (error) {
     console.error("Error playing track:", error);
     res.status(500).send("Error playing track");

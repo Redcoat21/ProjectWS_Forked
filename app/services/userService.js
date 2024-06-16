@@ -56,7 +56,7 @@ const upload = multer({
 
 const refreshSpotifyToken = function (res) {
   var state = generateRandomString(16);
-  var scope = 'user-read-private user-read-email';
+  var scope = 'user-read-private user-read-email user-read-playback-state user-modify-playback-state';
 
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
