@@ -1,7 +1,7 @@
 const express = require("express");
 const web = require("./routes/web");
 const bodyParser = require('body-parser');
-const dotenv = require("dotenv").config();
+ require("dotenv").config();
 const axios =require("axios");
 
 const app = express();
