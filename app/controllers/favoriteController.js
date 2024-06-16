@@ -7,10 +7,14 @@ const Joi = require("joi");
 const Service = require("../services/userService");
 const Tracklist = require("../models/Tracklists");
 const Sequelize = require("sequelize");
+const axios = require("axios");
+
+
 
 const likeMusic = async function (req, res) {
   const token = req.header("x-auth-token");
   const decoded = jwt.verify(token, "PROJECTWS");
+  const ACCESS_KEY_SPOTIFY = process.env.ACCESS_KEY_SPOTIFY;
   try {
     if (req.body.track_id) {
       const response = await axios.get(
