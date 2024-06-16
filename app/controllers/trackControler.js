@@ -232,6 +232,7 @@ const getLyrics = async function (req, res) {
         },
       }
     );
+    console.log(ACCESS_KEY_SPOTIFY)
     let getOneSong = response.data;
     const songname = getOneSong.name;
     const responsesong = await axios.get("https://api.musixmatch.com/ws/1.1/track.search", {
