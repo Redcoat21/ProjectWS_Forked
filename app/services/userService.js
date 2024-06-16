@@ -69,6 +69,21 @@ const refreshSpotifyToken = function (res) {
   console.log(res);
   console.log(client_id);
 };
+const authorizePlayback = function (req,res) {
+  var state = generateRandomString(16);
+  var scope = 'user-read-playback-state user-modify-playback-state';
+
+  res.redirect('https://accounts.spotify.com/authorize?' +
+    querystring.stringify({
+      response_type: 'code',
+      client_id: client_id,
+      scope: scope,
+      redirect_uri: redirect_uri,
+      state: state
+    }));
+  console.log(res);
+  // console.log(client_id);
+};
 
 const getRefreshToken = async (req,res) => {
   var refresh_token = req.query.refresh_token;
@@ -103,4 +118,5 @@ module.exports = {
   checkUsernameNotExist,
   upload,
   refreshSpotifyToken,
+  authorizePlayback,
 };

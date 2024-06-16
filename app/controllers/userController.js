@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Joi = require("joi");
+const axios= require("axios");
 const Service = require("../services/userService");
 const multer = require("multer");
 const { Sequelize, Op } = require("sequelize");
@@ -255,9 +256,9 @@ const getAccessTokenFromSpotify = async function (req, res) {
     const response = await axios.post(
       "https://accounts.spotify.com/api/token",
       "grant_type=client_credentials&client_id=" +
-        encodeURIComponent(client_id) +
-        "&client_secret=" +
-        encodeURIComponent(client_secret),
+      encodeURIComponent(client_id) +
+      "&client_secret=" +
+      encodeURIComponent(client_secret),
       {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -282,7 +283,7 @@ const refreshToken = function (req, res) {
 };
 
 const renewAccessToken = function (req, res) {
-  Service.getRefreshToken(req,res, (error, tokens) => {
+  Service.getRefreshToken(req, res, (error, tokens) => {
     if (error) {
       res.status(500).send({ error: error.message });
     } else {
@@ -290,6 +291,49 @@ const renewAccessToken = function (req, res) {
     }
   });
 };
+
+const authorizePlayback = function (req, res) {
+  Service.authorizePlayback(req, res, (error, tokens) => {
+    if (error) {
+      res.status(500).send({ error: error.message });
+    } else {
+      res.send(tokens);
+    }
+  });
+};
+const playonotherdevice = async function (req, res) {
+  const accessToken = req.params.accessToken;
+  const trackUri = req.params.trackUri; // Replace with actual track URI
+  try {
+    // Get user's devices
+    const devicesResponse = await axios.get('https://api.spotify.com/v1/me/player/devices', {
+      headers: {
+        'Authorization': 'Bearer ' + accessToken
+      }
+    });
+
+    const devices = devicesResponse.data.devices;
+    if (devices.length === 0) {
+      return res.status(400).send('No devices found');
+    }
+
+    const deviceId = devices[0].id; // Use the first device found
+
+    // Play track on the selected device
+    // const result= await axios.put(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+    //   uris: [trackUri]
+    // }, {
+    //   headers: {
+    //     'Authorization': 'Bearer ' + accessToken
+    //   }
+    // });
+    console.log({devices});
+    return res.status(200).send('Track playing on '+deviceId+" name: "+devices[0].name);
+  } catch (error) {
+    console.error('Error playing track:', error);
+    res.status(500).send('Error playing track');
+  }
+}
 
 //rey
 const getUsers = async function (req, res) {
@@ -337,5 +381,7 @@ module.exports = {
   refreshToken,
   getUsers, // bagian ini hanya untuk mengecek isi user dari database, dari Reynard
   getPlayingMusic,
-  renewAccessToken
+  renewAccessToken,
+  authorizePlayback,
+  playonotherdevice
 };

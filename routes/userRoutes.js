@@ -12,6 +12,8 @@ router.put("/apihit", authMiddleware, userController.rechargeApiHit);
 router.post("/accesstoken", userController.getAccessTokenFromSpotify);
 router.get("/auth", userController.refreshToken);
 router.get("/refresh_token", userController.renewAccessToken);
+router.get("/authplay", userController.authorizePlayback);
+router.get("/play/device/:trackUri/:accessToken", userController.playonotherdevice);
 
 router.get("/email", authMiddleware, userController.getUsers);
 router.get("/play/:user_id", authMiddleware, userController.getPlayingMusic);

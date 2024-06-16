@@ -19,7 +19,7 @@ post:
 - localhost:3000/track/favorite reynard
 
 get:
-- get lyrics ()
+- get lyrics () sdh selesai
 - translate lyric ()
 - play music (v) rey -> memasukantrack yang dicari ke now_playing
 - search music () yosua
@@ -67,7 +67,7 @@ reynard:
 richard:
 - localhost:3000/track/lyric/:id ok
 - localhost:3000/track//chart/:country/:row ok
-- localhost:3000/user/play/:playlist_id/:id
+- localhost:3000/user/play/device/:trackUri/:accesstoken 
 - localhost:3000/user/access 
 - localhost:3000/user/auth ok
 - localhost:3000/user/refresh_token ok
