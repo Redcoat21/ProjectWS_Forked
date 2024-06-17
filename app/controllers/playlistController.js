@@ -129,11 +129,11 @@ const InsertToPlayList = async function (req, res) {
     return res.status(404).json({ message: "Playlist not found!" });
   }
 
-  const trackId = url.split("/").pop();
-  console.log(trackId)
+  const track_id = url.split("/").pop();
+  console.log(track_id)
   try {
     const response = await axios.get(
-      `https://api.spotify.com/v1/tracks/${trackId}`,
+      `https://api.spotify.com/v1/tracks/${track_id}`,
       {
         headers: {
           'Authorization': "Bearer " + ACCESS_KEY_SPOTIFY,
@@ -151,7 +151,7 @@ const InsertToPlayList = async function (req, res) {
       tracklist_id: hasil,
       name: getOneSong.name,
       playlist_id: req.body.playlist_id,
-      url: getOneSong.external_urls.spotify,
+      url: track_id,
     });
 
     return res.status(200).send({
@@ -180,7 +180,7 @@ const deleteTrackList = async function (req, res) {
   const track = await Tracklist.findOne({
     where: {
       playlist_id: req.params.playlist_id,
-      url: req.params.url,
+      url: req.params.track_id,
     },
   });
 
