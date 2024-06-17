@@ -18,7 +18,7 @@ Tracklists.init(
     type: Sequelize.STRING(5),
     allowNull: false,
   },
-  url: {
+  track_id: {
     type: Sequelize.STRING(255),
     allowNull: false,
   },

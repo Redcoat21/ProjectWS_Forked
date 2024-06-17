@@ -1,7 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../../config/config");
 
-
 class Favorite extends Model {}
 
 Favorite.init(
@@ -10,17 +9,16 @@ Favorite.init(
       type: DataTypes.INTEGER(11),
       primaryKey: true,
       allowNull: false,
-      autoIncrement: true
+      autoIncrement: true,
     },
-    track_id: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-      },
     user_id: {
       type: DataTypes.STRING(6),
       allowNull: false,
     },
-    
+    track_id: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
+    },
   },
   {
     sequelize,

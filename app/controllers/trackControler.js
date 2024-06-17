@@ -172,20 +172,20 @@ const play = async function (req, res) {
     id: Joi.string().required().messages({
       "string.base": "Music ID should be a type of 'text'",
       "string.empty": "Music ID cannot be an empty field",
-      "any.required": "Music ID is required"
+      "any.required": "Music ID is required",
     }),
   });
 
   const tokenSchema = Joi.string().required().messages({
     "string.base": "Access token should be a type of 'text'",
     "string.empty": "Access token cannot be an empty field",
-    "any.required": "Access token is missing"
+    "any.required": "Access token is missing",
   });
 
   try {
     // Validate music ID
-    const { id } = req.params;
-    const { error: idError } = schema.validate({ id });
+    const { track_id, playlist_id } = req.body;
+    const { error: idError } = schema.validate({ track_id });
 
     if (idError) {
       return res.status(400).json({ error: idError.details[0].message });
@@ -210,18 +210,44 @@ const play = async function (req, res) {
     }
 
     // Find the track and update now_playing
-    const track = await Tracklist.findOne({
-      attributes: ["name"], // column yang nanti ditampilkan
-      where: { track_id: id },
-    });
+    if (playlist_id) {
+      const track = await Tracklist.findOne({
+        attributes: ["name"], // column yang nanti ditampilkan
+        where: {
+          track_id: track_id,
+          playlist_id: playlist_id,
+        },
+      });
 
-    if (!track) {
-      return res.status(404).json({ error: "Music not found" });
+      if (!track) {
+        return res.status(404).json({ error: "Track is not on the playlist" });
+      }
+
+      user.now_playing = track_id;
+      user.save();
+
+      return res.status(200).json({ message: `Now Playing ${track.name}` });
+    } else {
+      const response = await axios.get(
+        `https://api.spotify.com/v1/tracks/${track_id}`,
+        {
+          headers: {
+            Authorization: "Bearer " + ACCESS_KEY_SPOTIFY,
+          },
+        }
+      );
+
+      const track = response.data;
+
+      if (!track) {
+        return res.status(404).json({ error: "Track not found!" });
+      }
+
+      user.now_playing = track.id;
+      user.save();
+
+      return res.status(200).json({ message: `Now Playing ${track.name}` });
     }
-
-    await user.update({ now_playing: track.name });
-
-    return res.status(200).json({ track: track.name, user: user.name });
   } catch (error) {
     console.error("Error updating now_playing:", error);
     if (error.name === "TokenExpiredError") {
@@ -230,7 +256,6 @@ const play = async function (req, res) {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 
 const getLyrics = async function (req, res) {
   const token = req.header("x-auth-token");
@@ -259,40 +284,51 @@ const getLyrics = async function (req, res) {
         },
       }
     );
-    console.log(ACCESS_KEY_SPOTIFY)
+    console.log(ACCESS_KEY_SPOTIFY);
     let getOneSong = response.data;
     const songname = getOneSong.name;
-    const responsesong = await axios.get("https://api.musixmatch.com/ws/1.1/track.search", {
-      params: {
-        q_track: songname, page_size: 1, page: 1, s_track_rating: "desc",
-        apikey: API_KEY_MUSIXMATCH,
-      },
-    });
+    const responsesong = await axios.get(
+      "https://api.musixmatch.com/ws/1.1/track.search",
+      {
+        params: {
+          q_track: songname,
+          page_size: 1,
+          page: 1,
+          s_track_rating: "desc",
+          apikey: API_KEY_MUSIXMATCH,
+        },
+      }
+    );
 
     // Check if the response status is successful (200)
     if (responsesong.status === 200) {
       const lyricres = responsesong.data;
-      console.log(lyricres.message.body.track_list[0].track.track_id)
-      const responselyric = await axios.get("https://api.musixmatch.com/ws/1.1/track.lyrics.get", {
-        params: {
-          track_id: lyricres.message.body.track_list[0].track.track_id,
-          apikey: API_KEY_MUSIXMATCH,
-        },
-      });
+      console.log(lyricres.message.body.track_list[0].track.track_id);
+      const responselyric = await axios.get(
+        "https://api.musixmatch.com/ws/1.1/track.lyrics.get",
+        {
+          params: {
+            track_id: lyricres.message.body.track_list[0].track.track_id,
+            apikey: API_KEY_MUSIXMATCH,
+          },
+        }
+      );
 
       if (responselyric.status === 200) {
-
         const lyricsBody = responselyric.data.message.body.lyrics.lyrics_body;
         console.log(lyricsBody);
-        res.setHeader('Content-Type', 'text/html');
+        res.setHeader("Content-Type", "text/html");
         return res.status(200).send(lyricsBody);
       } else {
-        throw new Error("Musixmatch API request failed with status code " + response.status);
+        throw new Error(
+          "Musixmatch API request failed with status code " + response.status
+        );
       }
     } else {
-      throw new Error("Musixmatch API request failed with status code " + response.status);
+      throw new Error(
+        "Musixmatch API request failed with status code " + response.status
+      );
     }
-
   } catch (error) {
     console.error("Error fetching data:", error.response.data);
     return res
@@ -302,11 +338,12 @@ const getLyrics = async function (req, res) {
 };
 
 const chartTrack = async function (req, res) {
-
-    const { country, row } = req.params;
-    try {
-      console.log(API_KEY_MUSIXMATCH);
-      const response = await axios.get("https://api.musixmatch.com/ws/1.1/chart.tracks.get", {
+  const { country, row } = req.params;
+  try {
+    console.log(API_KEY_MUSIXMATCH);
+    const response = await axios.get(
+      "https://api.musixmatch.com/ws/1.1/chart.tracks.get",
+      {
         params: {
           chart_name: "top",
           page: 1,
@@ -315,30 +352,31 @@ const chartTrack = async function (req, res) {
           f_has_lyrics: 1,
           apikey: API_KEY_MUSIXMATCH,
         },
-      });
-      if (response.status === 200) {
-        console.log(response.data.message.body.track_list);
-        const trackList = response.data.message.body.track_list;
-        const tracks = trackList.map(trackItem => {
-          const track = trackItem.track;
-          return {
-            track_name: track.track_name,
-            artist_name: track.artist_name,
-            album_name: track.album_name,
-          };
-        });
-        res.setHeader('Content-Type', 'text/html');
-        return res.status(200).json({ tracks });
-      } else {
-        throw new Error("Musixmatch API request failed with status code " + response.status);
       }
-    } catch (error) {
-      console.error("Error fetching data from Musixmatch:", error);
-      return res.status(500).send("Internal Server Error"); // Change to 500 status code for internal server error
+    );
+    if (response.status === 200) {
+      console.log(response.data.message.body.track_list);
+      const trackList = response.data.message.body.track_list;
+      const tracks = trackList.map((trackItem) => {
+        const track = trackItem.track;
+        return {
+          track_name: track.track_name,
+          artist_name: track.artist_name,
+          album_name: track.album_name,
+        };
+      });
+      res.setHeader("Content-Type", "text/html");
+      return res.status(200).json({ tracks });
+    } else {
+      throw new Error(
+        "Musixmatch API request failed with status code " + response.status
+      );
     }
-  
+  } catch (error) {
+    console.error("Error fetching data from Musixmatch:", error);
+    return res.status(500).send("Internal Server Error"); // Change to 500 status code for internal server error
+  }
 };
-
 
 module.exports = {
   getLyrics,
