@@ -19,9 +19,9 @@ const isPremium = async function (req, res, next) {
     }
 
     if (user.premium == false) {
-      return;
+      return res.status(403).send({ message: "You are not Premium yet!" });
     } else {
-      return;
+      next();
     }
   } catch (error) {
     console.log(error);
