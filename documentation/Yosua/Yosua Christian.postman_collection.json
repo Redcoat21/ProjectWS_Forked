@@ -1,0 +1,213 @@
+{
+	"info": {
+		"_postman_id": "e4b6adc2-40d2-4bfa-a1d9-7fd6f1b7470f",
+		"name": "Yosua Christian",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34638785",
+		"_collection_link": "https://kelompok-2-api-spotify.postman.co/workspace/Project~6dfa34b0-2d89-4422-8ecb-05d4f43c4e51/collection/32799193-e4b6adc2-40d2-4bfa-a1d9-7fd6f1b7470f?action=share&source=collection_link&creator=34638785"
+	},
+	"item": [
+		{
+			"name": "Get Access Token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "localhost:3000/user/accesstoken",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"accesstoken"
+					]
+				},
+				"description": "### User Access Token\n\nThis endpoint is used to submit a user access token via an HTTP POST request to localhost:3000/user/accesstoken.\n\n#### Request Body\n\n- The request should include the following parameters in x-www-form-urlencoded format:\n    - `parameter_name`: (text) Description of the parameter.\n        \n\n#### Response\n\nThe response for this request is a JSON object conforming to the following schema:\n\n``` json\n{\n    \"access_token\": \"BQBS2rQsX6gl7DGCx51M2jVwfHCC1vcDGx5tYnorMYfUoVwwkwwB2hUy_BUcMVgFlzBo3RgMUrU8mVqH4gred5zBbCs3DJRQh9bKNQ8IhMnBpPvqWuA\",\n    \"token_type\": \"Bearer\",\n    \"expires_in\": 3600\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "Search Track By ID",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA1IiwiaWF0IjoxNzE4NDc5OTAwLCJleHAiOjE3MTg0ODM1MDB9.wMuTELjE4ec1h9W7CTK4sw5e9TpzmTQWqs27zvD6YL4"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/track/1OhIn0L6iofnk5bjalWfHq?si=03987d672ac14893",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"track",
+						"1OhIn0L6iofnk5bjalWfHq"
+					],
+					"query": [
+						{
+							"key": "si",
+							"value": "03987d672ac14893"
+						}
+					]
+				},
+				"description": "# Track Details\n\nThis endpoint retrieves the details of a specific track identified by the provided ID.\n\n## Request\n\n### Path Parameters\n\n- `id` (string) - The unique identifier of the track.\n    \n\n## Response\n\nThe response for this request is a JSON object with the following schema:\n\n``` json\n{\n  \"nama_lagu\": \"string\",\n  \"artist\": \"string\",\n  \"url\": \"string\",\n}\n\n ```\n\nThe response contains the details of the track including its nama_lagu, artist, artist, .url"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Playlist",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA1IiwiaWF0IjoxNzE4MTIyMzc1LCJleHAiOjE3MTgxMjU5NzV9.-llTJ4iYXqx-54rFn0I-mX4JXDJnjrWjRDDcu3sq7Ic"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "nyoba",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "ff",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/playlist",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"playlist"
+					]
+				},
+				"description": "\n### Create Playlist\n\nThis endpoint allows the creation of a new playlist.\n\n#### Request Body\n- `name` (text): The name of the playlist.\n- `description` (text): A brief description of the playlist.\n\n#### Response\nThe response for this request follows the JSON schema below:\n\n```json\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"playlistId\": {\n      \"type\": \"string\"\n    },\n    \"message\": {\n      \"type\": \"string\"\n    }\n  }\n}\n```\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Insert Track Into Playlist",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA1IiwiaWF0IjoxNzE4MTIyMzc1LCJleHAiOjE3MTgxMjU5NzV9.-llTJ4iYXqx-54rFn0I-mX4JXDJnjrWjRDDcu3sq7Ic"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "url",
+							"value": "https://open.spotify.com/track/1OhIn0L6iofnk5bjalWfHq?si=f1441e573e7c49a0",
+							"type": "text"
+						},
+						{
+							"key": "playlist_id",
+							"value": "PL003",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/track",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"track"
+					]
+				},
+				"description": "### POST /track\n\nThis endpoint is used to track a URL and associate it with a specific playlist.\n\n#### Request Body\n\n- `url` (text): The URL to be tracked.\n    \n- `playlist_id` (text): The ID of the playlist to which the URL will be associated.\n    \n\n#### Response\n\nThe response for this request follows the JSON schema below:\n\n``` json\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"status\": {\n      \"type\": \"string\"\n    },\n    \"message\": {\n      \"type\": \"string\"\n    }\n  }\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Playlist",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA1IiwiaWF0IjoxNzE4MTIyMzc1LCJleHAiOjE3MTgxMjU5NzV9.-llTJ4iYXqx-54rFn0I-mX4JXDJnjrWjRDDcu3sq7Ic"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/playlist/:id",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"playlist",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				},
+				"description": "### Delete Playlist\n\nThis endpoint is used to delete a specific playlist.\n\n#### Request\n\n- Method: DELETE\n    \n- URL: `localhost:3000/playlist/:id`\n    \n- Path Parameters\n    - id (required, string): The unique identifier of the playlist to be deleted.\n        \n\n#### Response\n\nThe response of this request is a JSON schema with the following properties:\n\n- status (string): The status of the request, which can be used to determine if the deletion was successful.\n    \n- message (string): A message indicating the result of the deletion operation.\n    \n\nExample:\n\n``` json\n{\n  \"status\": \"success\",\n  \"message\": \"Playlist deleted successfully\"\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Track From Playlist",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/track/tracklist/:playlist_id/:track_id",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"track",
+						"tracklist",
+						":playlist_id",
+						":track_id"
+					],
+					"variable": [
+						{
+							"key": "playlist_id",
+							"value": ""
+						},
+						{
+							"key": "track_id",
+							"value": ""
+						}
+					]
+				},
+				"description": "\n### DELETE /track/tracklist/:playlist_id/:name\n\nThis endpoint is used to delete a specific track from a tracklist within a playlist.\n\n#### Request\n- Parameters\n    - `playlist_id` (path, required) - The ID of the playlist from which the track needs to be deleted.\n    - `name` (path, required) - The name of the track to be deleted.\n\n#### Response\nThe response of this request is a JSON schema. The schema includes the following properties:\n- `message` (string, required) - A message indicating the status of the deletion operation.\n\nExample Response:\n```json\n{\n    \"message\": \"Track deleted successfully\"\n}\n```\n"
+			},
+			"response": []
+		}
+	]
+}
