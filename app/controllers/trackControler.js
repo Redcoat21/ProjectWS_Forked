@@ -37,15 +37,15 @@ const getTrackById = async function (req, res) {
     return res.status(404).json({ message: "User not found!" });
   }
 
-  const id = req.params.id;
-  if (!id) {
+  const track_id = req.params.track_id;
+  if (!track_id) {
     return res
       .status(400)
       .json({ error: "trackId is missing in the request param" });
   }
   try {
     const response = await axios.get(
-      `https://api.spotify.com/v1/tracks/${id}`,
+      `https://api.spotify.com/v1/tracks/${track_id}`,
       {
         headers: {
           Authorization: "Bearer " + ACCESS_KEY_SPOTIFY,
@@ -55,8 +55,8 @@ const getTrackById = async function (req, res) {
     let getOneSong = response.data;
     return res.status(200).send({
       name: getOneSong.name,
-      artist: getOneSong.album.artists[0].name,
-      track_id: id,
+      artist: getOneSong.artists[0].name,
+      track_id: track_id,
     });
   } catch (error) {
     console.error("Error fetching data:", error.response.data);
@@ -169,43 +169,63 @@ const getTrackByUrl = async function (req, res) {
 
 const play = async function (req, res) {
   try {
-    const id_music = req.params.id;
+    const track_id = req.body.track_id;
 
-    if (id_music != null) {
+    if (!track_id) {
+      return res.status(400).json({ message: "Track_ID required!" });
+    }
+
+    // Validate access token
+    const token = req.header("x-auth-token");
+
+    // Verify token and get user
+    const decoded = jwt.verify(token, "PROJECTWS");
+    const user = await User.findOne({
+      where: { user_id: decoded.user_id },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Find the track and update now_playing
+    if (req.body.playlist_id) {
       const track = await Tracklist.findOne({
-        attributes: ['name'], // column yang nanti ditampilkan
+        attributes: ["name"], // column yang nanti ditampilkan
         where: { track_id: id_music },
       });
 
-      if (track != null) {
-        const token = req.header("x-auth-token");
-        if (!token) {
-          return res.status(401).json({ error: "Access token missing" });
-        }
-
-        const decoded = jwt.verify(token, "PROJECTWS");
-        const user = await User.findOne({ where: { user_id: decoded.user_id } });
-
-        if (!user) {
-          return res.status(404).json({ error: "User not found" });
-        }
-
+      if (track) {
         await user.update({ now_playing: track.name });
 
-        return res.status(200).json({ track: track.name, user: user.name });
+        return res.status(200).json({ message: `Now Playing ${track.name}` });
       } else {
-        return res.status(404).json({ error: "Music not found" });
+        return res.status(404).json({ error: "Track not found" });
       }
     } else {
-      return res.status(400).json({ error: "Music ID is missing" });
+      const response = await axios.get(
+        `https://api.spotify.com/v1/tracks/${track_id}`,
+        {
+          headers: {
+            Authorization: "Bearer " + ACCESS_KEY_SPOTIFY,
+          },
+        }
+      );
+
+      const track = response.data;
+
+      if (track) {
+        await user.update({ now_playing: track.name });
+        return res.status(200).json({ message: `Now Playing ${track.name}` });
+      } else {
+        return res.status(404).json({ error: "Track not found" });
+      }
     }
   } catch (error) {
     console.error("Error updating now_playing:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
-}
-
-
+};
 
 const getLyrics = async function (req, res) {
   const token = req.header("x-auth-token");
@@ -217,6 +237,10 @@ const getLyrics = async function (req, res) {
 
   if (!user) {
     return res.status(404).json({ message: "User not found!" });
+  }
+
+  if (user.premium == false) {
+    return res.status(403).json({ message: "Account is not Premium!" });
   }
 
   const id = req.params.id;

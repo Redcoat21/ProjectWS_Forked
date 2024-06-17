@@ -9,14 +9,12 @@ const Tracklist = require("../models/Tracklists");
 const Sequelize = require("sequelize");
 const axios = require("axios");
 
-
-
 const likeMusic = async function (req, res) {
   // Schema untuk validasi track_id
   const schema = Joi.object({
     track_id: Joi.string().required().messages({
-      'string.base': 'Track ID should be a string',
-      'any.required': 'Track ID is required',
+      "string.base": "Track ID should be a string",
+      "any.required": "Track ID is required",
     }),
   });
 
@@ -25,7 +23,7 @@ const likeMusic = async function (req, res) {
     const { error } = schema.validate(req.body, { abortEarly: false });
 
     if (error) {
-      const errorMessage = error.details.map((err) => err.message).join('; ');
+      const errorMessage = error.details.map((err) => err.message).join("; ");
       return res.status(400).json({ message: errorMessage });
     }
 
@@ -68,7 +66,6 @@ const likeMusic = async function (req, res) {
     return res.status(200).json({
       message: `Track '${getTrack.name}' is successfully added into Favorites`,
     });
-
   } catch (error) {
     console.error("Error fetching data:", error.response?.data);
     return res.status(error.response?.status || 500).json({
@@ -88,7 +85,9 @@ function isTrackId(input) {
 async function searchTrackByName(trackName, accessToken) {
   try {
     const response = await axios.get(
-      `https://api.spotify.com/v1/search?q=${encodeURIComponent(trackName)}&type=track`,
+      `https://api.spotify.com/v1/search?q=${encodeURIComponent(
+        trackName
+      )}&type=track`,
       {
         headers: {
           Authorization: "Bearer " + accessToken,
@@ -110,8 +109,8 @@ const deleteLikeMusic = async function (req, res) {
   // Schema untuk validasi track_id
   const schema = Joi.object({
     track_id: Joi.string().required().messages({
-      'string.base': 'Track ID should be a string',
-      'any.required': 'Track ID is required',
+      "string.base": "Track ID should be a string",
+      "any.required": "Track ID is required",
     }),
   });
 
@@ -120,7 +119,7 @@ const deleteLikeMusic = async function (req, res) {
     const { error } = schema.validate(req.body, { abortEarly: false });
 
     if (error) {
-      const errorMessage = error.details.map((err) => err.message).join('; ');
+      const errorMessage = error.details.map((err) => err.message).join("; ");
       return res.status(400).json({ message: errorMessage });
     }
 
@@ -150,7 +149,6 @@ const deleteLikeMusic = async function (req, res) {
     return res.status(200).json({
       message: `Track is successfully removed from Favorites`,
     });
-
   } catch (error) {
     console.error("Error occurred:", error);
     return res.status(500).json({ message: "An error occurred", error });

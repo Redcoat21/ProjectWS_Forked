@@ -14,24 +14,24 @@ const authMiddleware = async function (req, res, next) {
     const decoded = jwt.verify(token, "PROJECTWS");
     const user = await User.findOne({ where: { user_id: decoded.user_id } });
 
-    if (!user ) {
+    if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
     // updaate api hit by Rey
-    if(user.api_hit <=0 ) {
+    if (user.api_hit <= 0) {
       return res.status(401).json({ error: "Insufficient API Hit" });
     }
-     
+
     await user.update({ api_hit: user.api_hit - 1 });
 
-    req.headerToken = token;
+    req.header = token;
     next();
   } catch (error) {
     console.error(error);
-    if (error.name === 'TokenExpiredError') {
+    if (error.name === "TokenExpiredError") {
       return res.status(401).json({ error: "Authentication token expired" });
-    } else if (error.name === 'JsonWebTokenError') {
+    } else if (error.name === "JsonWebTokenError") {
       return res.status(401).json({ error: "Invalid authentication token" });
     } else {
       console.error(error);

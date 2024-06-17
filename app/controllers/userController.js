@@ -331,20 +331,23 @@ const playonotherdevice = async function (req, res) {
         },
       }
     );
-    console.log(accessToken)
+    console.log(accessToken);
     let getOneSong = response.data;
     const songname = getOneSong.name;
-    if(response.status==200){
+    if (response.status == 200) {
       console.log({ devices });
       return res
         .status(200)
-        .send("Track "+songname+" is playing on " + deviceId + " name: " + devices[0].name);
-        
-      }else{
-        return res
-          .status(200)
-          .send("song not found");
-        
+        .send(
+          "Track " +
+            songname +
+            " is playing on " +
+            deviceId +
+            " name: " +
+            devices[0].name
+        );
+    } else {
+      return res.status(200).send("song not found");
     }
     // Play track on the selected device
     // const result= await axios.put(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
@@ -401,9 +404,16 @@ const superAdmin = async function (req, res) {
 
 //rey
 const getUsers = async function (req, res) {
+  const token = req.header("x-auth-token");
+  const decoded = jwt.verify(token, "PROJECTWS");
   try {
     const users = await User.findAll({
       attributes: ["name", "username", "email"],
+      where: {
+        user_id: {
+          [Sequelize.Op.ne]: decoded.user_id,
+        },
+      },
     }); // Mengambil semua data user dari database
     res.status(200).json({ Users: users });
   } catch (error) {
@@ -414,35 +424,34 @@ const getUsers = async function (req, res) {
 
 // tambahkan kolom now playing ya, di db sama model ntar di update
 const getPlayingMusic = async function (req, res) {
-  const user_id = req.params.user_id;
+  const token = req.header("x-auth-token");
+  const decoded = jwt.verify(token, "PROJECTWS");
 
   try {
-    if (!user_id) {
-      return res.status(400).json({ error: "User ID is required" });
-    }
-
-    const user = await User.findOne({
+    const user = await User.findAll({
       where: {
-        user_id: user_id,
         now_playing: {
-          [Sequelize.Op.ne]: null,
+          [Sequelize.Op.ne]: "",
+        },
+        user_id: {
+          [Sequelize.Op.ne]: decoded.user_id,
         },
       },
       attributes: ["username", "now_playing"],
     });
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found or now_playing is empty" });
+    if (user.length == 0) {
+      return res
+        .status(404)
+        .json({ message: "No Users are currently playing any tracks" });
     }
 
-    return res.status(200).json(user);
-
+    return res.status(200).json({ Users: user });
   } catch (error) {
     console.error("Error retrieving playing music:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 
 module.exports = {
   register,

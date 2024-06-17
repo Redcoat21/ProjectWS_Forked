@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "12b20ed2-81c1-4de3-97ba-91aecaa58239",
+		"_postman_id": "de552089-c50b-496d-af34-3bf6537485a8",
 		"name": "Yoga Pramana",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "32799193",
-		"_collection_link": "https://kelompok-2-api-spotify.postman.co/workspace/Project~6dfa34b0-2d89-4422-8ecb-05d4f43c4e51/collection/32799193-12b20ed2-81c1-4de3-97ba-91aecaa58239?action=share&source=collection_link&creator=32799193"
+		"_collection_link": "https://kelompok-2-api-spotify.postman.co/workspace/Team-Workspace~c9e93883-4dd8-4fd4-8559-446e0055cd86/collection/34638785-de552089-c50b-496d-af34-3bf6537485a8?action=share&source=collection_link&creator=32799193"
 	},
 	"item": [
 		{
@@ -209,6 +209,65 @@
 					"path": [
 						"user",
 						"apihit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create / Update / Delete User (SuperAdmin)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "user_id",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "profilePicture",
+							"value": "",
+							"type": "file"
+						},
+						{
+							"key": "deleteUser",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/user/superadmin",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"superadmin"
 					]
 				}
 			},

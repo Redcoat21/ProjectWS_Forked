@@ -1,28 +1,28 @@
 const { Model, Sequelize, DataTypes, Op } = require("sequelize");
 const sequelize = require("../../config/config");
 
-class Tracklists extends Model{}
+class Tracklists extends Model {}
 Tracklists.init(
   {
     tracklist_id: {
-    type: Sequelize.INTEGER(11),
-    primaryKey: true,
-    allowNull: false,
-    unique: true,
+      type: Sequelize.INTEGER(11),
+      primaryKey: true,
+      allowNull: false,
+      autoIncrement: true,
+    },
+    name: {
+      type: Sequelize.STRING(255),
+      allowNull: false,
+    },
+    playlist_id: {
+      type: Sequelize.STRING(5),
+      allowNull: false,
+    },
+    track_id: {
+      type: Sequelize.STRING(255),
+      allowNull: false,
+    },
   },
-  name: {
-    type: Sequelize.STRING(255),
-    allowNull: false,
-  },
-  playlist_id: {
-    type: Sequelize.STRING(5),
-    allowNull: false,
-  },
-  track_id: {
-    type: Sequelize.STRING(255),
-    allowNull: false,
-  },
-},
   {
     sequelize,
     modelName: "Tracklists",

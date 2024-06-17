@@ -14,12 +14,10 @@ router.post("/accesstoken", userController.getAccessTokenFromSpotify);
 router.get("/auth", userController.refreshToken);
 router.get("/refresh_token", userController.renewAccessToken);
 router.get("/authplay", userController.authorizePlayback);
-router.get(
-  "/play/device/:trackUri",
-  userController.playonotherdevice
-);
+router.get("/play/device/:trackUri", userController.playonotherdevice);
 
-router.get("/email", authMiddleware, userController.getUsers);
-router.get("/play/:user_id", authMiddleware, userController.getPlayingMusic);
+router.get("/email", userController.getUsers);
+router.get("/play", userController.getPlayingMusic);
+router.get("/play/user_id", userController.getPlayingMusic);
 
 module.exports = router;

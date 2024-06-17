@@ -10,7 +10,7 @@ const ACCESS_KEY_SPOTIFY = process.env.ACCESS_KEY_SPOTIFY;
 const createPlayList = async function (req, res) {
   const token = req.header("x-auth-token");
   if (!token) {
-    return res.status(400).send("require user token")
+    return res.status(400).send("require user token");
   }
   const decoded = jwt.verify(token, "PROJECTWS");
 
@@ -35,11 +35,9 @@ const createPlayList = async function (req, res) {
   const id_playlist = `PL${idcount}`;
   const { name, description } = req.body;
   const schema = Joi.object({
-    name: Joi.string()
-      .required()
-      .messages({
-        "any.required": "Semua Field Wajib Diisi!",
-      }),
+    name: Joi.string().required().messages({
+      "any.required": "Semua Field Wajib Diisi!",
+    }),
     description: Joi.string().required().messages({
       "any.required": "Semua Field Wajib Diisi!",
     }),
@@ -107,11 +105,11 @@ const deletePlayList = async function (req, res) {
 };
 
 const InsertToPlayList = async function (req, res) {
-  const url = req.body.url;
+  const track_id = req.body.track_id;
   const token = req.header("x-auth-token");
   const decoded = jwt.verify(token, "PROJECTWS");
-  if (!url || url == "") {
-    return res.status(404).json({ message: "url required" });
+  if (!track_id) {
+    return res.status(400).json({ message: "Track_ID required" });
   }
   const user = await User.findOne({
     where: { user_id: decoded.user_id },
@@ -129,26 +127,19 @@ const InsertToPlayList = async function (req, res) {
     return res.status(404).json({ message: "Playlist not found!" });
   }
 
-  const track_id = url.split("/").pop();
-  console.log(track_id);
   try {
     const response = await axios.get(
       `https://api.spotify.com/v1/tracks/${track_id}`,
       {
         headers: {
-          'Authorization': "Bearer " + ACCESS_KEY_SPOTIFY,
+          Authorization: "Bearer " + ACCESS_KEY_SPOTIFY,
         },
       }
     );
 
     let getOneSong = response.data;
-    const count =await Tracklist.findOne({
-      order: [['tracklist_id', 'DESC']]
-    });
-    const hasil= count+1;
-     
+
     await Tracklist.create({
-      tracklist_id: hasil,
       name: getOneSong.name,
       playlist_id: req.body.playlist_id,
       track_id: track_id,
@@ -159,9 +150,7 @@ const InsertToPlayList = async function (req, res) {
     });
   } catch (error) {
     console.error("Error fetching data:", error);
-    return res
-      .status(400)
-      .json({ error: error.response }); // Send error response
+    return res.status(400).json({ error: error.response }); // Send error response
   }
 };
 
@@ -175,6 +164,17 @@ const deleteTrackList = async function (req, res) {
 
   if (!user) {
     return res.status(404).json({ message: "User not found!" });
+  }
+
+  const playlist = await Playlist.findOne({
+    where: {
+      user_id: decoded.user_id,
+      playlist_id: req.params.playlist_id,
+    },
+  });
+
+  if (!playlist) {
+    return res.status(404).json({ message: "Playlist not found!" });
   }
 
   const track = await Tracklist.findOne({
@@ -194,7 +194,7 @@ const deleteTrackList = async function (req, res) {
       track_id: req.params.track_id,
     },
   });
-  
+
   return res
     .status(200)
     .json({ message: `${track.name} has been removed from the playlist` });
