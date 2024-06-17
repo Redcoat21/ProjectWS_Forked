@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "e4b6adc2-40d2-4bfa-a1d9-7fd6f1b7470f",
+		"_postman_id": "5771b169-d8c8-4578-b8bf-f780a3b82bac",
 		"name": "Yosua Christian",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "34638785",
-		"_collection_link": "https://kelompok-2-api-spotify.postman.co/workspace/Project~6dfa34b0-2d89-4422-8ecb-05d4f43c4e51/collection/32799193-e4b6adc2-40d2-4bfa-a1d9-7fd6f1b7470f?action=share&source=collection_link&creator=34638785"
+		"_collection_link": "https://kelompok-2-api-spotify.postman.co/workspace/Team-Workspace~c9e93883-4dd8-4fd4-8559-446e0055cd86/collection/34638785-5771b169-d8c8-4578-b8bf-f780a3b82bac?action=share&source=collection_link&creator=34638785"
 	},
 	"item": [
 		{
@@ -33,28 +33,35 @@
 		},
 		{
 			"name": "Search Track By ID",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA1IiwiaWF0IjoxNzE4NDc5OTAwLCJleHAiOjE3MTg0ODM1MDB9.wMuTELjE4ec1h9W7CTK4sw5e9TpzmTQWqs27zvD6YL4"
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA2IiwiaWF0IjoxNzE4NjM5MjIzLCJleHAiOjE3MTg2NDI4MjN9.ClgeE32KO0BBc-gB5NEkdnY5cVFZYq9kiwzY9RE5fTs"
 					}
 				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
 				"url": {
-					"raw": "localhost:3000/track/1OhIn0L6iofnk5bjalWfHq?si=03987d672ac14893",
+					"raw": "localhost:3000/track/:id",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
 						"track",
-						"1OhIn0L6iofnk5bjalWfHq"
+						":id"
 					],
-					"query": [
+					"variable": [
 						{
-							"key": "si",
-							"value": "03987d672ac14893"
+							"key": "id",
+							"value": "6y80ayvbK3OIi2pLvRY0tn"
 						}
 					]
 				},
@@ -69,7 +76,7 @@
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA1IiwiaWF0IjoxNzE4MTIyMzc1LCJleHAiOjE3MTgxMjU5NzV9.-llTJ4iYXqx-54rFn0I-mX4JXDJnjrWjRDDcu3sq7Ic"
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA2IiwiaWF0IjoxNzE4NjM5MjIzLCJleHAiOjE3MTg2NDI4MjN9.ClgeE32KO0BBc-gB5NEkdnY5cVFZYq9kiwzY9RE5fTs"
 					}
 				],
 				"body": {
@@ -77,12 +84,12 @@
 					"urlencoded": [
 						{
 							"key": "name",
-							"value": "nyoba",
+							"value": "galau",
 							"type": "text"
 						},
 						{
 							"key": "description",
-							"value": "ff",
+							"value": "lagi galau",
 							"type": "text"
 						}
 					]
@@ -102,72 +109,73 @@
 			"response": []
 		},
 		{
-			"name": "Insert Track Into Playlist",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "x-auth-token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA1IiwiaWF0IjoxNzE4MTIyMzc1LCJleHAiOjE3MTgxMjU5NzV9.-llTJ4iYXqx-54rFn0I-mX4JXDJnjrWjRDDcu3sq7Ic"
-					}
-				],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "url",
-							"value": "https://open.spotify.com/track/1OhIn0L6iofnk5bjalWfHq?si=f1441e573e7c49a0",
-							"type": "text"
-						},
-						{
-							"key": "playlist_id",
-							"value": "PL003",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:3000/track",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"track"
-					]
-				},
-				"description": "### POST /track\n\nThis endpoint is used to track a URL and associate it with a specific playlist.\n\n#### Request Body\n\n- `url` (text): The URL to be tracked.\n    \n- `playlist_id` (text): The ID of the playlist to which the URL will be associated.\n    \n\n#### Response\n\nThe response for this request follows the JSON schema below:\n\n``` json\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"status\": {\n      \"type\": \"string\"\n    },\n    \"message\": {\n      \"type\": \"string\"\n    }\n  }\n}\n\n ```"
-			},
-			"response": []
-		},
-		{
 			"name": "Delete Playlist",
 			"request": {
 				"method": "DELETE",
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA1IiwiaWF0IjoxNzE4MTIyMzc1LCJleHAiOjE3MTgxMjU5NzV9.-llTJ4iYXqx-54rFn0I-mX4JXDJnjrWjRDDcu3sq7Ic"
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA2IiwiaWF0IjoxNzE4NjM5MjIzLCJleHAiOjE3MTg2NDI4MjN9.ClgeE32KO0BBc-gB5NEkdnY5cVFZYq9kiwzY9RE5fTs"
 					}
 				],
 				"url": {
-					"raw": "localhost:3000/playlist/:id",
+					"raw": "localhost:3000/playlist/:playlist_id",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
 						"playlist",
-						":id"
+						":playlist_id"
 					],
 					"variable": [
 						{
-							"key": "id",
-							"value": ""
+							"key": "playlist_id",
+							"value": "PL003"
 						}
 					]
 				},
 				"description": "### Delete Playlist\n\nThis endpoint is used to delete a specific playlist.\n\n#### Request\n\n- Method: DELETE\n    \n- URL: `localhost:3000/playlist/:id`\n    \n- Path Parameters\n    - id (required, string): The unique identifier of the playlist to be deleted.\n        \n\n#### Response\n\nThe response of this request is a JSON schema with the following properties:\n\n- status (string): The status of the request, which can be used to determine if the deletion was successful.\n    \n- message (string): A message indicating the result of the deletion operation.\n    \n\nExample:\n\n``` json\n{\n  \"status\": \"success\",\n  \"message\": \"Playlist deleted successfully\"\n}\n\n ```"
+			},
+			"response": []
+		},
+		{
+			"name": "Insert Track Into Playlist",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA2IiwiaWF0IjoxNzE4NjM5MjIzLCJleHAiOjE3MTg2NDI4MjN9.ClgeE32KO0BBc-gB5NEkdnY5cVFZYq9kiwzY9RE5fTs"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "track_id",
+							"value": "0FZ4Dmg8jJJAPJnvBIzD9z",
+							"type": "text"
+						},
+						{
+							"key": "playlist_id",
+							"value": "PL004",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/playlist/track",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"playlist",
+						"track"
+					]
+				},
+				"description": "### POST /track\n\nThis endpoint is used to track a URL and associate it with a specific playlist.\n\n#### Request Body\n\n- `url` (text): The URL to be tracked.\n    \n- `playlist_id` (text): The ID of the playlist to which the URL will be associated.\n    \n\n#### Response\n\nThe response for this request follows the JSON schema below:\n\n``` json\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"status\": {\n      \"type\": \"string\"\n    },\n    \"message\": {\n      \"type\": \"string\"\n    }\n  }\n}\n\n ```"
 			},
 			"response": []
 		},
@@ -178,30 +186,29 @@
 				"header": [
 					{
 						"key": "x-auth-token",
-						"value": "",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA2IiwiaWF0IjoxNzE4NjM5MjIzLCJleHAiOjE3MTg2NDI4MjN9.ClgeE32KO0BBc-gB5NEkdnY5cVFZYq9kiwzY9RE5fTs",
 						"type": "text"
 					}
 				],
 				"url": {
-					"raw": "localhost:3000/track/tracklist/:playlist_id/:track_id",
+					"raw": "localhost:3000/playlist/:playlist_id/:track_id",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"track",
-						"tracklist",
+						"playlist",
 						":playlist_id",
 						":track_id"
 					],
 					"variable": [
 						{
 							"key": "playlist_id",
-							"value": ""
+							"value": "PL004"
 						},
 						{
 							"key": "track_id",
-							"value": ""
+							"value": "6y80ayvbK3OIi2pLvRY0tn"
 						}
 					]
 				},
