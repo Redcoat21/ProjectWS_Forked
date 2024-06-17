@@ -15,4 +15,5 @@ router.delete("/favorite", authMiddleware, favoriteController.deleteLikeMusic);
 
 router.get("/play/:id", authMiddleware, trackController.play);
 
+
 module.exports = router;
