@@ -130,7 +130,7 @@ const InsertToPlayList = async function (req, res) {
   }
 
   const track_id = url.split("/").pop();
-  console.log(track_id)
+  console.log(track_id);
   try {
     const response = await axios.get(
       `https://api.spotify.com/v1/tracks/${track_id}`,
@@ -151,7 +151,7 @@ const InsertToPlayList = async function (req, res) {
       tracklist_id: hasil,
       name: getOneSong.name,
       playlist_id: req.body.playlist_id,
-      url: track_id,
+      track_id: track_id,
     });
 
     return res.status(200).send({
@@ -180,7 +180,7 @@ const deleteTrackList = async function (req, res) {
   const track = await Tracklist.findOne({
     where: {
       playlist_id: req.params.playlist_id,
-      url: req.params.track_id,
+      track_id: req.params.track_id,
     },
   });
 
@@ -189,10 +189,12 @@ const deleteTrackList = async function (req, res) {
   }
 
   await Tracklist.destroy({
-    playlist_id: req.params.playlist_id,
-    url: req.params.url,
+    where: {
+      playlist_id: req.params.playlist_id,
+      track_id: req.params.track_id,
+    },
   });
-
+  
   return res
     .status(200)
     .json({ message: `${track.name} has been removed from the playlist` });

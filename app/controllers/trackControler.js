@@ -56,7 +56,7 @@ const getTrackById = async function (req, res) {
     return res.status(200).send({
       name: getOneSong.name,
       artist: getOneSong.album.artists[0].name,
-      url: id,
+      track_id: id,
     });
   } catch (error) {
     console.error("Error fetching data:", error.response.data);
