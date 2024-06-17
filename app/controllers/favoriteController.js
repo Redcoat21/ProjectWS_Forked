@@ -33,28 +33,40 @@ const likeMusic = async function (req, res) {
     const decoded = jwt.verify(token, "PROJECTWS");
     const ACCESS_KEY_SPOTIFY = process.env.ACCESS_KEY_SPOTIFY;
 
-    const response = await axios.get(
-      `https://api.spotify.com/v1/tracks/${req.body.track_id}`,
-      {
-        headers: {
-          Authorization: "Bearer " + ACCESS_KEY_SPOTIFY,
-        },
+    let trackId = req.body.track_id;
+    let getTrack;
+
+    // Cek apakah track_id adalah nama lagu atau id track
+    if (!isTrackId(trackId)) {
+      // Jika bukan id track, cari track berdasarkan nama
+      getTrack = await searchTrackByName(trackId, ACCESS_KEY_SPOTIFY);
+      if (!getTrack) {
+        return res.status(404).json({ message: "Track not found!" });
       }
-    );
-
-    const getTrack = response.data;
-
-    if (!getTrack) {
-      return res.status(404).json({ message: "Track not found!" });
+    } else {
+      // Jika track_id adalah id track, langsung cari track berdasarkan id
+      const response = await axios.get(
+        `https://api.spotify.com/v1/tracks/${trackId}`,
+        {
+          headers: {
+            Authorization: "Bearer " + ACCESS_KEY_SPOTIFY,
+          },
+        }
+      );
+      getTrack = response.data;
+      if (!getTrack) {
+        return res.status(404).json({ message: "Track not found!" });
+      }
     }
 
+    // Simpan track ke dalam daftar favorit
     await Favorite.upsert({
       user_id: decoded.user_id,
       track_id: getTrack.id,
     });
 
     return res.status(200).json({
-      message: `Track is successfully added into Favorites`,
+      message: `Track '${getTrack.name}' is successfully added into Favorites`,
     });
 
   } catch (error) {
@@ -65,6 +77,34 @@ const likeMusic = async function (req, res) {
     });
   }
 };
+
+// Fungsi untuk memeriksa apakah input adalah id track atau nama lagu
+function isTrackId(input) {
+  // Disini bisa dilakukan validasi lebih kompleks sesuai kebutuhan
+  return /^[0-9A-Za-z]{22}$/.test(input); // Contoh sederhana, misalnya id track adalah 22 karakter alfanumerik
+}
+
+// Fungsi untuk mencari track berdasarkan nama
+async function searchTrackByName(trackName, accessToken) {
+  try {
+    const response = await axios.get(
+      `https://api.spotify.com/v1/search?q=${encodeURIComponent(trackName)}&type=track`,
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+    const tracks = response.data.tracks.items;
+    if (tracks.length > 0) {
+      return tracks[0]; // Mengembalikan track pertama dari hasil pencarian
+    }
+    return null; // Jika tidak ditemukan track dengan nama tersebut
+  } catch (error) {
+    console.error("Error searching track:", error.response?.data);
+    throw error; // Melempar error untuk ditangani oleh blok catch di fungsi utama
+  }
+}
 
 const deleteLikeMusic = async function (req, res) {
   // Schema untuk validasi track_id

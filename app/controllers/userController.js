@@ -414,26 +414,35 @@ const getUsers = async function (req, res) {
 
 // tambahkan kolom now playing ya, di db sama model ntar di update
 const getPlayingMusic = async function (req, res) {
-  var user_id = req.params.user_id;
-  if (user_id != null) {
-    const user = await User.findAll({
-      attributes: ["username", "now_playing"], // column yang nanti ditampilkan
+  const user_id = req.params.user_id;
+
+  try {
+    if (!user_id) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    const user = await User.findOne({
       where: {
+        user_id: user_id,
         now_playing: {
           [Sequelize.Op.ne]: null,
         },
       },
+      attributes: ["username", "now_playing"],
     });
 
-    if (user != null) {
-      return res.status(200).json(user);
-    } else {
-      return res.status(400).json({ error: "User not found" });
+    if (!user) {
+      return res.status(404).json({ error: "User not found or now_playing is empty" });
     }
-  } else {
-    return res.status(400).json({ error: "User not found 20" });
+
+    return res.status(200).json(user);
+
+  } catch (error) {
+    console.error("Error retrieving playing music:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 module.exports = {
   register,
