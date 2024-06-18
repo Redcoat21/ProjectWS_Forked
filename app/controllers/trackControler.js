@@ -191,12 +191,12 @@ const play = async function (req, res) {
     // Find the track and update now_playing
     if (req.body.playlist_id) {
       const track = await Tracklist.findOne({
-        attributes: ["name"], // column yang nanti ditampilkan
-        where: { track_id: id_music },
+        attributes: ["track_id"], // column yang nanti ditampilkan
+        where: { track_id: track_id },
       });
 
       if (track) {
-        await user.update({ now_playing: track.name });
+        await user.update({ now_playing: track.track_id });
 
         return res.status(200).json({ message: `Now Playing ${track.name}` });
       } else {
@@ -215,7 +215,7 @@ const play = async function (req, res) {
       const track = response.data;
 
       if (track) {
-        await user.update({ now_playing: track.name });
+        await user.update({ now_playing: track.id });
         return res.status(200).json({ message: `Now Playing ${track.name}` });
       } else {
         return res.status(404).json({ error: "Track not found" });
