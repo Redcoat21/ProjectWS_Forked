@@ -37,7 +37,7 @@ const getTrackById = async function (req, res) {
     return res.status(404).json({ message: "User not found!" });
   }
 
-  const track_id = req.params.track_id;
+  const track_id = req.params.id;
   if (!track_id) {
     return res
       .status(400)
