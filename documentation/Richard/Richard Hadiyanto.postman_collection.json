@@ -1,0 +1,182 @@
+{
+	"info": {
+		"_postman_id": "8ede926e-3357-49b9-9fa5-f20bf0d2fc20",
+		"name": "Richard Hadiyanto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32821974",
+		"_collection_link": "https://kelompok-2-api-spotify.postman.co/workspace/Project~6dfa34b0-2d89-4422-8ecb-05d4f43c4e51/collection/32799193-8ede926e-3357-49b9-9fa5-f20bf0d2fc20?action=share&source=collection_link&creator=32821974"
+	},
+	"item": [
+		{
+			"name": "authorize",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "refreshtoken",
+						"value": "BQAV-XVsftovnwbODLhCoPnC__QYe-60uhJPYmDIbk8uPsUI8YyqZpuoJ7TMZhh1pDWuS5Ybuav0OicN-_w43VFO7irSAHMlrh3q6sfOZXYZ0_4Y6S4"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "localhost:3000/user/auth",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "refreshtoken",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "refreshToken",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3000/user/refresh_token?refresh_token=AQCSij4nmABX8RfWODu2X2rb-k_3alWuUf82OSRxOuE1vKsAVuBm-A3QId-IScsOSO9Dc5Nr2wKREgMH8fzehVGOTUhJ5CRMAEugfq43f84HzAVShJCDvgJgVvtBBi1jCgY",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"refresh_token"
+					],
+					"query": [
+						{
+							"key": "refresh_token",
+							"value": "AQCSij4nmABX8RfWODu2X2rb-k_3alWuUf82OSRxOuE1vKsAVuBm-A3QId-IScsOSO9Dc5Nr2wKREgMH8fzehVGOTUhJ5CRMAEugfq43f84HzAVShJCDvgJgVvtBBi1jCgY"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getlyrics",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA1IiwiaWF0IjoxNzE4NDg2MzEwLCJleHAiOjE3MTg0ODk5MTB9.QJYrdtj5FaYku6iILezhKyNvgOclJ9xpjf9Ie_bqcxc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "localhost:3000/track/lyric/1OhIn0L6iofnk5bjalWfHq?si=03987d672ac14893",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"track",
+						"lyric",
+						"1OhIn0L6iofnk5bjalWfHq"
+					],
+					"query": [
+						{
+							"key": "si",
+							"value": "03987d672ac14893"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "chartbest",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-auth-token",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiVVNSMDA1IiwiaWF0IjoxNzE4NDg2MzEwLCJleHAiOjE3MTg0ODk5MTB9.QJYrdtj5FaYku6iILezhKyNvgOclJ9xpjf9Ie_bqcxc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "localhost:3000/track/chart/it/3",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"track",
+						"chart",
+						"it",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "play on other device",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/user/play/device/1OhIn0L6iofnk5bjalWfHq/BQAh6s2kyIK-kcOWZ_JAs_qYYH8OwTEWsnTxeWLhqo8wvSiXsFQbWBBiTpi_SOH6PKEx1EkwH828oX36OzjOxuBHrOPjAMz6yr7pXk5amThO0Wwdv8B4_OOMou-Vu0hmosR2CIm61tTpiDild4qrb502f6bdUPDgx6UQcYhyFpStm09ZrPlpb23LrNhqf3WBh2ipZvO5Q73UKqA",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						"play",
+						"device",
+						"1OhIn0L6iofnk5bjalWfHq",
+						"BQAh6s2kyIK-kcOWZ_JAs_qYYH8OwTEWsnTxeWLhqo8wvSiXsFQbWBBiTpi_SOH6PKEx1EkwH828oX36OzjOxuBHrOPjAMz6yr7pXk5amThO0Wwdv8B4_OOMou-Vu0hmosR2CIm61tTpiDild4qrb502f6bdUPDgx6UQcYhyFpStm09ZrPlpb23LrNhqf3WBh2ipZvO5Q73UKqA"
+					],
+					"query": [
+						{
+							"key": "si",
+							"value": "03987d672ac14893",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

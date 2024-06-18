@@ -67,7 +67,7 @@ reynard:
 richard:
 - localhost:3000/track/lyric/:id ok
 - localhost:3000/track//chart/:country/:row ok
-- localhost:3000/user/play/device/:trackUri/:accesstoken 
+- localhost:3000/user/play/device/:trackUri ok
 - localhost:3000/user/access 
 - localhost:3000/user/auth ok
 - localhost:3000/user/refresh_token ok
