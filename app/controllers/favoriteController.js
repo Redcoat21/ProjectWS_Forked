@@ -13,8 +13,8 @@ const likeMusic = async function (req, res) {
   // Schema untuk validasi track_id
   const schema = Joi.object({
     track_id: Joi.string().required().messages({
-      "string.base": "Track ID should be a string",
-      "any.required": "Track ID is required",
+      'string.base': 'Track ID should be a string',
+      'any.required': 'Track ID is required',
     }),
   });
 
@@ -23,11 +23,15 @@ const likeMusic = async function (req, res) {
     const { error } = schema.validate(req.body, { abortEarly: false });
 
     if (error) {
-      const errorMessage = error.details.map((err) => err.message).join("; ");
+      const errorMessage = error.details.map((err) => err.message).join('; ');
       return res.status(400).json({ message: errorMessage });
     }
 
     const token = req.header("x-auth-token");
+    if (!token) {
+      return res.status(401).json({ message: 'Access token is missing' });
+    }
+
     const decoded = jwt.verify(token, "PROJECTWS");
     const ACCESS_KEY_SPOTIFY = process.env.ACCESS_KEY_SPOTIFY;
 
@@ -41,6 +45,7 @@ const likeMusic = async function (req, res) {
       if (!getTrack) {
         return res.status(404).json({ message: "Track not found!" });
       }
+      trackId = getTrack.id;
     } else {
       // Jika track_id adalah id track, langsung cari track berdasarkan id
       const response = await axios.get(
@@ -57,6 +62,20 @@ const likeMusic = async function (req, res) {
       }
     }
 
+    // Cek apakah track sudah ada di daftar favorit
+    const existingFavorite = await Favorite.findOne({
+      where: {
+        user_id: decoded.user_id,
+        track_id: trackId,
+      },
+    });
+
+    if (existingFavorite) {
+      return res.status(400).json({
+        message: `Track '${getTrack.name}' is already in your Favorites`,
+      });
+    }
+
     // Simpan track ke dalam daftar favorit
     await Favorite.upsert({
       user_id: decoded.user_id,
@@ -66,6 +85,7 @@ const likeMusic = async function (req, res) {
     return res.status(200).json({
       message: `Track '${getTrack.name}' is successfully added into Favorites`,
     });
+
   } catch (error) {
     console.error("Error fetching data:", error.response?.data);
     return res.status(error.response?.status || 500).json({
@@ -74,6 +94,47 @@ const likeMusic = async function (req, res) {
     });
   }
 };
+
+// Fungsi untuk memeriksa apakah input adalah id track atau nama lagu
+function isTrackId(input) {
+  // Disini bisa dilakukan validasi lebih kompleks sesuai kebutuhan
+  return /^[0-9A-Za-z]{22}$/.test(input); // Contoh sederhana, misalnya id track adalah 22 karakter alfanumerik
+}
+
+// Fungsi untuk mencari track berdasarkan nama
+async function searchTrackByName(trackName, accessToken) {
+  const response = await axios.get(
+    `https://api.spotify.com/v1/search?q=${encodeURIComponent(trackName)}&type=track&limit=1`,
+    {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    }
+  );
+  return response.data.tracks.items[0];
+}
+
+// Fungsi untuk mencari track berdasarkan nama
+async function searchTrackByName(trackName, accessToken) {
+  try {
+    const response = await axios.get(
+      `https://api.spotify.com/v1/search?q=${encodeURIComponent(trackName)}&type=track`,
+      {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+        },
+      }
+    );
+    const tracks = response.data.tracks.items;
+    if (tracks.length > 0) {
+      return tracks[0]; // Mengembalikan track pertama dari hasil pencarian
+    }
+    return null; // Jika tidak ditemukan track dengan nama tersebut
+  } catch (error) {
+    console.error("Error searching track:", error.response?.data);
+    throw error; // Melempar error untuk ditangani oleh blok catch di fungsi utama
+  }
+}
 
 // Fungsi untuk memeriksa apakah input adalah id track atau nama lagu
 function isTrackId(input) {
