@@ -25,7 +25,7 @@ const authMiddleware = async function (req, res, next) {
 
     await user.update({ api_hit: user.api_hit - 1 });
 
-    req.header = token;
+    req.token = token;
     next();
   } catch (error) {
     console.error(error);
