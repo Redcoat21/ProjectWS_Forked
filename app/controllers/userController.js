@@ -424,29 +424,29 @@ const getUsers = async function (req, res) {
 
 // tambahkan kolom now playing ya, di db sama model ntar di update
 const getPlayingMusic = async function (req, res) {
-  const token = req.header("x-auth-token");
-  const decoded = jwt.verify(token, "PROJECTWS");
+  const user_id = req.params.user_id;
 
   try {
-    const user = await User.findAll({
+    if (!user_id) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    const user = await User.findOne({
       where: {
+        user_id: user_id,
         now_playing: {
-          [Sequelize.Op.ne]: "",
-        },
-        user_id: {
-          [Sequelize.Op.ne]: decoded.user_id,
+          [Sequelize.Op.ne]: null,
         },
       },
       attributes: ["username", "now_playing"],
     });
 
-    if (user.length == 0) {
-      return res
-        .status(404)
-        .json({ message: "No Users are currently playing any tracks" });
+    if (!user) {
+      return res.status(404).json({ error: "User not found or now_playing is empty" });
     }
 
-    return res.status(200).json({ Users: user });
+    return res.status(200).json(user);
+
   } catch (error) {
     console.error("Error retrieving playing music:", error);
     return res.status(500).json({ error: "Internal Server Error" });

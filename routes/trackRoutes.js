@@ -17,7 +17,6 @@ router.get("/chart/:country/:row", authMiddleware, trackController.chartTrack);
 //rey
 router.post("/favorite", authMiddleware, favoriteController.likeMusic);
 router.delete("/favorite", authMiddleware, favoriteController.deleteLikeMusic);
-
-router.put("/play", authMiddleware, trackController.play);
+router.get("/play/:id", authMiddleware, trackController.play);
 
 module.exports = router;

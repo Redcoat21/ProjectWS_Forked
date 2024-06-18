@@ -23,6 +23,8 @@ router.get(
 
 router.get("/email", authMiddleware, userController.getUsers);
 router.get("/play", authMiddleware, userController.getPlayingMusic);
+router.get("/play/:user_id", authMiddleware, userController.getPlayingMusic);
+
 router.put("/play/:user_id", authMiddleware, userController.playOthersMusic);
 
 module.exports = router;
