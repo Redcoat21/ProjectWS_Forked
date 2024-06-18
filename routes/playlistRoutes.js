@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
-// const authMiddleware = require("../app/middleware/authMiddleware")
+const authMiddleware = require("../app/middleware/authMiddleware")
 const playlistController = require("../app/controllers/playlistController");
 
-router.post("/", playlistController.createPlayList);
-router.delete("/:playlist_id", playlistController.deletePlayList);
-router.post("/track", playlistController.InsertToPlayList);
+router.post("/", authMiddleware, playlistController.createPlayList);
+router.delete("/:playlist_id", authMiddleware, playlistController.deletePlayList);
+router.post("/track", authMiddleware, playlistController.InsertToPlayList);
 router.delete(
   "/track/:playlist_id/:track_id",
-  playlistController.deleteTrackList
+  authMiddleware, playlistController.deleteTrackList
 );
 
 module.exports = router;

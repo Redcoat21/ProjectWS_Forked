@@ -453,6 +453,53 @@ const getPlayingMusic = async function (req, res) {
   }
 };
 
+const playOthersMusic = async function (req, res) {
+  const token = req.header("x-auth-token");
+  const decoded = jwt.verify(token, "PROJECTWS");
+
+  const me = await User.findOne({
+    where: {
+      user_id: decoded.user_id,
+    },
+  });
+
+  if (!me) {
+    return res.status(404).json({ message: "User not found!" });
+  }
+
+  const user = await User.findOne({
+    attributes: ["now_playing"],
+    where: {
+      now_playing: {
+        [Sequelize.Op.ne]: "",
+      },
+      user_id: req.params.user_id,
+    },
+  });
+
+  if (!user) {
+    return res
+      .status(404)
+      .json({ message: "User not found or currently not playing any tracks!" });
+  }
+
+  me.now_playing = user.now_playing;
+  await me.save();
+
+  const response = await axios.get(
+    `https://api.spotify.com/v1/tracks/${user.now_playing}`,
+    {
+      headers: {
+        Authorization: "Bearer " + ACCESS_KEY_SPOTIFY,
+      },
+    }
+  );
+
+  return res
+    .status(200)
+    .json({ message: `You are now playing ${response.data.name}` });
+};
+
 module.exports = {
   register,
   login,
@@ -464,6 +511,7 @@ module.exports = {
   superAdmin,
   getUsers, // bagian ini hanya untuk mengecek isi user dari database, dari Reynard
   getPlayingMusic,
+  playOthersMusic,
   renewAccessToken,
   authorizePlayback,
   playonotherdevice,
