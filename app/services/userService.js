@@ -66,8 +66,12 @@ const refreshSpotifyToken = function (res) {
       redirect_uri: redirect_uri,
       state: state
     }));
-  console.log(res);
+  // console.log(res);
   console.log(client_id);
+  const locationHeader = res._header.match(/Location: (.+)\r\n/);
+const url = locationHeader ? locationHeader[1] : null;
+
+console.log(url);
 };
 const authorizePlayback = function (req,res) {
   var state = generateRandomString(16);
