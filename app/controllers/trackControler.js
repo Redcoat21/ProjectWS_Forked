@@ -169,63 +169,42 @@ const getTrackByUrl = async function (req, res) {
 
 const play = async function (req, res) {
   try {
-    const track_id = req.body.track_id;
+    const id_music = req.params.id;
 
-    if (!track_id) {
-      return res.status(400).json({ message: "Track_ID required!" });
-    }
-
-    // Validate access token
-    const token = req.header("x-auth-token");
-
-    // Verify token and get user
-    const decoded = jwt.verify(token, "PROJECTWS");
-    const user = await User.findOne({
-      where: { user_id: decoded.user_id },
-    });
-
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    // Find the track and update now_playing
-    if (req.body.playlist_id) {
+    if (id_music != null) {
       const track = await Tracklist.findOne({
-        attributes: ["track_id"], // column yang nanti ditampilkan
-        where: { track_id: track_id },
+        attributes: ['name'], // column yang nanti ditampilkan
+        where: { track_id: id_music },
       });
 
-      if (track) {
-        await user.update({ now_playing: track.track_id });
+      if (track != null) {
+        const token = req.header("x-auth-token");
+        if (!token) {
+          return res.status(401).json({ error: "Access token missing" });
+        }
 
-        return res.status(200).json({ message: `Now Playing ${track.name}` });
+        const decoded = jwt.verify(token, "PROJECTWS");
+        const user = await User.findOne({ where: { user_id: decoded.user_id } });
+
+        if (!user) {
+          return res.status(404).json({ error: "User not found" });
+        }
+
+        await user.update({ now_playing: track.name });
+
+        return res.status(200).json({ track: track.name, user: user.name });
       } else {
-        return res.status(404).json({ error: "Track not found" });
+        return res.status(404).json({ error: "Music not found" });
       }
     } else {
-      const response = await axios.get(
-        `https://api.spotify.com/v1/tracks/${track_id}`,
-        {
-          headers: {
-            Authorization: "Bearer " + ACCESS_KEY_SPOTIFY,
-          },
-        }
-      );
-
-      const track = response.data;
-
-      if (track) {
-        await user.update({ now_playing: track.id });
-        return res.status(200).json({ message: `Now Playing ${track.name}` });
-      } else {
-        return res.status(404).json({ error: "Track not found" });
-      }
+      return res.status(400).json({ error: "Music ID is missing" });
     }
   } catch (error) {
     console.error("Error updating now_playing:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
-};
+}
+
 
 const getLyrics = async function (req, res) {
   const token = req.header("x-auth-token");

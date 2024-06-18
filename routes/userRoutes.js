@@ -19,6 +19,8 @@ router.get("/play/device/:trackUri",[authMiddleware,premiumMiddleware], userCont
 
 router.get("/email", authMiddleware, userController.getUsers);
 router.get("/play", authMiddleware, userController.getPlayingMusic);
+router.get("/play/:user_id", authMiddleware, userController.getPlayingMusic);
+
 router.put("/play/:user_id", authMiddleware, userController.playOthersMusic);
 
 module.exports = router;
