@@ -215,7 +215,7 @@
 			"response": []
 		},
 		{
-			"name": "Create / Update / Delete User (SuperAdmin)",
+			"name": "Update / Delete User (SuperAdmin)",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -241,16 +241,6 @@
 							"key": "email",
 							"value": "",
 							"type": "text"
-						},
-						{
-							"key": "password",
-							"value": "",
-							"type": "text"
-						},
-						{
-							"key": "profilePicture",
-							"value": "",
-							"type": "file"
 						},
 						{
 							"key": "deleteUser",
