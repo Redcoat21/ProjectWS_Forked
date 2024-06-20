@@ -34,7 +34,8 @@
 						"user",
 						"auth"
 					]
-				}
+				},
+				"description": "buat Oauth siapa yang pake spotify sama dapetin request buat refresh access token"
 			},
 			"response": []
 		},
@@ -72,7 +73,8 @@
 							"value": "AQCSij4nmABX8RfWODu2X2rb-k_3alWuUf82OSRxOuE1vKsAVuBm-A3QId-IScsOSO9Dc5Nr2wKREgMH8fzehVGOTUhJ5CRMAEugfq43f84HzAVShJCDvgJgVvtBBi1jCgY"
 						}
 					]
-				}
+				},
+				"description": "pakai refresh token buat ngambil access token baru"
 			},
 			"response": []
 		},
@@ -111,7 +113,8 @@
 							"value": "03987d672ac14893"
 						}
 					]
-				}
+				},
+				"description": "dapat lyrics dari musixmatch pakai id lagu dari spotify buat search nya sama jwt user siapa yang login"
 			},
 			"response": []
 		},
@@ -145,7 +148,8 @@
 						"it",
 						"3"
 					]
-				}
+				},
+				"description": "dapet top tracks di negara mana sama top berapa , makai header untuk login"
 			},
 			"response": []
 		},
@@ -174,7 +178,8 @@
 							"disabled": true
 						}
 					]
-				}
+				},
+				"description": "play lagu di spotify , spotify harus ada yang buka supaya pengecekan kalau ada maka di play lagunya di spotify (query params si gk dipake)"
 			},
 			"response": []
 		}
