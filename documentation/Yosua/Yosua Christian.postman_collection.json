@@ -191,7 +191,7 @@
 					}
 				],
 				"url": {
-					"raw": "localhost:3000/playlist/track/:playlist_id/:track_id",
+					"raw": "localhost:3000/playlist/:playlist_id/:track_id",
 					"host": [
 						"localhost"
 					],
